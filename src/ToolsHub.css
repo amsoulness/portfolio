@@ -114,3 +114,32 @@
 .th-v13.th-lite .th-cosmic-canvas,.th-v13.th-lite .th-energy-core,.th-v13.th-lite .th-portal,.th-v13.th-lite .th-light-ribbon,.th-v13.th-lite .th-satellite,.th-v13.th-lite .th-hero-circuit{display:none}
 @media(max-width:760px){.th-v13 .th-portal,.th-v13 .th-light-ribbon,.th-v13 .th-satellite,.th-v13 .th-hero-circuit{display:none}.th-v13 .th-cosmic-canvas{opacity:.35}}
 @media(prefers-reduced-motion:reduce){.th-v13 .th-cosmic-canvas,.th-v13 .th-energy-core,.th-v13 .th-portal,.th-v13 .th-light-ribbon,.th-v13 .th-satellite,.th-v13 .th-hero-circuit{display:none!important}.th-v13 .th-card-icon:after{animation:none!important}}
+
+/* V17 — typographic direction: editorial + kinetic, accessible and responsive */
+.th-v13 .th-kinetic-title{display:flex;flex-direction:column;align-items:center;gap:.055em;line-height:.95;font-weight:950;letter-spacing:-.09em;text-transform:uppercase;font-size:clamp(43px,8.6vw,120px);margin:30px 0 24px}
+.th-v13 .th-title-line{display:block;white-space:nowrap}
+.th-v13 .th-title-word{display:inline-block;position:relative;animation:th-type-reveal .9s cubic-bezier(.2,.8,.2,1) both}
+.th-v13 .th-title-outline{color:transparent;-webkit-text-stroke:1.5px #c3a8f9;text-shadow:0 0 42px #9e6cff20;animation-delay:.15s}
+.th-v13 .th-title-line-two{font-size:.84em;letter-spacing:-.075em;animation:th-type-reveal 1s .28s both}
+.th-v13 .th-title-line-two em{font-style:normal;background:linear-gradient(100deg,#f8f5ff,#cba8ff 35%,#87caff 65%,#d4a7ff 90%,#f8f5ff);background-size:250% auto;background-clip:text;-webkit-background-clip:text;color:transparent;animation:th-text-shimmer 9s ease-in-out infinite alternate}
+.th-v13 .th-title-period{color:#a58aff;-webkit-text-stroke:0;text-shadow:0 0 24px #a58affaa}
+.th-v13 .th-hero p{max-width:690px;font-size:clamp(14px,1.6vw,18px);font-weight:400;letter-spacing:.015em}
+.th-v13 .th-hero-manifesto{display:flex;align-items:center;justify-content:center;gap:15px;margin-top:22px;font-size:10px;font-weight:850;letter-spacing:2.4px;color:#d6c2ff;text-align:center}
+.th-v13 .th-manifesto-line{width:40px;height:1px;background:linear-gradient(90deg,transparent,#b59cff)}
+.th-v13 .th-manifesto-line:last-child{transform:rotate(180deg)}
+.th-v13 .th-collection-heading{padding:30px 0 26px;position:relative}
+.th-v13 .th-collection-kicker{font-size:10px;letter-spacing:3px;color:#bda3fa;font-weight:850;margin-bottom:10px}
+.th-v13 .th-collection-heading h2{font-size:clamp(32px,5vw,64px);line-height:1.1;letter-spacing:-.065em;font-weight:900;margin:0 0 10px}
+.th-v13 .th-collection-heading h2 em{font-style:normal;color:transparent;-webkit-text-stroke:1px #c9aeff}
+.th-v13 .th-collection-heading p{color:#b3a9c8;margin:0;font-size:14px}
+.th-v13 .th-card-title{font-weight:850;letter-spacing:-.05em;font-size:clamp(19px,1.7vw,23px);transition:color .25s,text-shadow .25s}
+.th-v13 .th-card:hover .th-card-title{color:#e4d5ff;text-shadow:0 0 22px #aa8cff55}
+.th-v13 .th-tag{font-size:9px;letter-spacing:2.3px}
+.th-v13 .th-card-bottom{font-size:9px;letter-spacing:1.8px}
+.th-v13 .th-workspace-heading h2{font-weight:900;letter-spacing:-.06em;background:linear-gradient(100deg,#fff,#c2a5ff,#9acff6);background-clip:text;-webkit-background-clip:text;color:transparent}
+@keyframes th-type-reveal{from{opacity:0;transform:translateY(24px);filter:blur(6px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes th-text-shimmer{to{background-position:100% 0}}
+@media(max-width:760px){.th-v13 .th-kinetic-title{font-size:clamp(35px,10vw,72px);letter-spacing:-.08em}.th-v13 .th-hero-manifesto{font-size:8px;letter-spacing:1.2px}.th-v13 .th-manifesto-line{width:20px}.th-v13 .th-collection-heading{padding-top:18px}}
+@media(max-width:380px){.th-v13 .th-kinetic-title{font-size:clamp(31px,9.3vw,44px)}.th-v13 .th-title-outline{-webkit-text-stroke:1px #c3a8f9}}
+.th-v13.th-lite .th-title-word,.th-v13.th-lite .th-title-line-two,.th-v13.th-lite .th-title-line-two em{animation:none!important;filter:none!important}
+@media(prefers-reduced-motion:reduce){.th-v13 .th-title-word,.th-v13 .th-title-line-two,.th-v13 .th-title-line-two em{animation:none!important;filter:none!important}}
