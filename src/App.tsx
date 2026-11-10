@@ -516,6 +516,16 @@ function PortfolioApp(){
       .hero-actions-v26 .tools-hero-cta{border-radius:999px;padding:16px 25px}
       .hero .hero-description{max-width:720px;text-wrap:pretty;line-height:1.8}
       @media(max-width:650px){.hero-actions-v26{flex-direction:column;gap:12px;max-width:340px}.hero-actions-v26 .btn,.hero-actions-v26 .tools-hero-cta{width:100%;min-height:52px}.hero .hero-description{font-size:clamp(15px,4vw,18px);line-height:1.75;padding-inline:5px}}
+
+      /* V27 — Online brand images for contact links */
+      .contact-actions-v27{gap:14px;max-width:960px;margin-inline:auto}
+      .contact-actions-v27 .btn{display:inline-flex;align-items:center;justify-content:center;gap:11px;min-height:58px;padding:15px 23px;white-space:nowrap;transition:box-shadow .25s,border-color .25s}
+      .contact-actions-v27 .btn:hover{box-shadow:0 10px 35px #a78bfa38;border-color:#c4a5ff}
+      .contact-brand-icon{display:block;flex:none;width:22px;height:22px;object-fit:contain}
+      .contact-actions-v27 .btn.primary{background:linear-gradient(110deg,#7640d9,#9b52e8);color:#fff}
+      .contact-actions-v27 .btn span[aria-hidden]{margin-left:2px;font-size:15px}
+      @media(max-width:650px){.contact-actions-v27{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.contact-actions-v27 .btn{min-width:0;white-space:normal;min-height:62px;padding:11px 8px;font-size:9px;letter-spacing:.2px;gap:7px}.contact-brand-icon{width:20px;height:20px}}
+      @media(max-width:370px){.contact-actions-v27{grid-template-columns:1fr}.contact-actions-v27 .btn{font-size:11px}}
     `}</style>
     <motion.div className="progress" style={{scaleX:progress}}/>
     <div className="ambient" style={{background:`radial-gradient(circle at ${pointer.x}% ${pointer.y}%,rgba(124,58,237,.24),transparent 37%),radial-gradient(circle at 85% 65%,rgba(34,211,238,.09),transparent 36%)`}}/>
@@ -635,11 +645,11 @@ function PortfolioApp(){
     <section id="contact" className="section contact">
       <Reveal><span className="eyebrow">06 / LET’S CONNECT</span><h2>Let's create<br/><span className="gradient">something bold.</span></h2>
       <p style={{color:'#b4b1c4',fontSize:19,lineHeight:1.8,marginBottom:40}}>Open to conversations about software development, creative editing, collaboration and new opportunities. The fastest way to reach me is WhatsApp.</p>
-      <div className="actions">
-        <MagneticLink href={`https://wa.me/${WHATSAPP_NUMBER}`} primary external>MESSAGE ME ON WHATSAPP ↗</MagneticLink><MagneticLink href={EMAIL}>SEND AN EMAIL ↗</MagneticLink>
-        <MagneticLink href={GITHUB} external>GITHUB ↗</MagneticLink>
-        <MagneticLink href={LINKEDIN} external>LINKEDIN ↗</MagneticLink>
-        {WHATSAPP_NUMBER && <MagneticLink href={`https://wa.me/${WHATSAPP_NUMBER}`} external>WHATSAPP ↗</MagneticLink>}
+      <div className="actions contact-actions-v27">
+        <MagneticLink href={`https://wa.me/${WHATSAPP_NUMBER}`} primary external><img className="contact-brand-icon" src="https://cdn.simpleicons.org/whatsapp/FFFFFF" alt="" loading="lazy"/> MESSAGE ON WHATSAPP <span aria-hidden="true">↗</span></MagneticLink>
+        <MagneticLink href={EMAIL}><svg className="contact-brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m3.5 6 8.5 7 8.5-7"/></svg> SEND AN EMAIL <span aria-hidden="true">↗</span></MagneticLink>
+        <MagneticLink href={GITHUB} external><img className="contact-brand-icon" src="https://cdn.simpleicons.org/github/FFFFFF" alt="" loading="lazy"/> GITHUB <span aria-hidden="true">↗</span></MagneticLink>
+        <MagneticLink href={LINKEDIN} external><img className="contact-brand-icon" src="https://cdn.simpleicons.org/linkedin/FFFFFF" alt="" loading="lazy"/> LINKEDIN <span aria-hidden="true">↗</span></MagneticLink>
       </div></Reveal>
     </section>
     <footer className="footer">© 2026 AMSOULNESS / ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
