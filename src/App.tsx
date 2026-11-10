@@ -176,6 +176,7 @@ export default function App(){
   const [effectsOn,setEffectsOn]=useState(true)
   const [compact,setCompact]=useState(false)
   const [lowPower,setLowPower]=useState(false)
+  const [mobileQuality,setMobileQuality]=useState<'lite'|'full'>('lite')
   const pointerFrame=useRef<number|null>(null)
   useEffect(()=>{
     const media=window.matchMedia('(max-width: 700px), (pointer: coarse)')
@@ -202,9 +203,10 @@ export default function App(){
   const progress=useSpring(scrollYProgress,{stiffness:100,damping:28})
   const heroY=useTransform(scrollYProgress,[0,.3],[0,reduce?0:140])
   const animateEffects=effectsOn&&!reduce&&!lowPower
+  const liteMode=compact&&mobileQuality==='lite'
   const fullEffects=animateEffects&&!compact
-  return <main className={`site ${animateEffects?'':'effects-off'} ${compact?'compact-effects':''}`} onPointerDown={e=>{
-    if(!animateEffects||!(e.target instanceof Element))return
+  return <main className={`site ${animateEffects?'':'effects-off'} ${compact?'compact-effects':''} ${liteMode?'lite-mode':''}`} onPointerDown={e=>{
+    if(!animateEffects||liteMode||!(e.target instanceof Element))return
     const target=e.target.closest('a,button,.skill,.project,.creative-project,.inspiration-card,.editing-tool')
     const id=++rippleId.current
     setRipples(prev=>[...prev.slice(-5),{id,x:e.clientX,y:e.clientY}])
@@ -435,21 +437,38 @@ export default function App(){
       .site.effects-off .v10-dust,.site.effects-off .v10-ribbons,.site.effects-off .v10-vignette{display:none}
       @media(max-width:700px){.v10-dust i:nth-child(n+27),.v10-ribbons span:nth-child(n+3){display:none}.v10-vignette{display:none}.site .skill-v7:hover .skill-visual{transform:none}}
       @media(prefers-reduced-motion:reduce){.v10-dust,.v10-ribbons,.v10-vignette{display:none}.site .skill-v7 .skill-visual,.site .editing-tool .tech-icon{transition:none}}
+
+      /* V11: low-cost mobile presentation. Full effects remain available via button. */
+      .mobile-quality-button{position:fixed;left:12px;bottom:14px;z-index:85;min-height:44px;padding:10px 14px;border:1px solid #a68bdb88;border-radius:999px;background:#171126ed;color:#f4edff;font:600 12px system-ui,sans-serif;box-shadow:0 4px 18px #0006;cursor:pointer;backdrop-filter:blur(6px)}
+      .mobile-quality-button:focus-visible{outline:2px solid #c8a8ff;outline-offset:3px}
+      .site.lite-mode .v8-aurora,.site.lite-mode .v8-comets,.site.lite-mode .v9-nebula,.site.lite-mode .v9-scanlines,.site.lite-mode .v9-hero-halo,.site.lite-mode .v10-dust,.site.lite-mode .v10-ribbons,.site.lite-mode .v10-vignette,.site.lite-mode .v8-ripples{display:none!important}
+      .site.lite-mode .v9-stars i{animation:none;box-shadow:none;opacity:.35}
+      .site.lite-mode .particles .particle{box-shadow:none!important;filter:none!important;opacity:.3}
+      .site.lite-mode .ambient,.site.lite-mode .light-orb{filter:none!important;opacity:.15!important;animation:none!important}
+      .site.lite-mode .grid-bg{opacity:.18}
+      .site.lite-mode .skill-orbit,.site.lite-mode .visual-ring,.site.lite-mode .btn.primary:after,.site.lite-mode .section h2:after{animation:none!important}
+      .site.lite-mode .skill-aura{opacity:.35}
+      .site.lite-mode :is(.inspiration-card,.skill-v7,.editing-tool,.project,.creative-project){box-shadow:0 5px 16px #0004!important;backdrop-filter:none!important}
+      .site.lite-mode :is(.inspiration-art img,.skill-visual,.tech-icon){transition-duration:.15s!important}
+      .site.lite-mode :is(.inspiration-card,.skill-v7,.editing-tool,.project,.creative-project):active{filter:brightness(1.15)}
+      @media(max-width:700px){.site.lite-mode .v9-stars i:nth-child(n+15){display:none}.site.lite-mode .particles .particle:nth-of-type(n+11){display:none}}
+      @media(prefers-reduced-motion:reduce){.mobile-quality-button{display:none}}
       @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.gradient{animation:none}*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
     `}</style>
     <motion.div className="progress" style={{scaleX:progress}}/>
     <div className="ambient" style={{background:`radial-gradient(circle at ${pointer.x}% ${pointer.y}%,rgba(124,58,237,.24),transparent 37%),radial-gradient(circle at 85% 65%,rgba(34,211,238,.09),transparent 36%)`}}/>
     <div className="grid-bg"/>
+    {compact&&<button type="button" className="mobile-quality-button" onClick={()=>setMobileQuality(v=>v==='lite'?'full':'lite')} aria-label={`Switch to ${mobileQuality==='lite'?'full':'smooth'} mobile graphics`} title="Mobile graphics quality">{mobileQuality==='lite'?'⚡ Smooth mode':'✦ Full effects'}</button>}
     <div className="v8-aurora" aria-hidden="true"><span/><span/><span/></div>
-    <div className="v8-comets" aria-hidden="true">{comets.slice(0,compact?3:16).map((c,i)=><motion.span key={i} className="v8-comet" style={{left:`${c.left}%`}} animate={!animateEffects?{}:{y:['-15vh','115vh'],opacity:[0,.75,0]}} transition={{duration:c.duration,delay:c.delay,repeat:Infinity,ease:'linear'}}/>)}</div>
+    <div className="v8-comets" aria-hidden="true">{comets.slice(0,liteMode?0:compact?3:16).map((c,i)=><motion.span key={i} className="v8-comet" style={{left:`${c.left}%`}} animate={!animateEffects||liteMode?{}:{y:['-15vh','115vh'],opacity:[0,.75,0]}} transition={{duration:c.duration,delay:c.delay,repeat:Infinity,ease:'linear'}}/>)}</div>
     <div className="v8-ripples" aria-hidden="true">{ripples.map(r=><span key={r.id} className="v8-ripple" style={{left:r.x,top:r.y}}/>)}</div>
     <div className="v9-nebula" aria-hidden="true"><span/><span/><span/><span/></div>
-    <div className="v9-stars" aria-hidden="true">{extraStars.slice(0,compact?45:210).map((star,i)=><i key={i} style={{left:`${star.x}%`,top:`${star.y}%`,width:star.size,height:star.size,animationDelay:`-${star.delay}s`}}/>)}</div>
+    <div className="v9-stars" aria-hidden="true">{extraStars.slice(0,liteMode?14:compact?45:210).map((star,i)=><i key={i} style={{left:`${star.x}%`,top:`${star.y}%`,width:star.size,height:star.size,animationDelay:`-${star.delay}s`}}/>)}</div>
     <div className="v9-scanlines" aria-hidden="true"/>
-    <div className="v10-dust" aria-hidden="true">{dust.slice(0,compact?26:100).map((d,i)=><i key={i} style={{left:`${d.x}%`,top:`${d.y}%`,width:d.size,height:d.size,animationDelay:`-${d.delay}s`}}/>)}</div>
-    <div className="v10-ribbons" aria-hidden="true">{ribbons.slice(0,compact?2:8).map((r,i)=><span key={i} style={{left:`${r.x}%`,animationDelay:`-${r.delay}s`,animationDuration:`${r.duration}s`}}/>)}</div>
+    <div className="v10-dust" aria-hidden="true">{dust.slice(0,liteMode?0:compact?26:100).map((d,i)=><i key={i} style={{left:`${d.x}%`,top:`${d.y}%`,width:d.size,height:d.size,animationDelay:`-${d.delay}s`}}/>)}</div>
+    <div className="v10-ribbons" aria-hidden="true">{ribbons.slice(0,liteMode?0:compact?2:8).map((r,i)=><span key={i} style={{left:`${r.x}%`,animationDelay:`-${r.delay}s`,animationDuration:`${r.duration}s`}}/>)}</div>
     <div className="v10-vignette" aria-hidden="true"/>
-    <div className="particles" aria-hidden="true">{streaks.slice(0,compact?3:streaks.length).map((streak,i)=><motion.span key={`streak-${i}`} className="streak" style={{left:`${streak.left}%`}} animate={!animateEffects?{}:{y:[-200,1500],opacity:[0,.75,0]}} transition={{duration:streak.duration,delay:streak.delay,repeat:Infinity,ease:"linear"}}/>)}{particles.slice(0,compact?38:170).map((p,i)=><motion.span key={i} className="particle" style={{left:`${p.x}%`,top:`${p.y}%`,width:p.size,height:p.size}} animate={!animateEffects?{}:{y:[0,-35,0],opacity:[.15,.9,.15],scale:[1,1.7,1]}} transition={{duration:p.duration,delay:p.delay,repeat:Infinity,ease:'easeInOut'}}/>)}</div>
+    <div className="particles" aria-hidden="true">{streaks.slice(0,liteMode?0:compact?3:streaks.length).map((streak,i)=><motion.span key={`streak-${i}`} className="streak" style={{left:`${streak.left}%`}} animate={!animateEffects||liteMode?{}:{y:[-200,1500],opacity:[0,.75,0]}} transition={{duration:streak.duration,delay:streak.delay,repeat:Infinity,ease:"linear"}}/>)}{particles.slice(0,liteMode?10:compact?38:170).map((p,i)=><motion.span key={i} className="particle" style={{left:`${p.x}%`,top:`${p.y}%`,width:p.size,height:p.size}} animate={!animateEffects||liteMode?{}:{y:[0,-35,0],opacity:[.15,.9,.15],scale:[1,1.7,1]}} transition={{duration:p.duration,delay:p.delay,repeat:Infinity,ease:'easeInOut'}}/>)}</div>
     <div className="v9-float-controls" aria-label="Portfolio quick actions">
       <a href="#projects" className="v9-float-btn" aria-label="Jump to projects" title="Explore projects">✦<span>Work</span></a>
       <a href="#inspiration" className="v9-float-btn" aria-label="Jump to inspiration" title="Inspiration gallery">✧<span>Inspire</span></a>
