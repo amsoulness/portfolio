@@ -23,3 +23,29 @@
 @keyframes th-drift{from{transform:translate3d(-4%,0,0)}to{transform:translate3d(9%,9%,0)}}@keyframes th-twinkle{from{opacity:.12;transform:scale(.7)}to{opacity:.7;transform:scale(1.2)}}@keyframes th-halo{to{transform:translate(-50%,-50%) rotate(360deg)}}
 .th-v13.th-lite .th-aurora,.th-v13.th-lite .th-halo,.th-v13.th-lite .th-gridlight{display:none}.th-v13.th-lite .th-stars i{animation:none;box-shadow:none;opacity:.22}.th-v13.th-lite .th-stars i:nth-child(n+15){display:none}.th-v13.th-lite .th-nav{backdrop-filter:none}.th-v13.th-lite .th-card{box-shadow:none;transition:border-color .15s}.th-v13.th-lite .th-card:before{display:none}.th-v13.th-lite .th-card:hover{transform:none;box-shadow:none}
 @media(max-width:760px){.th-v13 .th-hero{min-height:390px;padding:70px 0 48px}.th-v13 .th-nav-right{gap:8px}.th-v13 .th-nav-right a,.th-v13 .th-quality{font-size:9px;letter-spacing:.5px;padding:8px 10px}.th-v13 .th-brand{font-size:21px}.th-v13 .th-hero h1{font-size:clamp(45px,11vw,76px)}}@media(max-width:390px){.th-v13 .th-brand{font-size:18px}.th-v13 .th-nav-right a,.th-v13 .th-quality{font-size:8px;padding:8px}}@media(hover:none){.th-v13 .th-card:hover{transform:none}.th-v13 .th-card:before{display:none}}@media(prefers-reduced-motion:reduce){.th-v13 .th-aurora,.th-v13 .th-halo,.th-v13 .th-stars i{animation:none!important}.th-v13 .th-card,.th-v13 .th-card:before,.th-v13 .th-nav-right a,.th-v13 .th-quality{transition:none!important}.th-v13 .th-card:hover{transform:none!important}}
+
+
+/* V14 — cinematic desktop, optional performance switch on mobile only */
+.th-v13 .th-nebula{position:absolute;inset:-15%;background:radial-gradient(ellipse 35% 22% at 20% 22%,#7943d522,transparent 80%),radial-gradient(ellipse 30% 20% at 80% 35%,#8b5cf626,transparent 80%),radial-gradient(ellipse 25% 20% at 45% 82%,#268ebc19,transparent 80%);animation:th-nebula-breathe 18s ease-in-out infinite alternate}
+.th-v13 .th-beam{position:absolute;width:70vw;height:2px;left:-20%;top:33%;background:linear-gradient(90deg,transparent,#a48bff55,#6cd9e133,transparent);filter:blur(2px);transform:rotate(-23deg);animation:th-beam-shift 16s ease-in-out infinite alternate}
+.th-v13 .th-beam-two{left:35%;top:75%;transform:rotate(19deg);animation-delay:-8s;opacity:.65}
+.th-v13 .th-orbit{position:absolute;width:62vw;aspect-ratio:1;left:-30vw;top:8%;border:1px solid #bca5ff1a;border-radius:50%;box-shadow:0 0 70px #6c3dc313;animation:th-orbit-spin 85s linear infinite}
+.th-v13 .th-orbit-two{width:54vw;left:auto;right:-29vw;top:30%;border-style:dashed;border-color:#92c7ff22;animation-duration:110s;animation-direction:reverse}
+.th-v13 .th-meteors i{position:absolute;display:block;width:120px;height:1px;background:linear-gradient(90deg,transparent,#ddd2ffb0,transparent);opacity:0;transform:rotate(-33deg) translateX(0);animation:th-meteor 12s linear infinite;filter:drop-shadow(0 0 5px #ac8eff)}
+.th-v13 .th-sparks i{position:absolute;width:2px;height:2px;border-radius:50%;background:#d5c4ff;box-shadow:0 0 10px #b48bff;opacity:.15;animation:th-spark 7s ease-in-out infinite alternate}
+.th-v13 .th-card{animation:th-card-arrive .65s both}
+.th-v13 .th-card:nth-child(2){animation-delay:.07s}.th-v13 .th-card:nth-child(3){animation-delay:.14s}.th-v13 .th-card:nth-child(4){animation-delay:.21s}.th-v13 .th-card:nth-child(5){animation-delay:.28s}.th-v13 .th-card:nth-child(6){animation-delay:.35s}.th-v13 .th-card:nth-child(7){animation-delay:.42s}.th-v13 .th-card:nth-child(8){animation-delay:.49s}
+.th-v13 .th-hero h1{animation:th-hero-enter .9s both}
+.th-v13 .th-hero .th-eyebrow{animation:th-hero-enter .8s .1s both}
+.th-v13 .th-hero p{animation:th-hero-enter .9s .2s both}
+@keyframes th-nebula-breathe{to{transform:translate3d(2%,3%,0) scale(1.08);opacity:.7}}
+@keyframes th-beam-shift{to{translate:14vw 9vh;opacity:.2}}
+@keyframes th-orbit-spin{to{transform:rotate(360deg)}}
+@keyframes th-meteor{0%,72%{opacity:0;transform:rotate(-33deg) translateX(-130px)}75%{opacity:.65}86%{opacity:0;transform:rotate(-33deg) translateX(210px)}100%{opacity:0}}
+@keyframes th-spark{to{opacity:.85;transform:translateY(-14px) scale(1.5)}}
+@keyframes th-card-arrive{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes th-hero-enter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.th-v13.th-lite .th-nebula,.th-v13.th-lite .th-beam,.th-v13.th-lite .th-orbit,.th-v13.th-lite .th-meteors,.th-v13.th-lite .th-sparks{display:none}
+.th-v13.th-lite .th-card,.th-v13.th-lite .th-hero h1,.th-v13.th-lite .th-hero .th-eyebrow,.th-v13.th-lite .th-hero p{animation:none}
+@media(max-width:760px){.th-v13 .th-meteors i:nth-child(n+4),.th-v13 .th-sparks i:nth-child(n+11){display:none}.th-v13 .th-nebula{animation:none}.th-v13 .th-orbit,.th-v13 .th-beam{display:none}}
+@media(prefers-reduced-motion:reduce){.th-v13 .th-nebula,.th-v13 .th-beam,.th-v13 .th-orbit,.th-v13 .th-meteors i,.th-v13 .th-sparks i,.th-v13 .th-card,.th-v13 .th-hero h1,.th-v13 .th-hero .th-eyebrow,.th-v13 .th-hero p{animation:none!important}}
