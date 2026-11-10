@@ -526,7 +526,7 @@ function PortfolioApp(){
     <div className="particles" aria-hidden="true">{streaks.slice(0,liteMode?0:compact?3:streaks.length).map((streak,i)=><motion.span key={`streak-${i}`} className="streak" style={{left:`${streak.left}%`}} animate={!animateEffects||liteMode?{}:{y:[-200,1500],opacity:[0,.75,0]}} transition={{duration:streak.duration,delay:streak.delay,repeat:Infinity,ease:"linear"}}/>)}{particles.slice(0,liteMode?10:compact?38:170).map((p,i)=><motion.span key={i} className="particle" style={{left:`${p.x}%`,top:`${p.y}%`,width:p.size,height:p.size}} animate={!animateEffects||liteMode?{}:{y:[0,-35,0],opacity:[.15,.9,.15],scale:[1,1.7,1]}} transition={{duration:p.duration,delay:p.delay,repeat:Infinity,ease:'easeInOut'}}/>)}</div>
     <div className="v9-float-controls" aria-label="Portfolio quick actions">
       <a href="#projects" className="v9-float-btn" aria-label="Jump to projects" title="Explore projects">✦<span>Work</span></a>
-      <a href="#inspiration" className="v9-float-btn" aria-label="Jump to inspiration" title="Inspiration gallery">✧<span>Inspire</span></a>
+      <a href="#inspiration" className="v9-float-btn" aria-label="Jump to my personal favorites" title="My favorite picks">✧<span>My Picks</span></a>
       <button type="button" className="v9-float-btn" onClick={()=>setEffectsOn(v=>!v)} aria-pressed={effectsOn} title={effectsOn?'Pause decorative effects':'Enable decorative effects'}>{effectsOn?'◉':'◎'}<span>{effectsOn?'FX on':'FX off'}</span></button>
       {showTop&&<button type="button" className="v9-float-btn v9-top" onClick={()=>window.scrollTo({top:0,behavior:reduce?'auto':'smooth'})} aria-label="Back to top" title="Back to top">↑<span>Top</span></button>}
     </div>
@@ -537,7 +537,7 @@ function PortfolioApp(){
         <a href="#about" onClick={()=>setMenuOpen(false)}>ABOUT</a>
         <a href="#skills" onClick={()=>setMenuOpen(false)}>SKILLS</a>
         <a href="#projects" onClick={()=>setMenuOpen(false)}>WORK</a>
-        <a href="#inspiration" onClick={()=>setMenuOpen(false)}>INSPIRE</a>
+        <a href="#inspiration" onClick={()=>setMenuOpen(false)}>MY PICKS</a>
         <a href="/tools" className="tools-nav-spotlight" onClick={()=>setMenuOpen(false)}><span className="tools-nav-spark">✦</span> TOOLS <span className="tools-nav-new">EXPLORE ↗</span></a>
         <a href="#experience" onClick={()=>setMenuOpen(false)}>EXPERIENCE</a><a href="#contact" onClick={()=>setMenuOpen(false)}>CONTACT ↗</a>
       </div>
@@ -624,7 +624,7 @@ function PortfolioApp(){
       <Heading index="04" kicker="EXPERIENCE & EDUCATION" title="Learning by doing."/>
       <div className="timeline">{experiences.map((item,i)=><Reveal key={item.title} delay={i*.12}><motion.div className="timeline-card" whileHover={reduce?{}:{x:12}}><span className="eyebrow">{item.date}</span><h3>{item.title}</h3><strong style={{color:'#a78bfa'}}>{item.company}</strong><p>{item.description}</p></motion.div></Reveal>)}</div>
     </section>
-    <section className="section" id="inspiration"><Heading index="05" kicker="BEYOND THE SCREEN" title="Things that inspire me."/><p className="inspiration-intro">Stories, sounds, ideas, and tools that shape my creativity. Tap any card to explore.</p><div className="inspiration-grid">{inspirations.map((item,i)=><InspirationCard key={item.title} item={item} index={i}/>)}</div></section>
+    <section className="section" id="inspiration"><Heading index="05" kicker="THE PERSONAL COLLECTION" title="The things I stand by."/><p className="inspiration-intro">A curated collection of my favorites. From unforgettable stories to music, books, and technology—these are the things I personally love, admire, and recommend. Tap any card to explore.</p><div className="inspiration-grid">{inspirations.map((item,i)=><InspirationCard key={item.title} item={item} index={i}/>)}</div></section>
     <section id="contact" className="section contact">
       <Reveal><span className="eyebrow">06 / LET’S CONNECT</span><h2>Let's create<br/><span className="gradient">something bold.</span></h2>
       <p style={{color:'#b4b1c4',fontSize:19,lineHeight:1.8,marginBottom:40}}>Open to conversations about software development, creative editing, collaboration and new opportunities. The fastest way to reach me is WhatsApp.</p>
