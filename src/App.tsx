@@ -509,6 +509,13 @@ function PortfolioApp(){
       @media(max-width:650px){.tools-featured-section{width:calc(100% - 24px);border-radius:22px}.tools-featured-topline{padding:16px;font-size:8px;letter-spacing:1px}.tools-featured-topline span:last-child{display:none}.tools-featured-layout{padding:32px 20px 37px;gap:25px}.tools-featured-copy h2{font-size:clamp(38px,10vw,56px)}.tools-featured-description{font-size:14px}.tools-featured-chips{gap:7px}.tools-featured-chips span{font-size:9px}.tools-featured-button{width:100%;gap:8px;font-size:11px;letter-spacing:.4px}.tools-featured-visual{min-height:285px}.tools-featured-orbit{width:190px;height:190px}.tools-featured-orbit-b{width:260px;height:260px}.tools-featured-center{width:112px;height:112px;border-radius:25px}.tools-featured-center>span{font-size:26px}.tools-featured-center strong{font-size:20px}.tools-featured-mini{min-width:0;padding:9px 10px}.tools-featured-mini strong{font-size:9px}.tools-featured-mini small{font-size:7px}.tools-featured-mini-a{top:6%;left:3%}.tools-featured-mini-b{top:9%;right:3%}.tools-featured-mini-c{left:4%;bottom:6%}.tools-featured-visual-hint{font-size:8px}.tools-featured-footnote{font-size:8px;letter-spacing:.6px}.tools-nav-spotlight{padding:11px!important}}
       @media(max-width:370px){.tools-featured-mini{display:none}.tools-featured-copy h2{font-size:36px}}
       @media(prefers-reduced-motion:reduce){.tools-featured-orbit,.tools-featured-mini,.tools-featured-marquee>div,.tools-nav-spark,.tools-cta-pulse{animation:none!important}}
+
+      /* V26 — calmer hero, only two primary actions */
+      .hero-actions-v26{display:flex;justify-content:center;align-items:center;gap:14px;max-width:700px;margin-inline:auto}
+      .hero-actions-v26 .btn,.hero-actions-v26 .tools-hero-cta{min-height:54px;box-sizing:border-box;white-space:nowrap}
+      .hero-actions-v26 .tools-hero-cta{border-radius:999px;padding:16px 25px}
+      .hero .hero-description{max-width:720px;text-wrap:pretty;line-height:1.8}
+      @media(max-width:650px){.hero-actions-v26{flex-direction:column;gap:12px;max-width:340px}.hero-actions-v26 .btn,.hero-actions-v26 .tools-hero-cta{width:100%;min-height:52px}.hero .hero-description{font-size:clamp(15px,4vw,18px);line-height:1.75;padding-inline:5px}}
     `}</style>
     <motion.div className="progress" style={{scaleX:progress}}/>
     <div className="ambient" style={{background:`radial-gradient(circle at ${pointer.x}% ${pointer.y}%,rgba(124,58,237,.24),transparent 37%),radial-gradient(circle at 85% 65%,rgba(34,211,238,.09),transparent 36%)`}}/>
@@ -555,8 +562,8 @@ function PortfolioApp(){
       <motion.div className="hero-content" style={{y:heroY}}>
         <motion.p className="eyebrow" initial={reduce?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8}}>✦ DEVELOPER × CREATIVE EDITOR</motion.p>
         <h1>{['Emmanuel','Cherian.'].map((word,i)=><div key={word} style={{overflow:'hidden',paddingBottom:9}}><motion.span className={i===1?'gradient':''} style={{display:'inline-block'}} initial={reduce?false:{y:'110%',opacity:0}} animate={{y:'0%',opacity:1}} transition={{duration:1.1,delay:.25+i*.25,ease:[.22,1,.36,1]}}>{word}</motion.span></div>)}</h1>
-        <Reveal delay={.4}><p className="hero-description">I'm a BCA student, aspiring software developer and self-taught video editor. I bring together software, technology and cinematic storytelling under the name AMSOULNESS / ASLNS.</p></Reveal>
-        <div className="actions"><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE FREE TOOLS <span aria-hidden="true">↗</span></a><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><MagneticLink href={`https://wa.me/${WHATSAPP_NUMBER}`} external>CHAT ON WHATSAPP ↗</MagneticLink><MagneticLink href="#skills">VIEW MY SKILLS ✦</MagneticLink><MagneticLink href="#inspiration">MY INSPIRATIONS ↗</MagneticLink></div>
+        <Reveal delay={.4}><p className="hero-description">I’m Emmanuel — a BCA student, aspiring software developer, and self-taught video editor. Through AMSOULNESS / ASLNS, I blend code, technology, and cinematic storytelling to turn ideas into experiences.</p></Reveal>
+        <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE FREE TOOLS <span aria-hidden="true">↗</span></a></div>
       </motion.div>
       <motion.div className="scroll-cue" animate={reduce?{}:{y:[0,10,0]}} transition={{duration:2,repeat:Infinity}}>SCROLL TO EXPLORE ↓</motion.div>
     </section>
