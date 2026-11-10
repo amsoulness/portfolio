@@ -455,6 +455,11 @@ function PortfolioApp(){
       @media(max-width:700px){.site.lite-mode .v9-stars i:nth-child(n+15){display:none}.site.lite-mode .particles .particle:nth-of-type(n+11){display:none}}
       @media(prefers-reduced-motion:reduce){.mobile-quality-button{display:none}}
       @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.gradient{animation:none}*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
+      /* V23: hide desktop quick-action stack on phones; mobile navigation handles Work/Inspire. */
+      @media (max-width: 767px) {
+        .site .v9-float-controls { display: none !important; }
+      }
     `}</style>
     <motion.div className="progress" style={{scaleX:progress}}/>
     <div className="ambient" style={{background:`radial-gradient(circle at ${pointer.x}% ${pointer.y}%,rgba(124,58,237,.24),transparent 37%),radial-gradient(circle at 85% 65%,rgba(34,211,238,.09),transparent 36%)`}}/>
@@ -483,6 +488,7 @@ function PortfolioApp(){
         <a href="#about" onClick={()=>setMenuOpen(false)}>ABOUT</a>
         <a href="#skills" onClick={()=>setMenuOpen(false)}>SKILLS</a>
         <a href="#projects" onClick={()=>setMenuOpen(false)}>WORK</a>
+        <a href="#inspiration" onClick={()=>setMenuOpen(false)}>INSPIRE</a>
         <a href="/tools" onClick={()=>setMenuOpen(false)}>TOOLS ✦</a>
         <a href="#experience" onClick={()=>setMenuOpen(false)}>EXPERIENCE</a><a href="#contact" onClick={()=>setMenuOpen(false)}>CONTACT ↗</a>
       </div>
@@ -556,7 +562,7 @@ function PortfolioApp(){
         {WHATSAPP_NUMBER && <MagneticLink href={`https://wa.me/${WHATSAPP_NUMBER}`} external>WHATSAPP ↗</MagneticLink>}
       </div></Reveal>
     </section>
-    <footer className="footer">© 2026 ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
+    <footer className="footer">© 2026 AMSOULNESS / ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
   </main>
 }
 
