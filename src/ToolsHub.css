@@ -289,3 +289,34 @@
 }
 @media(max-width:350px){.th-v13 .th-v21-name strong{font-size:20px}.th-v13 .th-v21-name small{font-size:6px;letter-spacing:.6px}.th-v13 .th-v21-actions .th-v21-mode,.th-v13 .th-v21-actions .th-v21-return{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.th-v13 .th-v21-track span,.th-v13 .th-v21-live{animation:none!important}.th-v13 .th-v21-actions :is(a,button),.th-v13 .th-v21-emblem{transition:none!important}}
+
+/* V22 — Deep Space Motion Engine, desktop-first with accessible fallback */
+.th-v13 .th-v22-stage{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;isolation:isolate;--scroll-shift:0px;--scroll-turn:0deg}
+.th-v13 .th-v22-depth{position:absolute;width:65vmax;height:65vmax;border-radius:50%;filter:blur(65px);opacity:.24;mix-blend-mode:screen;will-change:transform}
+.th-v13 .th-v22-depth-a{top:-30vmax;left:-25vmax;background:conic-gradient(from 30deg,#742de3,transparent 25%,#3348b9 40%,transparent 60%,#a14cb4 75%,transparent);animation:th-v22-drift-a 26s ease-in-out infinite alternate}
+.th-v13 .th-v22-depth-b{bottom:-36vmax;right:-30vmax;background:conic-gradient(from 210deg,#183c8d,transparent 27%,#8c2bba 54%,transparent 70%,#26a0bd);animation:th-v22-drift-b 33s ease-in-out infinite alternate}
+.th-v13 .th-v22-arc{position:absolute;left:50%;top:32%;width:min(92vw,1050px);aspect-ratio:1;border-radius:50%;border:1px solid #c0a6ff20;transform:translate(-50%,calc(-50% + var(--scroll-shift))) rotate(var(--scroll-turn));box-shadow:inset 0 0 90px #8057d209,0 0 80px #8657d208}
+.th-v13 .th-v22-arc:before{content:'';position:absolute;inset:8%;border-radius:50%;border:1px dashed #9cb6ff20}
+.th-v13 .th-v22-arc-a{animation:th-v22-ring-a 75s linear infinite}
+.th-v13 .th-v22-arc-b{width:min(65vw,720px);top:42%;border-color:#9e72e92d;animation:th-v22-ring-b 94s linear infinite}
+.th-v13 .th-v22-arc-b:after{content:'';position:absolute;top:7%;left:19%;width:9px;height:9px;border-radius:50%;background:#cdb7ff;box-shadow:0 0 20px 5px #ad87fa66}
+.th-v13 .th-v22-horizon{position:absolute;top:60%;left:-20%;width:140%;height:220px;border-top:1px solid #aa8cf62e;border-radius:50%;transform:rotate(-7deg);box-shadow:0 -10px 50px -36px #ac83ff;animation:th-v22-horizon 18s ease-in-out infinite alternate}
+.th-v13 .th-v22-noise{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#ffffff04 6px 6.5px);opacity:.18;mask-image:linear-gradient(#000,transparent 90%)}
+.th-v13 .th-v22-constellation i{position:absolute;width:3px;height:3px;border-radius:50%;background:#d8c6ff;box-shadow:0 0 14px #b8a0ff;opacity:.12;animation:th-v22-pulse 5s ease-in-out infinite alternate}
+.th-v13 .th-v22-constellation i:nth-child(4n){width:5px;height:5px;box-shadow:0 0 20px #95d8ff}
+.th-v13 .th-v22-orbit-label{position:absolute;font:700 9px/1.4 ui-monospace,monospace;letter-spacing:3px;color:#b8a3ed60;writing-mode:vertical-rl;user-select:none}
+.th-v13 .th-v22-label-a{top:26%;left:2.5%}.th-v13 .th-v22-label-b{right:2.5%;bottom:20%}
+.th-v13 .th-v22-card{animation:th-v22-card-enter .8s cubic-bezier(.16,1,.3,1) both}
+.th-v13 .th-card{backface-visibility:hidden}
+.th-v13 .th-card:hover{border-color:#d1b5ffb0;box-shadow:0 22px 65px #9461f329,0 0 35px #c6a0ff0d}
+.th-v13 .th-card:hover .th-card-icon{filter:drop-shadow(0 0 12px #ac86ff66)}
+.th-v13 .th-v22-stage:not(.th-v22-active){display:none}
+@keyframes th-v22-drift-a{to{transform:translate3d(9vw,12vh,0) rotate(22deg) scale(1.1)}}
+@keyframes th-v22-drift-b{to{transform:translate3d(-10vw,-8vh,0) rotate(-18deg) scale(1.12)}}
+@keyframes th-v22-ring-a{to{rotate:360deg}}
+@keyframes th-v22-ring-b{to{rotate:-360deg}}
+@keyframes th-v22-horizon{to{transform:translateY(65px) rotate(-4deg);opacity:.32}}
+@keyframes th-v22-pulse{to{opacity:.8;transform:translateY(-15px) scale(1.4)}}
+@keyframes th-v22-card-enter{from{opacity:0;transform:translateY(26px) scale(.975)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:760px){.th-v13 .th-v22-stage{display:none}.th-v13 .th-v22-card{animation:none}.th-v13 .th-v22-orbit-label{display:none}}
+@media(prefers-reduced-motion:reduce){.th-v13 .th-v22-stage{display:none!important}.th-v13 .th-v22-card{animation:none!important}}
