@@ -74,3 +74,43 @@
 .th-v13.th-lite .th-motion-fx,.th-v13.th-lite .th-particle-cloud,.th-v13.th-lite .th-prism,.th-v13.th-lite .th-wave{display:none}
 @media(max-width:760px){.th-v13 .th-particle-cloud i:nth-child(n+26){display:none}.th-v13 .th-prism,.th-v13 .th-wave{display:none}.th-v13 .th-cursor-glow,.th-v13 .th-cursor-ring{display:none}}
 @media(prefers-reduced-motion:reduce){.th-v13 .th-motion-fx,.th-v13 .th-particle-cloud,.th-v13 .th-prism,.th-v13 .th-wave{display:none!important}}
+
+
+/* V16: Nebula Reactor — layered kinetic art and efficient canvas starfield */
+.th-v13 .th-cosmic-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.95}
+.th-v13 .th-energy-core{position:absolute;width:min(65vw,700px);aspect-ratio:1;left:50%;top:6%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,#c4a3ff10 0%,#8b5cf615 12%,#9b72f00a 30%,transparent 68%);filter:blur(5px);animation:th-core-breathe 9s ease-in-out infinite alternate}
+.th-v13 .th-portal{position:absolute;left:50%;top:12%;width:min(64vw,660px);aspect-ratio:1;border-radius:50%;border:1px solid #aa8af52b;box-shadow:inset 0 0 35px #8b5cf609,0 0 25px #a78bfa0a;transform:translateX(-50%);animation:th-reactor-turn 46s linear infinite}
+.th-v13 .th-portal-outer{border-style:dashed;border-width:1px;mask-image:linear-gradient(120deg,transparent,#000 30%,#000 70%,transparent)}
+.th-v13 .th-portal-middle{width:min(49vw,500px);top:16%;border-color:#79b6f529;border-style:dotted;animation-duration:65s;animation-direction:reverse}
+.th-v13 .th-portal-inner{width:min(34vw,345px);top:21%;border-color:#d0b0ff35;animation-duration:35s;box-shadow:0 0 55px #ae80ff13,inset 0 0 35px #ae80ff10}
+.th-v13 .th-portal:before,.th-v13 .th-portal:after{content:'';position:absolute;top:50%;left:-4px;width:8px;height:8px;border-radius:50%;background:#cbb5ff;box-shadow:0 0 16px #b58bff,0 0 32px #9561ec}
+.th-v13 .th-portal:after{left:auto;right:-4px;background:#8edaff;box-shadow:0 0 15px #80c7ff}
+.th-v13 .th-light-ribbon{position:absolute;left:-20%;width:140%;height:210px;top:42%;border-top:1px solid #b9a1ff34;border-bottom:1px solid #5a9eea17;border-radius:50%;transform:rotate(-12deg);box-shadow:0 -13px 32px -31px #b79aff;animation:th-ribbon-sway 14s ease-in-out infinite alternate}
+.th-v13 .th-light-ribbon-b{top:70%;transform:rotate(13deg);border-color:#77baf522;animation-delay:-7s;animation-duration:19s}
+.th-v13 .th-satellite{position:absolute;width:12px;height:12px;border:1px solid #d1baff99;transform:rotate(45deg);box-shadow:0 0 20px #a58aff5c,0 0 55px #9e72fa36;animation:th-satellite-float 9s ease-in-out infinite alternate}
+.th-v13 .th-satellite-a{left:12%;top:27%}.th-v13 .th-satellite-b{right:16%;top:62%;animation-delay:-4s}
+.th-v13 .th-hero-circuit{position:absolute;inset:8% 2%;pointer-events:none;opacity:.7}
+.th-v13 .th-hero-circuit span{position:absolute;width:70px;height:70px;border:1px solid #ad8cfb35;border-radius:16px;transform:rotate(45deg);animation:th-circuit-dance 18s linear infinite}
+.th-v13 .th-hero-circuit span:nth-child(1){top:8%;left:4%}
+.th-v13 .th-hero-circuit span:nth-child(2){bottom:12%;right:7%;width:40px;height:40px;animation-direction:reverse}
+.th-v13 .th-hero-circuit span:nth-child(3){top:26%;right:1%;width:22px;height:22px;animation-duration:9s}
+.th-v13 .th-hero-circuit span:nth-child(4){bottom:6%;left:12%;width:16px;height:16px;animation-duration:12s}
+.th-v13 .th-card{transform-style:preserve-3d}
+.th-v13 .th-card:after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at 18% 8%,#c5b0ff17,transparent 43%);opacity:0;transition:opacity .3s}
+.th-v13 .th-card:hover:after{opacity:1}
+.th-v13 .th-card-icon{position:relative;z-index:1}
+.th-v13 .th-card-icon:after{content:'';position:absolute;inset:-6px;border:1px dashed #c6a7ff33;border-radius:20px;opacity:0;transform:rotate(0deg);transition:opacity .3s}
+.th-v13 .th-card:hover .th-card-icon:after{opacity:1;animation:th-icon-orbit 7s linear infinite}
+.th-v13 .th-toolbar{position:relative}
+.th-v13 .th-toolbar:before{content:'';position:absolute;left:0;right:0;bottom:-12px;height:1px;background:linear-gradient(90deg,transparent,#b49aff55,transparent)}
+.th-v13 .th-panel{position:relative;overflow:hidden}
+.th-v13 .th-panel:before{content:'';position:absolute;left:0;top:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,#bca0ff,#84c6fa,transparent);opacity:.65}
+@keyframes th-core-breathe{to{opacity:.52;transform:translateX(-50%) scale(1.12)}}
+@keyframes th-reactor-turn{to{transform:translateX(-50%) rotate(360deg)}}
+@keyframes th-ribbon-sway{to{translate:0 65px;opacity:.32}}
+@keyframes th-satellite-float{to{translate:24px -40px;rotate:110deg;opacity:.3}}
+@keyframes th-circuit-dance{to{transform:rotate(405deg)}}
+@keyframes th-icon-orbit{to{transform:rotate(360deg)}}
+.th-v13.th-lite .th-cosmic-canvas,.th-v13.th-lite .th-energy-core,.th-v13.th-lite .th-portal,.th-v13.th-lite .th-light-ribbon,.th-v13.th-lite .th-satellite,.th-v13.th-lite .th-hero-circuit{display:none}
+@media(max-width:760px){.th-v13 .th-portal,.th-v13 .th-light-ribbon,.th-v13 .th-satellite,.th-v13 .th-hero-circuit{display:none}.th-v13 .th-cosmic-canvas{opacity:.35}}
+@media(prefers-reduced-motion:reduce){.th-v13 .th-cosmic-canvas,.th-v13 .th-energy-core,.th-v13 .th-portal,.th-v13 .th-light-ribbon,.th-v13 .th-satellite,.th-v13 .th-hero-circuit{display:none!important}.th-v13 .th-card-icon:after{animation:none!important}}
