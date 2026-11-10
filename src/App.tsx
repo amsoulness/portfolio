@@ -1,3 +1,4 @@
+import ToolsHub from './ToolsHub'
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode, CSSProperties } from 'react'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
@@ -170,7 +171,7 @@ function MagneticLink({href,children,primary=false,external=false}:{href:string,
   const reduce=useReducedMotion()
   return <motion.a ref={ref} href={href} target={external?'_blank':undefined} rel={external?'noopener noreferrer':undefined} className={`btn ${primary?'primary':'outline'}`} animate={reduce?{}:offset} transition={{type:'spring',stiffness:180,damping:15}} whileHover={reduce?{}:{scale:1.045}} whileTap={{scale:.94}} onPointerMove={e=>{if(reduce||e.pointerType!=='mouse')return;const r=ref.current?.getBoundingClientRect();if(r)setOffset({x:(e.clientX-r.left-r.width/2)*.12,y:(e.clientY-r.top-r.height/2)*.12})}} onPointerLeave={()=>setOffset({x:0,y:0})}>{children}</motion.a>
 }
-export default function App(){
+function PortfolioApp(){
   const [pointer,setPointer]=useState({x:50,y:40})
   const [menuOpen,setMenuOpen]=useState(false)
   const [effectsOn,setEffectsOn]=useState(true)
@@ -482,6 +483,7 @@ export default function App(){
         <a href="#about" onClick={()=>setMenuOpen(false)}>ABOUT</a>
         <a href="#skills" onClick={()=>setMenuOpen(false)}>SKILLS</a>
         <a href="#projects" onClick={()=>setMenuOpen(false)}>WORK</a>
+        <a href="/tools" onClick={()=>setMenuOpen(false)}>TOOLS ✦</a>
         <a href="#experience" onClick={()=>setMenuOpen(false)}>EXPERIENCE</a><a href="#contact" onClick={()=>setMenuOpen(false)}>CONTACT ↗</a>
       </div>
     </nav>
@@ -556,4 +558,8 @@ export default function App(){
     </section>
     <footer className="footer">© 2026 ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
   </main>
+}
+
+export default function App(){
+  return window.location.pathname.replace(/\/$/,'') === '/tools' ? <ToolsHub/> : <PortfolioApp/>
 }
