@@ -208,3 +208,37 @@
   .th-v13 .th-kinetic-title { font-size:30px; }
   .th-v13 .th-collection-heading h2 { font-size:28px; }
 }
+
+/* V20 — legible expressive typography and usable mobile portfolio navigation */
+.th-v13 .th-v20-title{display:flex;flex-direction:column;align-items:center;gap:.02em;max-width:100%;margin:30px auto 25px;line-height:1.02;font-size:clamp(52px,8vw,112px);font-weight:950;letter-spacing:-.075em;text-align:center}
+.th-v13 .th-v20-line{display:block;max-width:100%;color:#f8f5ff;white-space:nowrap;text-shadow:0 8px 38px #a77bfa1b}
+.th-v13 .th-v20-gradient{color:#bda4ff;background:linear-gradient(110deg,#f5eaff 0%,#c7a6ff 35%,#8fc9ff 75%,#c9a9ff 100%);background-size:180% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:th-v20-shift 9s ease-in-out infinite alternate}
+.th-v13 .th-v20-section-title{font-weight:950;letter-spacing:-.065em;line-height:1.13;text-wrap:balance}
+.th-v13 .th-v20-section-title em{font-style:normal;color:#c3a6ff;-webkit-text-stroke:0!important;background:linear-gradient(105deg,#d9c4ff,#a3cfff);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.th-v13 .th-nav-actions .th-nav-back{display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;flex:none;min-height:44px}
+.th-v13 .th-nav-actions .th-nav-back .th-back-label{display:inline!important;font-size:10px;letter-spacing:1.1px;font-weight:850}
+.th-v13 .th-nav-actions .th-nav-back .th-back-arrow{font-size:19px;line-height:1}
+@keyframes th-v20-shift{to{background-position:100% 0}}
+@media(max-width:760px){
+.th-v13 .th-v20-title{font-size:clamp(40px,10.3vw,70px);line-height:1.06;letter-spacing:-.075em;gap:.07em;padding:0 3px}
+.th-v13 .th-v20-line{white-space:normal;overflow-wrap:normal}
+.th-v13 .th-v20-section-title{font-size:clamp(31px,7.7vw,47px);line-height:1.16}
+.th-v13 .th-v20-section-title em{display:block;margin-top:3px}
+.th-v13 .th-nav-v18{display:flex;justify-content:space-between;gap:9px;min-width:0;padding:12px 12px}
+.th-v13 .th-brand-v18{flex:1;min-width:0}
+.th-v13 .th-nav-actions{flex:none;gap:7px}
+.th-v13 .th-nav-actions .th-nav-back{padding:8px 11px;min-width:0;min-height:42px;border-radius:11px}
+.th-v13 .th-nav-actions .th-nav-back .th-back-label{display:inline!important;font-size:9px;letter-spacing:.45px}
+.th-v13 .th-nav-actions .th-quality{padding:8px 9px;min-height:42px;font-size:8px;letter-spacing:0}
+.th-v13 .th-brand-words small{font-size:6px;letter-spacing:.55px}
+}
+@media(max-width:440px){
+.th-v13 .th-brand-mark{display:none}
+.th-v13 .th-brand-words strong{font-size:clamp(15px,4vw,19px)}
+.th-v13 .th-brand-words small{display:none}
+.th-v13 .th-v20-title{font-size:clamp(35px,10vw,44px)}
+.th-v13 .th-nav-actions .th-nav-back{padding:8px 9px}
+.th-v13 .th-nav-actions .th-nav-back .th-back-label{font-size:8px}
+}
+@media(max-width:350px){.th-v13 .th-nav-actions .th-quality{font-size:7px;padding:7px}.th-v13 .th-brand-words strong{font-size:14px}.th-v13 .th-v20-title{font-size:33px}}
+@media(prefers-reduced-motion:reduce){.th-v13 .th-v20-gradient{animation:none!important}}
