@@ -83,9 +83,17 @@ async function getInspirationImage(item:Inspiration, signal:AbortSignal):Promise
       const r=await fetch('https://openlibrary.org/search.json?title=The%20Culture%20Code&author=Daniel%20Coyle&limit=5',{signal})
       if(r.ok){const d=await r.json();const match=(d.docs||[]).find((x:{cover_i?:number,title?:string})=>x.cover_i&&x.title?.toLowerCase().includes('culture code'));if(match?.cover_i)return `https://covers.openlibrary.org/b/id/${match.cover_i}-L.jpg?default=false`}
     }
-    if(item.title==='ChatGPT')return 'https://cdn.simpleicons.org/openai/FFFFFF'
-    if(item.title==='Gemini')return 'https://cdn.simpleicons.org/googlegemini'
+    if(item.title==='ChatGPT')return 'https://cdn.simpleicons.org/openai/74AA9C'
+    if(item.title==='Gemini')return 'https://cdn.simpleicons.org/googlegemini/8E75B2'
     if(item.title==='Adobe After Effects')return 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/aftereffects/aftereffects-original.svg'
+    if(item.title==='Game of Thrones'||item.title==='Attack on Titan'){
+      // Try the page summary image first; fall back to the MediaWiki pageimages API below.
+      const page=item.title==='Game of Thrones'?'Game_of_Thrones':'Attack_on_Titan_(TV_series)'
+      try{
+        const res=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${page}`,{signal,headers:{Accept:'application/json'}})
+        if(res.ok){const data=await res.json();const art=data.originalimage?.source||data.thumbnail?.source;if(art)return art}
+      }catch(e){if(signal.aborted)return null}
+    }
     if(item.category==='MUSIC'){
       const term=item.title==='Angel'?'Massive Attack Angel':'Saint Avangeline Lilith'
       const r=await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(term)}&entity=song&limit=20`,{signal})
@@ -649,7 +657,7 @@ function PortfolioApp(){
         <MagneticLink href={`https://wa.me/${WHATSAPP_NUMBER}`} primary external><img className="contact-brand-icon" src="https://cdn.simpleicons.org/whatsapp/FFFFFF" alt="" loading="lazy"/> MESSAGE ON WHATSAPP <span aria-hidden="true">↗</span></MagneticLink>
         <MagneticLink href={EMAIL}><svg className="contact-brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m3.5 6 8.5 7 8.5-7"/></svg> SEND AN EMAIL <span aria-hidden="true">↗</span></MagneticLink>
         <MagneticLink href={GITHUB} external><img className="contact-brand-icon" src="https://cdn.simpleicons.org/github/FFFFFF" alt="" loading="lazy"/> GITHUB <span aria-hidden="true">↗</span></MagneticLink>
-        <MagneticLink href={LINKEDIN} external><img className="contact-brand-icon" src="https://cdn.simpleicons.org/linkedin/FFFFFF" alt="" loading="lazy"/> LINKEDIN <span aria-hidden="true">↗</span></MagneticLink>
+        <MagneticLink href={LINKEDIN} external><img className="contact-brand-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg" alt="" loading="lazy" onError={e=>{e.currentTarget.style.display="none"}}/> LINKEDIN <span aria-hidden="true">↗</span></MagneticLink>
       </div></Reveal>
     </section>
     <footer className="footer">© 2026 AMSOULNESS / ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
