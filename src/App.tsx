@@ -460,6 +460,55 @@ function PortfolioApp(){
       @media (max-width: 767px) {
         .site .v9-float-controls { display: none !important; }
       }
+
+      /* V24 — Tools Hub feature launchpad */
+      .tools-nav-spotlight{position:relative!important;display:inline-flex!important;align-items:center;gap:7px;padding:10px 15px!important;border:1px solid #b995ff8a!important;border-radius:999px;background:linear-gradient(120deg,#3c2266,#211339)!important;box-shadow:0 0 20px #9c65fa20;color:#f2eaff!important}
+      .tools-nav-spotlight:hover{box-shadow:0 0 25px #ad80ff65;transform:translateY(-2px)}
+      .tools-nav-spark{color:#d6c0ff;animation:tools-v24-spark 3s ease-in-out infinite}
+      .tools-nav-new{font-size:9px;letter-spacing:1px;color:#c5a7ff}
+      .tools-hero-cta{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:13px 19px;border-radius:14px;text-decoration:none;font-size:12px;letter-spacing:1.1px;font-weight:850;color:#130a24!important;background:linear-gradient(110deg,#e6d9ff,#b28bff 58%,#9edaff);box-shadow:0 9px 35px #ad80ff48;transition:transform .2s,box-shadow .2s}
+      .tools-hero-cta:hover{transform:translateY(-3px);box-shadow:0 14px 45px #ad80ff72}
+      .tools-cta-pulse{animation:tools-v24-spark 3s ease-in-out infinite}
+      .tools-featured-section{position:relative;isolation:isolate;overflow:hidden;margin:0 auto 40px;width:min(1220px,calc(100% - 44px));border:1px solid #bfa2ff55;border-radius:30px;background:linear-gradient(130deg,#1d1032f5,#0d0b1af5 55%,#111f32f5);box-shadow:0 25px 100px #0008,0 0 70px #8b5cf613;color:#f6f0ff}
+      .tools-featured-section:before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 78% 43%,#9a6aff20,transparent 52%),radial-gradient(ellipse at 15% 90%,#339ad815,transparent 50%);pointer-events:none}
+      .tools-featured-topline{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:21px 32px;border-bottom:1px solid #b99cff2b;font:750 10px/1.4 ui-monospace,monospace;letter-spacing:2px;color:#bba6e5}
+      .tools-featured-topline i{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#a58aff;box-shadow:0 0 12px #ad86ff}
+      .tools-featured-layout{display:grid;grid-template-columns:1.05fr 1fr;align-items:center;gap:25px;padding:65px 52px 75px}
+      .tools-featured-copy{position:relative;z-index:2}
+      .tools-featured-eyebrow{font:800 11px/1.5 ui-monospace,monospace;letter-spacing:3px;color:#c7aaff}
+      .tools-featured-copy h2{margin:20px 0 23px;font-size:clamp(42px,5.3vw,76px);line-height:1.04;letter-spacing:-.075em;font-weight:950}
+      .tools-featured-copy h2 span{background:linear-gradient(110deg,#d5baff,#aa8bff,#8ed6f6);background-clip:text;-webkit-background-clip:text;color:transparent}
+      .tools-featured-description{max-width:490px;font-size:15px;line-height:1.9;color:#bcb4cc}
+      .tools-featured-chips{display:flex;flex-wrap:wrap;gap:9px;margin:26px 0 29px}
+      .tools-featured-chips span{font-size:10px;letter-spacing:.8px;font-weight:800;color:#d9c8fa;border:1px solid #b69af34a;background:#ad8af410;padding:9px 12px;border-radius:999px}
+      .tools-featured-button{display:inline-flex;align-items:center;justify-content:space-between;gap:35px;min-height:56px;padding:12px 13px 12px 22px;border-radius:15px;background:linear-gradient(100deg,#d7bfff,#ad8afa 60%,#9edaf7);color:#1b1030!important;font-size:12px;font-weight:950;letter-spacing:1.2px;text-decoration:none;box-shadow:0 8px 30px #ad82f642;transition:transform .25s,box-shadow .25s}
+      .tools-featured-button:hover{transform:translateY(-4px);box-shadow:0 14px 40px #ae87ff75}
+      .tools-featured-button-arrow{display:grid;place-items:center;width:35px;height:35px;border-radius:10px;background:#25143a;color:#f5e9ff;font-size:21px}
+      .tools-featured-footnote{margin-top:22px;font-size:9px;letter-spacing:1.8px;color:#9185a7}
+      .tools-featured-footnote span{margin:0 7px;color:#b39bf1}
+      .tools-featured-visual{position:relative;display:block;min-height:390px;overflow:hidden;border:1px solid #a98af249;border-radius:26px;background:radial-gradient(circle at 50% 45%,#402467,#120d24 52%,#080c18);text-decoration:none;transition:border-color .3s,box-shadow .3s}
+      .tools-featured-visual:hover{border-color:#c2a5ff;box-shadow:0 0 60px #a56cff25}
+      .tools-featured-visual-grid{position:absolute;inset:0;background-image:linear-gradient(#b9a0ff0d 1px,transparent 1px),linear-gradient(90deg,#b9a0ff0d 1px,transparent 1px);background-size:32px 32px;mask-image:radial-gradient(circle,#000,transparent 75%)}
+      .tools-featured-orbit{position:absolute;width:260px;height:260px;top:50%;left:50%;border:1px dashed #c9a8ff57;border-radius:50%;transform:translate(-50%,-50%);animation:tools-v24-spin 32s linear infinite}
+      .tools-featured-orbit-b{width:340px;height:340px;border-color:#80c6fa35;animation-direction:reverse;animation-duration:48s}
+      .tools-featured-orbit:after{content:'';position:absolute;top:9%;left:16%;width:7px;height:7px;border-radius:50%;background:#d6c1ff;box-shadow:0 0 17px #b991ff}
+      .tools-featured-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:150px;height:150px;border-radius:35px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1px solid #d4baff99;background:linear-gradient(145deg,#53327a,#25183d);box-shadow:0 0 50px #a16aff45,inset 0 1px #fff3}
+      .tools-featured-center>span{font-size:34px;color:#e2caff}.tools-featured-center strong{font-size:27px;font-weight:950;letter-spacing:-1px;color:#fff}.tools-featured-center small{font-size:9px;letter-spacing:3px;color:#cdb5f8}
+      .tools-featured-mini{position:absolute;z-index:2;display:flex;flex-direction:column;gap:4px;min-width:130px;padding:12px 15px;border:1px solid #bb9aff77;border-radius:14px;background:#1d1536ed;box-shadow:0 8px 30px #0007;animation:tools-v24-float 6s ease-in-out infinite}
+      .tools-featured-mini>span{font-size:21px;color:#c9adff}.tools-featured-mini strong{font-size:11px;letter-spacing:1.5px;color:#f4eaff}.tools-featured-mini small{font-size:8px;letter-spacing:.6px;color:#a99abf}
+      .tools-featured-mini-a{top:10%;left:5%}.tools-featured-mini-b{right:4%;top:17%;animation-delay:-2s}.tools-featured-mini-c{left:9%;bottom:9%;animation-delay:-4s}
+      .tools-featured-visual-hint{position:absolute;right:15px;bottom:17px;color:#a8d5f8;font-size:9px;letter-spacing:1.4px;font-weight:800}
+      .tools-featured-marquee{overflow:hidden;border-top:1px solid #ae8cff31;padding:15px 0;background:#09071688}
+      .tools-featured-marquee>div{width:max-content;white-space:nowrap;font:800 10px/1.5 ui-monospace,monospace;letter-spacing:2px;color:#bca9df;animation:tools-v24-marquee 40s linear infinite}
+      .tools-featured-marquee b{margin:0 22px;color:#a88bff}
+      @keyframes tools-v24-spark{50%{opacity:.5;transform:scale(.75)}}
+      @keyframes tools-v24-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+      @keyframes tools-v24-float{50%{translate:0 -12px}}
+      @keyframes tools-v24-marquee{to{transform:translateX(-45%)}}
+      @media(max-width:900px){.tools-featured-layout{grid-template-columns:1fr;padding:45px 32px;gap:35px}.tools-featured-visual{min-height:340px}}
+      @media(max-width:650px){.tools-featured-section{width:calc(100% - 24px);border-radius:22px}.tools-featured-topline{padding:16px;font-size:8px;letter-spacing:1px}.tools-featured-topline span:last-child{display:none}.tools-featured-layout{padding:32px 20px 37px;gap:25px}.tools-featured-copy h2{font-size:clamp(38px,10vw,56px)}.tools-featured-description{font-size:14px}.tools-featured-chips{gap:7px}.tools-featured-chips span{font-size:9px}.tools-featured-button{width:100%;gap:8px;font-size:11px;letter-spacing:.4px}.tools-featured-visual{min-height:285px}.tools-featured-orbit{width:190px;height:190px}.tools-featured-orbit-b{width:260px;height:260px}.tools-featured-center{width:112px;height:112px;border-radius:25px}.tools-featured-center>span{font-size:26px}.tools-featured-center strong{font-size:20px}.tools-featured-mini{min-width:0;padding:9px 10px}.tools-featured-mini strong{font-size:9px}.tools-featured-mini small{font-size:7px}.tools-featured-mini-a{top:6%;left:3%}.tools-featured-mini-b{top:9%;right:3%}.tools-featured-mini-c{left:4%;bottom:6%}.tools-featured-visual-hint{font-size:8px}.tools-featured-footnote{font-size:8px;letter-spacing:.6px}.tools-nav-spotlight{padding:11px!important}}
+      @media(max-width:370px){.tools-featured-mini{display:none}.tools-featured-copy h2{font-size:36px}}
+      @media(prefers-reduced-motion:reduce){.tools-featured-orbit,.tools-featured-mini,.tools-featured-marquee>div,.tools-nav-spark,.tools-cta-pulse{animation:none!important}}
     `}</style>
     <motion.div className="progress" style={{scaleX:progress}}/>
     <div className="ambient" style={{background:`radial-gradient(circle at ${pointer.x}% ${pointer.y}%,rgba(124,58,237,.24),transparent 37%),radial-gradient(circle at 85% 65%,rgba(34,211,238,.09),transparent 36%)`}}/>
@@ -489,7 +538,7 @@ function PortfolioApp(){
         <a href="#skills" onClick={()=>setMenuOpen(false)}>SKILLS</a>
         <a href="#projects" onClick={()=>setMenuOpen(false)}>WORK</a>
         <a href="#inspiration" onClick={()=>setMenuOpen(false)}>INSPIRE</a>
-        <a href="/tools" onClick={()=>setMenuOpen(false)}>TOOLS ✦</a>
+        <a href="/tools" className="tools-nav-spotlight" onClick={()=>setMenuOpen(false)}><span className="tools-nav-spark">✦</span> TOOLS <span className="tools-nav-new">EXPLORE ↗</span></a>
         <a href="#experience" onClick={()=>setMenuOpen(false)}>EXPERIENCE</a><a href="#contact" onClick={()=>setMenuOpen(false)}>CONTACT ↗</a>
       </div>
     </nav>
@@ -507,9 +556,33 @@ function PortfolioApp(){
         <motion.p className="eyebrow" initial={reduce?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8}}>✦ DEVELOPER × CREATIVE EDITOR</motion.p>
         <h1>{['Emmanuel','Cherian.'].map((word,i)=><div key={word} style={{overflow:'hidden',paddingBottom:9}}><motion.span className={i===1?'gradient':''} style={{display:'inline-block'}} initial={reduce?false:{y:'110%',opacity:0}} animate={{y:'0%',opacity:1}} transition={{duration:1.1,delay:.25+i*.25,ease:[.22,1,.36,1]}}>{word}</motion.span></div>)}</h1>
         <Reveal delay={.4}><p className="hero-description">I'm a BCA student, aspiring software developer and self-taught video editor. I bring together software, technology and cinematic storytelling under the name AMSOULNESS / ASLNS.</p></Reveal>
-        <div className="actions"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><MagneticLink href={`https://wa.me/${WHATSAPP_NUMBER}`} external>CHAT ON WHATSAPP ↗</MagneticLink><MagneticLink href="#skills">VIEW MY SKILLS ✦</MagneticLink><MagneticLink href="#inspiration">MY INSPIRATIONS ↗</MagneticLink></div>
+        <div className="actions"><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE FREE TOOLS <span aria-hidden="true">↗</span></a><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><MagneticLink href={`https://wa.me/${WHATSAPP_NUMBER}`} external>CHAT ON WHATSAPP ↗</MagneticLink><MagneticLink href="#skills">VIEW MY SKILLS ✦</MagneticLink><MagneticLink href="#inspiration">MY INSPIRATIONS ↗</MagneticLink></div>
       </motion.div>
       <motion.div className="scroll-cue" animate={reduce?{}:{y:[0,10,0]}} transition={{duration:2,repeat:Infinity}}>SCROLL TO EXPLORE ↓</motion.div>
+    </section>
+    <section className="tools-featured-section" id="featured-tools" aria-labelledby="tools-featured-title">
+      <div className="tools-featured-topline"><span><i/> AMSOULNESS / DIGITAL LAB</span><span>FEATURED EXPERIENCE — 001</span></div>
+      <div className="tools-featured-layout">
+        <div className="tools-featured-copy">
+          <p className="tools-featured-eyebrow">✦ MORE THAN A PORTFOLIO</p>
+          <h2 id="tools-featured-title">YOUR IDEAS.<br/><span>OUR TOOLKIT.</span></h2>
+          <p className="tools-featured-description">A creative space built for your next big idea. Compress images, generate QR codes, format code, explore colors and more — free tools, right here on AMSOULNESS.</p>
+          <div className="tools-featured-chips"><span>✧ 8 FREE TOOLS</span><span>◇ NO SIGN-UP</span><span>⚡ BUILT FOR CREATORS</span></div>
+          <a href="/tools" className="tools-featured-button"><span>ENTER THE TOOLS UNIVERSE</span><span className="tools-featured-button-arrow">↗</span></a>
+          <p className="tools-featured-footnote">INSTANT ACCESS <span>•</span> BUILT TO CREATE <span>•</span> EXPLORE MORE</p>
+        </div>
+        <a href="/tools" className="tools-featured-visual" aria-label="Open the AMSOULNESS Tools Hub">
+          <div className="tools-featured-visual-grid" aria-hidden="true"/>
+          <div className="tools-featured-orbit tools-featured-orbit-a" aria-hidden="true"/>
+          <div className="tools-featured-orbit tools-featured-orbit-b" aria-hidden="true"/>
+          <div className="tools-featured-center" aria-hidden="true"><span>✦</span><strong>ASLNS</strong><small>TOOLS LAB</small></div>
+          <div className="tools-featured-mini tools-featured-mini-a"><span>◈</span><strong>IMAGE</strong><small>COMPRESS / CONVERT</small></div>
+          <div className="tools-featured-mini tools-featured-mini-b"><span>⌘</span><strong>CODE</strong><small>FORMAT / DECODE</small></div>
+          <div className="tools-featured-mini tools-featured-mini-c"><span>▦</span><strong>CREATE</strong><small>QR / COLORS / TEXT</small></div>
+          <span className="tools-featured-visual-hint">CLICK TO EXPLORE ↗</span>
+        </a>
+      </div>
+      <div className="tools-featured-marquee" aria-hidden="true"><div>IMAGE COMPRESSOR <b>✦</b> QR GENERATOR <b>✦</b> JSON FORMATTER <b>✦</b> COLOR TOOLS <b>✦</b> TEXT UTILITIES <b>✦</b> PASSWORD GENERATOR <b>✦</b> IMAGE CONVERTER <b>✦</b> DEVELOPER TOOLS <b>✦</b> IMAGE COMPRESSOR <b>✦</b> QR GENERATOR <b>✦</b></div></div>
     </section>
     <section id="about" className="section">
       <Heading index="01" kicker="THE PERSON" title="Two worlds. One mindset."/>
