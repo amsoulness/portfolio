@@ -178,3 +178,33 @@
 @media(max-width:380px){.th-v13 .th-brand-words small{display:none}.th-v13 .th-brand-mark{display:none}}
 .th-v13.th-lite .th-nav-v18:before,.th-v13.th-lite .th-nav-scan,.th-v13.th-lite .th-brand-mark-orbit,.th-v13.th-lite .th-nav-pulse{animation:none}
 @media(prefers-reduced-motion:reduce){.th-v13 .th-nav-v18:before,.th-v13 .th-nav-scan,.th-v13 .th-brand-mark-orbit,.th-v13 .th-nav-pulse{animation:none!important}}
+
+/* AMSOULNESS V19 — mobile typography repair; desktop remains unchanged */
+@media (max-width: 760px) {
+  .th-v13 .th-hero { min-width:0; width:100%; padding:56px 0 42px; }
+  .th-v13 .th-kinetic-title { width:100%; max-width:100%; min-width:0; font-size:clamp(36px,9vw,60px); line-height:1.07; letter-spacing:-.055em; gap:.08em; margin:26px 0 22px; overflow:visible; }
+  .th-v13 .th-title-line { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; column-gap:.2em; row-gap:.02em; white-space:normal; width:100%; max-width:100%; }
+  .th-v13 .th-title-word { display:inline-block; flex:none; max-width:100%; white-space:nowrap; letter-spacing:-.055em; }
+  .th-v13 .th-title-outline { -webkit-text-stroke:1px #c3a8f9; text-shadow:none; }
+  .th-v13 .th-title-line-two { font-size:.86em; letter-spacing:-.045em; }
+  .th-v13 .th-title-line-two em { display:inline-block; max-width:100%; }
+  .th-v13 .th-collection-heading { text-align:center; max-width:100%; padding:26px 0 24px; }
+  .th-v13 .th-collection-heading h2 { font-size:clamp(30px,7.7vw,46px); line-height:1.16; letter-spacing:-.045em; max-width:100%; overflow-wrap:normal; }
+  .th-v13 .th-collection-heading h2 em { display:inline; -webkit-text-stroke:.8px #c9aeff; letter-spacing:-.055em; }
+  .th-v13 .th-eyebrow { font-size:clamp(9px,2vw,11px); letter-spacing:clamp(1px,.35vw,2px); line-height:1.7; overflow-wrap:anywhere; }
+  .th-v13 .th-hero p { max-width:100%; font-size:clamp(14px,3.4vw,17px); line-height:1.75; letter-spacing:0; }
+  .th-v13 .th-hero-meta { gap:12px 16px; justify-content:center; font-size:9px; letter-spacing:1px; }
+  .th-v13 .th-hero-manifesto { max-width:100%; gap:8px; letter-spacing:1px; }
+  .th-v13 .th-hero-manifesto > span:nth-child(2) { min-width:0; }
+}
+@media (max-width: 420px) {
+  .th-v13 .th-kinetic-title { font-size:clamp(32px,8.6vw,40px); }
+  .th-v13 .th-title-line { flex-direction:column; row-gap:.06em; }
+  .th-v13 .th-title-line-two { font-size:.89em; }
+  .th-v13 .th-collection-heading h2 { font-size:clamp(29px,7.5vw,35px); }
+  .th-v13 .th-collection-heading h2 em { display:block; margin-top:2px; }
+}
+@media (max-width: 330px) {
+  .th-v13 .th-kinetic-title { font-size:30px; }
+  .th-v13 .th-collection-heading h2 { font-size:28px; }
+}
