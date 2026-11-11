@@ -229,7 +229,7 @@ function YouTubeTool(){
  const inspect=async()=>{
   setLoading(true);setMessage('');setInfo(null);setFormat('')
   try{
-
+   if(!MEDIA_API)throw new Error('Downloader backend not configured. Set VITE_MEDIA_API_URL in Vercel.')
    const response=await fetch(`${MEDIA_API}/api/video/info`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url})})
    const data=await response.json()
    if(!response.ok)throw new Error(data.detail||'Unable to inspect this video.')
