@@ -1,10 +1,14 @@
 <div align="center">
 
+<img src="assets/aslns-banner.svg" alt="AMSOULNESS — animated neon identity banner" width="100%" />
+
 # ✦ AMSOULNESS ✦
 
 ### `DESIGN × CODE × CURIOSITY`
 
 **A little code. A little chaos. A whole lot of curiosity.**
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=19&duration=3200&pause=1100&color=A78BFA&center=true&vCenter=true&repeat=true&width=760&height=50&lines=Designing+experiences%2C+not+just+pages.;Turning+curiosity+into+working+code.;One+idea.+Eight+tools.+Endless+possibilities." alt="Animated typing introduction" />
 
 *A digital playground where ideas become interfaces, experiments become experiences, and useful tools get a little personality.*
 
@@ -24,6 +28,8 @@
 
 ---
 
+<div align="center"><img src="assets/aslns-divider.svg" alt="Animated purple divider" width="100%" /></div>
+
 ## ✧ The Story
 
 > **Not just another portfolio. A place for things worth making.**
@@ -38,6 +44,8 @@ This repository brings together two connected experiences:
 - **The Tools Hub** — eight browser-based utilities for everyday creative and developer tasks.
 
 <div align="center">
+
+<img src="assets/aslns-workflow.svg" alt="Animated creative workflow from imagine to refine" width="100%" />
 
 ### `01 / IMAGINE` → `02 / DESIGN` → `03 / DEVELOP` → `04 / REFINE`
 
@@ -60,6 +68,8 @@ This repository brings together two connected experiences:
 
 </div>
 
+<div align="center"><img src="assets/aslns-divider.svg" alt="Animated section divider" width="100%" /></div>
+
 ## ⚡ The Creative Toolbox
 
 *Small utilities. Big everyday usefulness.*
@@ -78,6 +88,8 @@ This repository brings together two connected experiences:
 > **Try before you read:** The best way to experience these tools is to [open the live Tools Hub](https://aslns.online/tools). Exact capabilities and supported formats depend on the tool and browser.
 
 ---
+
+<div align="center"><img src="assets/aslns-divider.svg" alt="Animated section divider" width="100%" /></div>
 
 ## ✦ What Makes It ASLNS?
 
@@ -279,3 +291,23 @@ This repository does not currently declare an open-source license. Unless a lice
 <sub>© 2026 AMSOULNESS / ASLNS</sub>
 
 </div>
+
+
+---
+
+<div align="center">
+
+<img src="assets/aslns-divider.svg" alt="Animated footer divider" width="100%" />
+
+### `STILL CREATING • STILL EXPLORING • STILL EVOLVING`
+
+*The next version is always one idea away.*
+
+</div>
+
+<details>
+<summary><b>✨ About the motion elements in this README</b></summary>
+
+The banner, section dividers, and workflow illustration are local animated SVG assets included in this repository under <code>assets/</code>. The typing headline uses a third-party image service. Motion depends on GitHub's image rendering and your browser's accessibility preferences. If animations are unavailable, the SVGs still display as static artwork.
+
+</details>

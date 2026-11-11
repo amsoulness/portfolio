@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="40" viewBox="0 0 1000 40" role="img" aria-label="Animated section divider">
+<defs><linearGradient id="g"><stop stop-color="#111827"/><stop offset=".5" stop-color="#a78bfa"/><stop offset="1" stop-color="#111827"/></linearGradient></defs>
+<path d="M20 20H980" stroke="url(#g)" stroke-width="1.5"/>
+<circle cx="40" cy="20" r="5" fill="#7dd3fc"><animate attributeName="cx" values="40;960;40" dur="9s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="9s" repeatCount="indefinite"/></circle>
+<circle cx="500" cy="20" r="3" fill="#c4b5fd"><animate attributeName="r" values="2;6;2" dur="3s" repeatCount="indefinite"/></circle>
+</svg>
