@@ -477,6 +477,20 @@ function PortfolioApp(){
       .tools-hero-cta{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:13px 19px;border-radius:14px;text-decoration:none;font-size:12px;letter-spacing:1.1px;font-weight:850;color:#130a24!important;background:linear-gradient(110deg,#e6d9ff,#b28bff 58%,#9edaff);box-shadow:0 9px 35px #ad80ff48;transition:transform .2s,box-shadow .2s}
       .tools-hero-cta:hover{transform:translateY(-3px);box-shadow:0 14px 45px #ad80ff72}
       .tools-cta-pulse{animation:tools-v24-spark 3s ease-in-out infinite}
+      /* ASLNS Digital Lab 3.0 — homepage showcase */
+      .tools-featured-section{background:radial-gradient(ellipse at 75% 40%,#32205177,transparent 52%),linear-gradient(135deg,#140c24,#090914 60%,#091523)!important;border-color:#ae90f566!important;box-shadow:0 35px 100px #0009,0 0 65px #8655d91c!important}
+      .tools-featured-topline{background:linear-gradient(90deg,#9b72eb12,transparent 65%)}
+      .tools-featured-copy h2{letter-spacing:-.065em!important;text-wrap:balance}
+      .tools-featured-chips span:first-child{background:linear-gradient(115deg,#7c3aed40,#22d3ee20);border-color:#b9a0ff99;color:#f2e9ff}
+      .tools-featured-button{position:relative;overflow:hidden;isolation:isolate;border:1px solid #ffffff55;box-shadow:0 14px 40px #9864ef44, inset 0 1px #ffffff77!important}
+      .tools-featured-button:before{content:'';position:absolute;z-index:-1;inset:-100% auto -100% -55%;width:32%;transform:rotate(24deg);background:linear-gradient(90deg,transparent,#fff9,transparent);transition:left .65s ease}
+      .tools-featured-button:hover:before{left:140%}
+      .tools-featured-button:focus-visible,.tools-featured-visual:focus-visible{outline:2px solid #c8b5ff;outline-offset:5px}
+      .tools-featured-visual{background:radial-gradient(circle at 50% 45%,#503077,#1a102e 50%,#080d1c)!important;box-shadow:inset 0 0 60px #7c3aed18,0 20px 55px #0007}
+      .tools-featured-mini{backdrop-filter:blur(14px);box-shadow:0 14px 32px #0007,inset 0 1px #ffffff1a}
+      .tools-featured-mini:hover{filter:brightness(1.22)}
+      @media(max-width:650px){.tools-featured-button{width:100%;gap:12px}.tools-featured-visual{min-height:345px}}
+      @media(prefers-reduced-motion:reduce){.tools-featured-button:before{display:none}}
       .tools-featured-section{position:relative;isolation:isolate;overflow:hidden;margin:0 auto 40px;width:min(1220px,calc(100% - 44px));border:1px solid #bfa2ff55;border-radius:30px;background:linear-gradient(130deg,#1d1032f5,#0d0b1af5 55%,#111f32f5);box-shadow:0 25px 100px #0008,0 0 70px #8b5cf613;color:#f6f0ff}
       .tools-featured-section:before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 78% 43%,#9a6aff20,transparent 52%),radial-gradient(ellipse at 15% 90%,#339ad815,transparent 50%);pointer-events:none}
       .tools-featured-topline{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:21px 32px;border-bottom:1px solid #b99cff2b;font:750 10px/1.4 ui-monospace,monospace;letter-spacing:2px;color:#bba6e5}
@@ -581,7 +595,7 @@ function PortfolioApp(){
         <motion.p className="eyebrow" initial={reduce?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8}}>✦ DEVELOPER × CREATIVE EDITOR</motion.p>
         <h1>{['Emmanuel','Cherian.'].map((word,i)=><div key={word} style={{overflow:'hidden',paddingBottom:9}}><motion.span className={i===1?'gradient':''} style={{display:'inline-block'}} initial={reduce?false:{y:'110%',opacity:0}} animate={{y:'0%',opacity:1}} transition={{duration:1.1,delay:.25+i*.25,ease:[.22,1,.36,1]}}>{word}</motion.span></div>)}</h1>
         <Reveal delay={.4}><p className="hero-description">I’m Emmanuel — a BCA student, aspiring software developer, and self-taught video editor. Through AMSOULNESS / ASLNS, I blend code, technology, and cinematic storytelling to turn ideas into experiences.</p></Reveal>
-        <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE FREE TOOLS <span aria-hidden="true">↗</span></a></div>
+        <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE 5 CREATIVE TOOLS <span aria-hidden="true">↗</span></a></div>
       </motion.div>
       <motion.div className="scroll-cue" animate={reduce?{}:{y:[0,10,0]}} transition={{duration:2,repeat:Infinity}}>SCROLL TO EXPLORE ↓</motion.div>
     </section>
@@ -591,9 +605,9 @@ function PortfolioApp(){
         <div className="tools-featured-copy">
           <p className="tools-featured-eyebrow">✦ MORE THAN A PORTFOLIO</p>
           <h2 id="tools-featured-title">YOUR IDEAS.<br/><span>OUR TOOLKIT.</span></h2>
-          <p className="tools-featured-description">A creative space built for your next big idea. Compress images, generate QR codes, format code, explore colors and more — free tools, right here on AMSOULNESS.</p>
-          <div className="tools-featured-chips"><span>✧ 8 FREE TOOLS</span><span>◇ NO SIGN-UP</span><span>⚡ BUILT FOR CREATORS</span></div>
-          <a href="/tools" className="tools-featured-button"><span>ENTER THE TOOLS UNIVERSE</span><span className="tools-featured-button-arrow">↗</span></a>
+          <p className="tools-featured-description">Five powerful creative utilities, one seamless workspace. Compress and convert images, design QR codes, explore color palettes, and generate secure passwords — all in your browser.</p>
+          <div className="tools-featured-chips"><span>✧ 5 CREATIVE TOOLS</span><span>◇ NO SIGN-UP</span><span>⚡ BUILT FOR CREATORS</span></div>
+          <a href="/tools" className="tools-featured-button"><span>EXPLORE THE DIGITAL LAB</span><span className="tools-featured-button-arrow">↗</span></a>
           <p className="tools-featured-footnote">INSTANT ACCESS <span>•</span> BUILT TO CREATE <span>•</span> EXPLORE MORE</p>
         </div>
         <a href="/tools" className="tools-featured-visual" aria-label="Open the AMSOULNESS Tools Hub">
@@ -602,12 +616,12 @@ function PortfolioApp(){
           <div className="tools-featured-orbit tools-featured-orbit-b" aria-hidden="true"/>
           <div className="tools-featured-center" aria-hidden="true"><span>✦</span><strong>ASLNS</strong><small>TOOLS LAB</small></div>
           <div className="tools-featured-mini tools-featured-mini-a"><span>◈</span><strong>IMAGE</strong><small>COMPRESS / CONVERT</small></div>
-          <div className="tools-featured-mini tools-featured-mini-b"><span>⌘</span><strong>CODE</strong><small>FORMAT / DECODE</small></div>
-          <div className="tools-featured-mini tools-featured-mini-c"><span>▦</span><strong>CREATE</strong><small>QR / COLORS / TEXT</small></div>
+          <div className="tools-featured-mini tools-featured-mini-b"><span>▧</span><strong>QR STUDIO</strong><small>DESIGN / EXPORT</small></div>
+          <div className="tools-featured-mini tools-featured-mini-c"><span>◉</span><strong>COLOR LAB</strong><small>PALETTES / SHADES</small></div>
           <span className="tools-featured-visual-hint">CLICK TO EXPLORE ↗</span>
         </a>
       </div>
-      <div className="tools-featured-marquee" aria-hidden="true"><div>IMAGE COMPRESSOR <b>✦</b> QR GENERATOR <b>✦</b> JSON FORMATTER <b>✦</b> COLOR TOOLS <b>✦</b> TEXT UTILITIES <b>✦</b> PASSWORD GENERATOR <b>✦</b> IMAGE CONVERTER <b>✦</b> DEVELOPER TOOLS <b>✦</b> IMAGE COMPRESSOR <b>✦</b> QR GENERATOR <b>✦</b></div></div>
+      <div className="tools-featured-marquee" aria-hidden="true"><div>IMAGE COMPRESSOR <b>✦</b> IMAGE CONVERTER <b>✦</b> QR CODE STUDIO <b>✦</b> COLOR LAB <b>✦</b> PASSWORD STUDIO <b>✦</b> IMAGE COMPRESSOR <b>✦</b> IMAGE CONVERTER <b>✦</b> QR CODE STUDIO <b>✦</b> COLOR LAB <b>✦</b> PASSWORD STUDIO <b>✦</b></div></div>
     </section>
     <section id="about" className="section">
       <Heading index="01" kicker="THE PERSON" title="Two worlds. One mindset."/>
