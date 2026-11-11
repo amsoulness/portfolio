@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/aslns-banner.svg" alt="AMSOULNESS — animated neon identity banner" width="100%" />
+<img src="assets/aslns-cinematic.gif" alt="AMSOULNESS animated cinematic neon banner" width="100%" />
 
 # ✦ AMSOULNESS ✦
 
@@ -29,6 +29,8 @@
 ---
 
 <div align="center"><img src="assets/aslns-divider.svg" alt="Animated purple divider" width="100%" /></div>
+
+<div align="center"><img src="assets/aslns-marquee.gif" alt="Scrolling creative motto" width="100%" /></div>
 
 ## ✧ The Story
 
@@ -70,6 +72,8 @@ This repository brings together two connected experiences:
 
 <div align="center"><img src="assets/aslns-divider.svg" alt="Animated section divider" width="100%" /></div>
 
+<div align="center"><img src="assets/aslns-terminal.gif" alt="Animated developer terminal" width="100%" /></div>
+
 ## ⚡ The Creative Toolbox
 
 *Small utilities. Big everyday usefulness.*
@@ -90,6 +94,8 @@ This repository brings together two connected experiences:
 ---
 
 <div align="center"><img src="assets/aslns-divider.svg" alt="Animated section divider" width="100%" /></div>
+
+<div align="center"><img src="assets/aslns-pulse.gif" alt="Animated audio-style light bars" width="100%" /></div>
 
 ## ✦ What Makes It ASLNS?
 
@@ -308,6 +314,6 @@ This repository does not currently declare an open-source license. Unless a lice
 <details>
 <summary><b>✨ About the motion elements in this README</b></summary>
 
-The banner, section dividers, and workflow illustration are local animated SVG assets included in this repository under <code>assets/</code>. The typing headline uses a third-party image service. Motion depends on GitHub's image rendering and your browser's accessibility preferences. If animations are unavailable, the SVGs still display as static artwork.
+The cinematic banner, scrolling marquee, terminal, and pulse visualization are locally hosted GIFs under <code>assets/</code>. The section dividers and workflow illustration are SVGs, whose motion may not play in GitHub’s image proxy. The typing headline uses a third-party image service. Motion may be reduced by browser or accessibility settings.
 
 </details>
