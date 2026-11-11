@@ -1,128 +1,304 @@
 import {useEffect,useRef,useState} from 'react'
+
 import QRCode from 'qrcode'
+
 import './ToolsHub.css'
 
 
+
+
+
 function MotionFX({enabled}:{enabled:boolean}){
+
  const root=useRef<HTMLDivElement>(null)
+
  useEffect(()=>{
+
   if(!enabled||!root.current)return
+
   const host=root.current
+
   let raf=0,px=window.innerWidth*.5,py=window.innerHeight*.45
+
   const move=(e:PointerEvent)=>{if(e.pointerType==='touch')return;px=e.clientX;py=e.clientY;if(raf)return;raf=requestAnimationFrame(()=>{host.style.setProperty('--mx',px+'px');host.style.setProperty('--my',py+'px');raf=0})}
+
   const tap=(e:PointerEvent)=>{if(e.pointerType==='mouse'&&e.button!==0)return;const el=document.createElement('span');el.className='th-touch-burst';el.style.left=e.clientX+'px';el.style.top=e.clientY+'px';host.appendChild(el);el.addEventListener('animationend',()=>el.remove(),{once:true});setTimeout(()=>el.remove(),850)}
+
   window.addEventListener('pointermove',move,{passive:true});window.addEventListener('pointerdown',tap,{passive:true})
+
   return()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerdown',tap);cancelAnimationFrame(raf);host.replaceChildren()}
+
  },[enabled])
+
  return <div ref={root} className={`th-motion-fx ${enabled?'th-motion-on':''}`} aria-hidden="true"><div className="th-cursor-glow"/><div className="th-cursor-ring"/></div>
+
 }
 
+
+
 function CosmicCanvas({active}:{active:boolean}){
+
  const canvasRef=useRef<HTMLCanvasElement>(null)
+
  useEffect(()=>{
+
   if(!active)return
+
   const canvas=canvasRef.current
+
   if(!canvas)return
+
   const ctx=canvas.getContext('2d',{alpha:true})
+
   if(!ctx)return
+
   let width=0,height=0,dpr=1,frame=0,raf=0,visible=!document.hidden
+
   const points=Array.from({length:95},(_,i)=>({
+
    x:((i*0.61803398875)%1),y:((i*0.41421356237)%1),
+
    radius:i%11===0?2.1:i%3===0?1.4:.8,
+
    speed:.07+(i%9)*.017,phase:i*2.39,hue:i%6===0?188:267
+
   }))
+
   const resize=()=>{width=window.innerWidth;height=window.innerHeight;dpr=Math.min(window.devicePixelRatio||1,1.5);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);canvas.style.width=width+'px';canvas.style.height=height+'px';ctx.setTransform(dpr,0,0,dpr,0,0)}
+
   const visibility=()=>{visible=!document.hidden}
+
   const draw=()=>{
+
    raf=requestAnimationFrame(draw)
+
    if(!visible)return
+
    frame++
+
    if(frame%2!==0)return
+
    ctx.clearRect(0,0,width,height)
+
    const t=performance.now()*.001
+
    for(const p of points){
+
     const x=(p.x*width+Math.sin(t*p.speed+p.phase)*27+width)%width
+
     const y=(p.y*height-t*(5+p.speed*15)%height+height)%height
+
     const alpha=.16+.33*(.5+.5*Math.sin(t*1.3+p.phase))
+
     ctx.beginPath();ctx.arc(x,y,p.radius,0,Math.PI*2)
+
     ctx.fillStyle=`hsla(${p.hue},95%,82%,${alpha})`;ctx.fill()
+
    }
+
    const cx=width*.52+Math.sin(t*.12)*width*.08,cy=height*.34+Math.cos(t*.17)*35
+
    const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(width*.48,430))
+
    glow.addColorStop(0,'rgba(139,92,246,.065)');glow.addColorStop(.45,'rgba(99,102,241,.028)');glow.addColorStop(1,'rgba(0,0,0,0)')
+
    ctx.fillStyle=glow;ctx.fillRect(0,0,width,height)
+
   }
+
   resize();draw()
+
   window.addEventListener('resize',resize,{passive:true});document.addEventListener('visibilitychange',visibility)
+
   return()=>{cancelAnimationFrame(raf);window.removeEventListener('resize',resize);document.removeEventListener('visibilitychange',visibility)}
+
  },[active])
+
  return <canvas ref={canvasRef} className="th-cosmic-canvas" aria-hidden="true"/>
+
 }
+
+
+
 
 
 function ImmersiveMotion({enabled}:{enabled:boolean}){
+
  const ref=useRef<HTMLDivElement>(null)
+
  useEffect(()=>{
+
   const host=ref.current
+
   if(!host||!enabled)return
+
   let raf=0,scrollY=window.scrollY
+
   const sync=()=>{raf=0;host.style.setProperty('--scroll-shift',`${Math.min(300,scrollY*.18)}px`);host.style.setProperty('--scroll-turn',`${Math.min(50,scrollY*.014)}deg`)}
+
   const onScroll=()=>{scrollY=window.scrollY;if(!raf)raf=requestAnimationFrame(sync)}
+
   onScroll()
+
   window.addEventListener('scroll',onScroll,{passive:true})
+
   return()=>{window.removeEventListener('scroll',onScroll);cancelAnimationFrame(raf)}
+
  },[enabled])
+
  return <div ref={ref} className={`th-v22-stage ${enabled?'th-v22-active':''}`} aria-hidden="true">
+
   <div className="th-v22-depth th-v22-depth-a"/><div className="th-v22-depth th-v22-depth-b"/>
+
   <div className="th-v22-arc th-v22-arc-a"/><div className="th-v22-arc th-v22-arc-b"/>
+
   <div className="th-v22-horizon"/><div className="th-v22-noise"/>
+
   <div className="th-v22-constellation">{Array.from({length:24},(_,i)=><i key={i} style={{left:`${(i*41.17+5)%100}%`,top:`${(i*29.71+13)%100}%`,animationDelay:`-${(i*.41)%9}s`}}/>)}</div>
+
   <div className="th-v22-orbit-label th-v22-label-a">ASLNS / MOTION SYSTEM</div>
+
   <div className="th-v22-orbit-label th-v22-label-b">∞ CREATE / EXPLORE</div>
+
+ </div>
+
+}
+
+
+
+type ToolId='compress'|'convert'|'qr'|'json'|'color'|'text'|'password'|'developer'|'youtube'
+
+const cards:{id:ToolId;icon:string;name:string;desc:string;tag:string}[]=[
+
+{id:'compress',icon:'◩',name:'Image Compressor',desc:'Make every pixel count. Less weight, same visual impact.',tag:'CREATOR'},
+
+{id:'convert',icon:'▧',name:'Image Converter',desc:'One image. Endless possibilities. Change its format in a click.',tag:'CREATOR'},
+
+{id:'qr',icon:'▦',name:'QR Code Studio',desc:'Turn a link into a little piece of magic.',tag:'UTILITY'},
+
+{id:'json',icon:'{ }',name:'JSON Formatter',desc:'From tangled code to beautiful structure.',tag:'DEVELOPER'},
+
+{id:'color',icon:'◉',name:'Color Lab',desc:'Find the shade that makes your next idea shine.',tag:'DESIGN'},
+
+{id:'text',icon:'¶',name:'Text Utilities',desc:'Every word matters. Make yours work harder.',tag:'UTILITY'},
+
+{id:'password',icon:'✳',name:'Password Generator',desc:'Strong by design. Random by nature.',tag:'SECURITY'},
+
+{id:'developer',icon:'</>',name:'Developer Encoder',desc:'Translate the web, one character at a time.',tag:'DEVELOPER'},
+{id:'youtube',icon:'▶',name:'YouTube Downloader',desc:'Preview a video and choose available download formats.',tag:'MEDIA'}]
+
+const cap=(s:string)=>s.charAt(0).toUpperCase()+s.slice(1)
+
+function download(blob:Blob,name:string){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000)}
+
+function readImage(file:File):Promise<HTMLImageElement>{return new Promise((resolve,reject)=>{const url=URL.createObjectURL(file);const img=new Image();img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Unable to read this image.'))};img.src=url})}
+
+async function encodeImage(file:File,format:'image/jpeg'|'image/png'|'image/webp',quality:number,maxDim:number){const img=await readImage(file);const scale=Math.min(1,maxDim/Math.max(img.naturalWidth,img.naturalHeight));const w=Math.max(1,Math.round(img.naturalWidth*scale)),h=Math.max(1,Math.round(img.naturalHeight*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas is unavailable.');if(format==='image/jpeg'){ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h)}ctx.drawImage(img,0,0,w,h);const blob=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,format,quality));if(!blob||blob.type!==format)throw new Error('Your browser does not support this output format.');return {blob,w,h}}
+
+function copy(text:string,setNotice:(s:string)=>void){navigator.clipboard.writeText(text).then(()=>setNotice('Copied to clipboard.')).catch(()=>setNotice('Copy failed. Select and copy the result manually.'))}
+
+function ImageTool({mode}:{mode:'compress'|'convert'}){const [file,setFile]=useState<File|null>(null),[quality,setQuality]=useState(78),[maxDim,setMaxDim]=useState(1920),[format,setFormat]=useState<'image/jpeg'|'image/png'|'image/webp'>(mode==='compress'?'image/webp':'image/png'),[busy,setBusy]=useState(false),[result,setResult]=useState('');const input=useRef<HTMLInputElement>(null)
+
+ const process=async()=>{if(!file)return;setBusy(true);setResult('');try{const {blob,w,h}=await encodeImage(file,format,quality/100,maxDim);const ext=format==='image/jpeg'?'jpg':format==='image/png'?'png':'webp';download(blob,`${file.name.replace(/\.[^.]+$/,'')}-aslns.${ext}`);setResult(`Downloaded ${w} × ${h} • ${(blob.size/1024).toFixed(1)} KB (original ${(file.size/1024).toFixed(1)} KB).`)}catch(e){setResult(e instanceof Error?e.message:'Conversion failed.')}finally{setBusy(false)}}
+
+ return <div className="th-fields"><label className="th-file">Choose image<input ref={input} type="file" accept="image/*" onChange={e=>{setFile(e.target.files?.[0]??null);setResult('')}}/></label>{file&&<p className="th-hint">{file.name} • {(file.size/1024).toFixed(1)} KB</p>}<label>Output format<select value={format} onChange={e=>setFormat(e.target.value as typeof format)}><option value="image/webp">WebP</option><option value="image/jpeg">JPG</option><option value="image/png">PNG (lossless)</option></select></label>{format!=='image/png'&&<label>Quality: {quality}%<input type="range" min="30" max="100" value={quality} onChange={e=>setQuality(+e.target.value)}/></label>}<label>Maximum width or height<select value={maxDim} onChange={e=>setMaxDim(+e.target.value)}><option value="640">640 px</option><option value="1080">1080 px</option><option value="1920">1920 px</option><option value="4096">4096 px</option><option value="8192">8192 px</option></select></label><button disabled={!file||busy} onClick={process}>{busy?'Processing…':mode==='compress'?'Compress & download':'Convert & download'} ↗</button><p className="th-hint">Your image stays in your browser. PNG ignores the quality slider; compression may not always reduce file size.</p>{result&&<p role="status" className="th-result">{result}</p>}</div>}
+
+function QRTool(){const [value,setValue]=useState('https\://aslns.online'),[size,setSize]=useState(320),[fg,setFg]=useState('#160d2b'),[bg,setBg]=useState('#ffffff'),[url,setUrl]=useState(''),[error,setError]=useState('');useEffect(()=>{let active=true;if(!value.trim()){setUrl('');return}QRCode.toDataURL(value,{width:size,margin:2,errorCorrectionLevel:'M',color:{dark:fg,light:bg}}).then(u=>{if(active){setUrl(u);setError('')}}).catch(()=>{if(active){setError('Could not generate QR code.');setUrl('')}});return()=>{active=false}},[value,size,fg,bg]);return <div className="th-fields"><label>Link or text<textarea rows={3} value={value} onChange={e=>setValue(e.target.value)} maxLength={2000}/></label><label>QR size<select value={size} onChange={e=>setSize(+e.target.value)}><option value={256}>256 px</option><option value={320}>320 px</option><option value={512}>512 px</option><option value={1024}>1024 px</option></select></label><div className="th-split"><label>Foreground<input type="color" value={fg} onChange={e=>setFg(e.target.value)}/></label><label>Background<input type="color" value={bg} onChange={e=>setBg(e.target.value)}/></label></div>{url&&<img className="th-qr" src={url} alt="Generated QR code"/>}<button disabled={!url} onClick={()=>{const a=document.createElement('a');a.href=url;a.download='aslns-qr.png';a.click()}}>Download QR PNG ↗</button>{error&&<p role="alert">{error}</p>}</div>}
+
+function JSONTool(){const [source,setSource]=useState('{"hello":"AMSOULNESS","tools":8}'),[output,setOutput]=useState(''),[notice,setNotice]=useState('');const run=(minify:boolean)=>{try{const obj=JSON.parse(source);setOutput(JSON.stringify(obj,null,minify?0:2));setNotice('Valid JSON ✓')}catch(e){setNotice(e instanceof Error?e.message:'Invalid JSON');setOutput('')}};return <div className="th-fields"><label>Input JSON<textarea rows={7} spellCheck={false} value={source} onChange={e=>setSource(e.target.value)}/></label><div className="th-actions"><button onClick={()=>run(false)}>Format</button><button className="th-secondary" onClick={()=>run(true)}>Minify</button></div><p role="status" className="th-hint">{notice}</p><label>Output<textarea rows={7} spellCheck={false} readOnly value={output}/></label><button className="th-secondary" disabled={!output} onClick={()=>copy(output,setNotice)}>Copy output</button></div>}
+
+function ColorTool(){const [hex,setHex]=useState('#a78bfa'),[notice,setNotice]=useState('');const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;const max=Math.max(r,g,b)/255,min=Math.min(r,g,b)/255,d=max-min;let h=0;if(d){if(max===r/255)h=((g-b)/255/d)%6;else if(max===g/255)h=(b-r)/255/d+2;else h=(r-g)/255/d+4;h=(h*60+360)%360}const l=(max+min)/2,s=d===0?0:d/(1-Math.abs(2*l-1));const rgb=`rgb(${r}, ${g}, ${b})`,hsl=`hsl(${Math.round(h)}, ${Math.round(s*100)}%, ${Math.round(l*100)}%)`;return <div className="th-fields"><div className="th-color-preview" style={{background:hex}}/><label>Choose color<input type="color" value={hex} onChange={e=>setHex(e.target.value)}/></label>{[['HEX',hex.toUpperCase()],['RGB',rgb],['HSL',hsl]].map(([label,v])=><div className="th-value" key={label}><span>{label} · {v}</span><button className="th-secondary" onClick={()=>copy(v,setNotice)}>Copy</button></div>)}<p role="status" className="th-hint">{notice}</p></div>}
+
+function TextTool(){const [source,setSource]=useState(''),[notice,setNotice]=useState('');const words=source.trim()?source.trim().split(/\s+/u).length:0;const lines=source?source.split(/\r\n|\n|\r/).length:0;const transform=(action:string)=>{if(action==='upper')setSource(source.toUpperCase());if(action==='lower')setSource(source.toLowerCase());if(action==='trim')setSource(source.trim().replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n'));if(action==='title')setSource(source.toLowerCase().replace(/\b\p{L}/gu,m=>m.toUpperCase()));setNotice('Text updated.')};return <div className="th-fields"><label>Your text<textarea rows={9} value={source} onChange={e=>setSource(e.target.value)} placeholder="Paste or type here…"/></label><div className="th-stats"><span>{words} words</span><span>{[...source].length} characters</span><span>{lines} lines</span></div><div className="th-actions">{[['upper','UPPERCASE'],['lower','lowercase'],['title','Title Case'],['trim','Clean spaces']].map(([k,v])=><button key={k} className="th-secondary" onClick={()=>transform(k)}>{v}</button>)}</div><button onClick={()=>copy(source,setNotice)} disabled={!source}>Copy text</button><p role="status" className="th-hint">{notice}</p></div>}
+
+function PasswordTool(){const [length,setLength]=useState(20),[upper,setUpper]=useState(true),[lower,setLower]=useState(true),[digits,setDigits]=useState(true),[symbols,setSymbols]=useState(true),[password,setPassword]=useState(''),[notice,setNotice]=useState('');const generate=()=>{const groups=[upper?'ABCDEFGHJKLMNPQRSTUVWXYZ':'',lower?'abcdefghijkmnopqrstuvwxyz':'',digits?'23456789':'',symbols?'!@#$%^&*_-+=':''].filter(Boolean);if(!groups.length){setNotice('Select at least one character group.');return}const pool=groups.join('');const rand=(max:number)=>{const range=0x100000000,limit=Math.floor(range/max)*max;let x:number;do{x=crypto.getRandomValues(new Uint32Array(1))[0]}while(x>=limit);return x%max};const chars=groups.map(g=>g[rand(g.length)]);while(chars.length<length)chars.push(pool[rand(pool.length)]);for(let i=chars.length-1;i>0;i--){const j=rand(i+1);[chars[i],chars[j]]=[chars[j],chars[i]]}setPassword(chars.join(''));setNotice('Generated locally using cryptographic randomness.')};return <div className="th-fields"><label>Password length: {length}<input type="range" min="8" max="64" value={length} onChange={e=>setLength(+e.target.value)}/></label><div className="th-checks">{[[upper,setUpper,'Uppercase'],[lower,setLower,'Lowercase'],[digits,setDigits,'Numbers'],[symbols,setSymbols,'Symbols']].map(([v,set,label])=><label key={label as string}><input type="checkbox" checked={v as boolean} onChange={e=>(set as (v:boolean)=>void)(e.target.checked)}/>{label as string}</label>)}</div><button onClick={generate}>Generate password ↗</button><label>Generated password<textarea rows={3} readOnly value={password} placeholder="Click generate"/></label><button className="th-secondary" disabled={!password} onClick={()=>copy(password,setNotice)}>Copy password</button><p role="status" className="th-hint">{notice} Never share your password with anyone.</p></div>}
+
+const htmlEncode=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]??c))
+
+const htmlDecode=(s:string)=>{const el=document.createElement('textarea');el.innerHTML=s;return el.value}
+
+function DeveloperTool(){const [source,setSource]=useState(''),[mode,setMode]=useState('base64'),[output,setOutput]=useState(''),[notice,setNotice]=useState('');const run=(decode:boolean)=>{try{let result='';if(mode==='base64')result=decode?new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(source.trim()),c=>c.charCodeAt(0))):btoa(Array.from(new TextEncoder().encode(source),b=>String.fromCharCode(b)).join(''));if(mode==='url')result=decode?decodeURIComponent(source):encodeURIComponent(source);if(mode==='html')result=decode?htmlDecode(source):htmlEncode(source);setOutput(result);setNotice('Success ✓')}catch(e){setOutput('');setNotice(e instanceof Error?e.message:'Invalid input')}};return <div className="th-fields"><label>Operation<select value={mode} onChange={e=>{setMode(e.target.value);setOutput('');setNotice('')}}><option value="base64">Base64 (UTF-8)</option><option value="url">URL component</option><option value="html">HTML entities</option></select></label><label>Input<textarea rows={6} value={source} onChange={e=>setSource(e.target.value)}/></label><div className="th-actions"><button onClick={()=>run(false)}>Encode</button><button className="th-secondary" onClick={()=>run(true)}>Decode</button></div><label>Output<textarea rows={6} value={output} readOnly/></label><button className="th-secondary" disabled={!output} onClick={()=>copy(output,setNotice)}>Copy output</button><p role="status" className="th-hint">{notice}</p></div>}
+
+type VideoFormat={id:string;label:string;ext:string;resolution:string;size?:number|null}
+type VideoInfo={title:string;thumbnail:string;duration:number|null;uploader:string;formats:VideoFormat[]}
+const MEDIA_API=(import.meta.env.VITE_MEDIA_API_URL || '').replace(/\/$/,'')
+function YouTubeTool(){
+ const [url,setUrl]=useState(''),[info,setInfo]=useState<VideoInfo|null>(null)
+ const [format,setFormat]=useState(''),[loading,setLoading]=useState(false)
+ const [busy,setBusy]=useState(false),[message,setMessage]=useState('')
+ const inspect=async()=>{
+  setLoading(true);setMessage('');setInfo(null);setFormat('')
+  try{
+
+   const response=await fetch(`${MEDIA_API}/api/video/info`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url})})
+   const data=await response.json()
+   if(!response.ok)throw new Error(data.detail||'Unable to inspect this video.')
+   setInfo(data);setFormat(data.formats?.[0]?.id||'')
+  }catch(e){setMessage(e instanceof Error?e.message:'Could not load video information.')}
+  finally{setLoading(false)}
+ }
+ const startDownload=async()=>{
+  if(!info||!format||busy)return
+  setBusy(true);setMessage('Preparing your download. Large files may take a while…')
+  try{
+   const response=await fetch(`${MEDIA_API}/api/video/download`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url,format_id:format})})
+   if(!response.ok){let detail='Download failed.';try{detail=(await response.json()).detail||detail}catch{};throw new Error(detail)}
+   const blob=await response.blob()
+   const chosen=info.formats.find(f=>f.id===format)
+   const extension=chosen?.ext==='webm'?'webm':'mp4'
+   download(blob,`aslns-video.${extension}`)
+   setMessage('Download ready ✓')
+  }catch(e){setMessage(e instanceof Error?e.message:'Download failed.')}
+  finally{setBusy(false)}
+ }
+ const duration=(seconds:number|null)=>seconds==null?'—':`${Math.floor(seconds/3600)?Math.floor(seconds/3600)+':':''}${String(Math.floor(seconds%3600/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`
+ return <div className="th-fields th-youtube">
+  <div className="th-yt-eyebrow">▶ ASLNS MEDIA LAB / VIDEO</div>
+  <label>YouTube video link<input type="url" value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://www.youtube.com/watch?v=..." autoComplete="off"/></label>
+  <button onClick={inspect} disabled={loading||!url.trim()}>{loading?'Finding available formats…':'Analyze video ↗'}</button>
+  {info&&<div className="th-yt-video">
+   {info.thumbnail&&<img className="th-yt-thumbnail" src={info.thumbnail} alt="Video thumbnail"/>}
+   <div className="th-yt-info"><strong>{info.title}</strong><span>{info.uploader} · {duration(info.duration)}</span></div>
+   <label>Available quality and format<select value={format} onChange={e=>setFormat(e.target.value)}>{info.formats.map(f=><option key={f.id} value={f.id}>{f.label}</option>)}</select></label>
+   <button disabled={busy||!format} onClick={startDownload}>{busy?'Processing download…':'Download selected format ↓'}</button>
+  </div>}
+  <p className="th-hint">Only download videos you own or are authorized to save. Available qualities depend on the source. Restricted or DRM-protected videos are not supported. Large downloads require a capable backend.</p>
+  {message&&<p className="th-result" role="status">{message}</p>}
  </div>
 }
 
-type ToolId='compress'|'convert'|'qr'|'json'|'color'|'text'|'password'|'developer'
-const cards:{id:ToolId;icon:string;name:string;desc:string;tag:string}[]=[
-{id:'compress',icon:'◩',name:'Image Compressor',desc:'Make every pixel count. Less weight, same visual impact.',tag:'CREATOR'},
-{id:'convert',icon:'▧',name:'Image Converter',desc:'One image. Endless possibilities. Change its format in a click.',tag:'CREATOR'},
-{id:'qr',icon:'▦',name:'QR Code Studio',desc:'Turn a link into a little piece of magic.',tag:'UTILITY'},
-{id:'json',icon:'{ }',name:'JSON Formatter',desc:'From tangled code to beautiful structure.',tag:'DEVELOPER'},
-{id:'color',icon:'◉',name:'Color Lab',desc:'Find the shade that makes your next idea shine.',tag:'DESIGN'},
-{id:'text',icon:'¶',name:'Text Utilities',desc:'Every word matters. Make yours work harder.',tag:'UTILITY'},
-{id:'password',icon:'✳',name:'Password Generator',desc:'Strong by design. Random by nature.',tag:'SECURITY'},
-{id:'developer',icon:'</>',name:'Developer Encoder',desc:'Translate the web, one character at a time.',tag:'DEVELOPER'}]
-const cap=(s:string)=>s.charAt(0).toUpperCase()+s.slice(1)
-function download(blob:Blob,name:string){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000)}
-function readImage(file:File):Promise<HTMLImageElement>{return new Promise((resolve,reject)=>{const url=URL.createObjectURL(file);const img=new Image();img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Unable to read this image.'))};img.src=url})}
-async function encodeImage(file:File,format:'image/jpeg'|'image/png'|'image/webp',quality:number,maxDim:number){const img=await readImage(file);const scale=Math.min(1,maxDim/Math.max(img.naturalWidth,img.naturalHeight));const w=Math.max(1,Math.round(img.naturalWidth*scale)),h=Math.max(1,Math.round(img.naturalHeight*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas is unavailable.');if(format==='image/jpeg'){ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h)}ctx.drawImage(img,0,0,w,h);const blob=await new Promise<Blob|null>(resolve=>canvas.toBlob(resolve,format,quality));if(!blob||blob.type!==format)throw new Error('Your browser does not support this output format.');return {blob,w,h}}
-function copy(text:string,setNotice:(s:string)=>void){navigator.clipboard.writeText(text).then(()=>setNotice('Copied to clipboard.')).catch(()=>setNotice('Copy failed. Select and copy the result manually.'))}
-function ImageTool({mode}:{mode:'compress'|'convert'}){const [file,setFile]=useState<File|null>(null),[quality,setQuality]=useState(78),[maxDim,setMaxDim]=useState(1920),[format,setFormat]=useState<'image/jpeg'|'image/png'|'image/webp'>(mode==='compress'?'image/webp':'image/png'),[busy,setBusy]=useState(false),[result,setResult]=useState('');const input=useRef<HTMLInputElement>(null)
- const process=async()=>{if(!file)return;setBusy(true);setResult('');try{const {blob,w,h}=await encodeImage(file,format,quality/100,maxDim);const ext=format==='image/jpeg'?'jpg':format==='image/png'?'png':'webp';download(blob,`${file.name.replace(/\.[^.]+$/,'')}-aslns.${ext}`);setResult(`Downloaded ${w} × ${h} • ${(blob.size/1024).toFixed(1)} KB (original ${(file.size/1024).toFixed(1)} KB).`)}catch(e){setResult(e instanceof Error?e.message:'Conversion failed.')}finally{setBusy(false)}}
- return <div className="th-fields"><label className="th-file">Choose image<input ref={input} type="file" accept="image/*" onChange={e=>{setFile(e.target.files?.[0]??null);setResult('')}}/></label>{file&&<p className="th-hint">{file.name} • {(file.size/1024).toFixed(1)} KB</p>}<label>Output format<select value={format} onChange={e=>setFormat(e.target.value as typeof format)}><option value="image/webp">WebP</option><option value="image/jpeg">JPG</option><option value="image/png">PNG (lossless)</option></select></label>{format!=='image/png'&&<label>Quality: {quality}%<input type="range" min="30" max="100" value={quality} onChange={e=>setQuality(+e.target.value)}/></label>}<label>Maximum width or height<select value={maxDim} onChange={e=>setMaxDim(+e.target.value)}><option value="640">640 px</option><option value="1080">1080 px</option><option value="1920">1920 px</option><option value="4096">4096 px</option><option value="8192">8192 px</option></select></label><button disabled={!file||busy} onClick={process}>{busy?'Processing…':mode==='compress'?'Compress & download':'Convert & download'} ↗</button><p className="th-hint">Your image stays in your browser. PNG ignores the quality slider; compression may not always reduce file size.</p>{result&&<p role="status" className="th-result">{result}</p>}</div>}
-function QRTool(){const [value,setValue]=useState('https://aslns.online'),[size,setSize]=useState(320),[fg,setFg]=useState('#160d2b'),[bg,setBg]=useState('#ffffff'),[url,setUrl]=useState(''),[error,setError]=useState('');useEffect(()=>{let active=true;if(!value.trim()){setUrl('');return}QRCode.toDataURL(value,{width:size,margin:2,errorCorrectionLevel:'M',color:{dark:fg,light:bg}}).then(u=>{if(active){setUrl(u);setError('')}}).catch(()=>{if(active){setError('Could not generate QR code.');setUrl('')}});return()=>{active=false}},[value,size,fg,bg]);return <div className="th-fields"><label>Link or text<textarea rows={3} value={value} onChange={e=>setValue(e.target.value)} maxLength={2000}/></label><label>QR size<select value={size} onChange={e=>setSize(+e.target.value)}><option value={256}>256 px</option><option value={320}>320 px</option><option value={512}>512 px</option><option value={1024}>1024 px</option></select></label><div className="th-split"><label>Foreground<input type="color" value={fg} onChange={e=>setFg(e.target.value)}/></label><label>Background<input type="color" value={bg} onChange={e=>setBg(e.target.value)}/></label></div>{url&&<img className="th-qr" src={url} alt="Generated QR code"/>}<button disabled={!url} onClick={()=>{const a=document.createElement('a');a.href=url;a.download='aslns-qr.png';a.click()}}>Download QR PNG ↗</button>{error&&<p role="alert">{error}</p>}</div>}
-function JSONTool(){const [source,setSource]=useState('{"hello":"AMSOULNESS","tools":8}'),[output,setOutput]=useState(''),[notice,setNotice]=useState('');const run=(minify:boolean)=>{try{const obj=JSON.parse(source);setOutput(JSON.stringify(obj,null,minify?0:2));setNotice('Valid JSON ✓')}catch(e){setNotice(e instanceof Error?e.message:'Invalid JSON');setOutput('')}};return <div className="th-fields"><label>Input JSON<textarea rows={7} spellCheck={false} value={source} onChange={e=>setSource(e.target.value)}/></label><div className="th-actions"><button onClick={()=>run(false)}>Format</button><button className="th-secondary" onClick={()=>run(true)}>Minify</button></div><p role="status" className="th-hint">{notice}</p><label>Output<textarea rows={7} spellCheck={false} readOnly value={output}/></label><button className="th-secondary" disabled={!output} onClick={()=>copy(output,setNotice)}>Copy output</button></div>}
-function ColorTool(){const [hex,setHex]=useState('#a78bfa'),[notice,setNotice]=useState('');const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;const max=Math.max(r,g,b)/255,min=Math.min(r,g,b)/255,d=max-min;let h=0;if(d){if(max===r/255)h=((g-b)/255/d)%6;else if(max===g/255)h=(b-r)/255/d+2;else h=(r-g)/255/d+4;h=(h*60+360)%360}const l=(max+min)/2,s=d===0?0:d/(1-Math.abs(2*l-1));const rgb=`rgb(${r}, ${g}, ${b})`,hsl=`hsl(${Math.round(h)}, ${Math.round(s*100)}%, ${Math.round(l*100)}%)`;return <div className="th-fields"><div className="th-color-preview" style={{background:hex}}/><label>Choose color<input type="color" value={hex} onChange={e=>setHex(e.target.value)}/></label>{[['HEX',hex.toUpperCase()],['RGB',rgb],['HSL',hsl]].map(([label,v])=><div className="th-value" key={label}><span>{label} · {v}</span><button className="th-secondary" onClick={()=>copy(v,setNotice)}>Copy</button></div>)}<p role="status" className="th-hint">{notice}</p></div>}
-function TextTool(){const [source,setSource]=useState(''),[notice,setNotice]=useState('');const words=source.trim()?source.trim().split(/\s+/u).length:0;const lines=source?source.split(/\r\n|\n|\r/).length:0;const transform=(action:string)=>{if(action==='upper')setSource(source.toUpperCase());if(action==='lower')setSource(source.toLowerCase());if(action==='trim')setSource(source.trim().replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n'));if(action==='title')setSource(source.toLowerCase().replace(/\b\p{L}/gu,m=>m.toUpperCase()));setNotice('Text updated.')};return <div className="th-fields"><label>Your text<textarea rows={9} value={source} onChange={e=>setSource(e.target.value)} placeholder="Paste or type here…"/></label><div className="th-stats"><span>{words} words</span><span>{[...source].length} characters</span><span>{lines} lines</span></div><div className="th-actions">{[['upper','UPPERCASE'],['lower','lowercase'],['title','Title Case'],['trim','Clean spaces']].map(([k,v])=><button key={k} className="th-secondary" onClick={()=>transform(k)}>{v}</button>)}</div><button onClick={()=>copy(source,setNotice)} disabled={!source}>Copy text</button><p role="status" className="th-hint">{notice}</p></div>}
-function PasswordTool(){const [length,setLength]=useState(20),[upper,setUpper]=useState(true),[lower,setLower]=useState(true),[digits,setDigits]=useState(true),[symbols,setSymbols]=useState(true),[password,setPassword]=useState(''),[notice,setNotice]=useState('');const generate=()=>{const groups=[upper?'ABCDEFGHJKLMNPQRSTUVWXYZ':'',lower?'abcdefghijkmnopqrstuvwxyz':'',digits?'23456789':'',symbols?'!@#$%^&*_-+=':''].filter(Boolean);if(!groups.length){setNotice('Select at least one character group.');return}const pool=groups.join('');const rand=(max:number)=>{const range=0x100000000,limit=Math.floor(range/max)*max;let x:number;do{x=crypto.getRandomValues(new Uint32Array(1))[0]}while(x>=limit);return x%max};const chars=groups.map(g=>g[rand(g.length)]);while(chars.length<length)chars.push(pool[rand(pool.length)]);for(let i=chars.length-1;i>0;i--){const j=rand(i+1);[chars[i],chars[j]]=[chars[j],chars[i]]}setPassword(chars.join(''));setNotice('Generated locally using cryptographic randomness.')};return <div className="th-fields"><label>Password length: {length}<input type="range" min="8" max="64" value={length} onChange={e=>setLength(+e.target.value)}/></label><div className="th-checks">{[[upper,setUpper,'Uppercase'],[lower,setLower,'Lowercase'],[digits,setDigits,'Numbers'],[symbols,setSymbols,'Symbols']].map(([v,set,label])=><label key={label as string}><input type="checkbox" checked={v as boolean} onChange={e=>(set as (v:boolean)=>void)(e.target.checked)}/>{label as string}</label>)}</div><button onClick={generate}>Generate password ↗</button><label>Generated password<textarea rows={3} readOnly value={password} placeholder="Click generate"/></label><button className="th-secondary" disabled={!password} onClick={()=>copy(password,setNotice)}>Copy password</button><p role="status" className="th-hint">{notice} Never share your password with anyone.</p></div>}
-const htmlEncode=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]??c))
-const htmlDecode=(s:string)=>{const el=document.createElement('textarea');el.innerHTML=s;return el.value}
-function DeveloperTool(){const [source,setSource]=useState(''),[mode,setMode]=useState('base64'),[output,setOutput]=useState(''),[notice,setNotice]=useState('');const run=(decode:boolean)=>{try{let result='';if(mode==='base64')result=decode?new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(source.trim()),c=>c.charCodeAt(0))):btoa(Array.from(new TextEncoder().encode(source),b=>String.fromCharCode(b)).join(''));if(mode==='url')result=decode?decodeURIComponent(source):encodeURIComponent(source);if(mode==='html')result=decode?htmlDecode(source):htmlEncode(source);setOutput(result);setNotice('Success ✓')}catch(e){setOutput('');setNotice(e instanceof Error?e.message:'Invalid input')}};return <div className="th-fields"><label>Operation<select value={mode} onChange={e=>{setMode(e.target.value);setOutput('');setNotice('')}}><option value="base64">Base64 (UTF-8)</option><option value="url">URL component</option><option value="html">HTML entities</option></select></label><label>Input<textarea rows={6} value={source} onChange={e=>setSource(e.target.value)}/></label><div className="th-actions"><button onClick={()=>run(false)}>Encode</button><button className="th-secondary" onClick={()=>run(true)}>Decode</button></div><label>Output<textarea rows={6} value={output} readOnly/></label><button className="th-secondary" disabled={!output} onClick={()=>copy(output,setNotice)}>Copy output</button><p role="status" className="th-hint">{notice}</p></div>}
 export default function ToolsHub(){const [active,setActive]=useState<ToolId|null>(null),[query,setQuery]=useState(''),[category,setCategory]=useState('ALL');
+
 const [mobile,setMobile]=useState(()=>typeof window!=='undefined'&&window.matchMedia('(max-width: 760px)').matches);
+
 const [lite,setLite]=useState(()=>typeof window!=='undefined'&&(window.matchMedia('(max-width: 760px)').matches||window.matchMedia('(prefers-reduced-motion: reduce)').matches));
+
 useEffect(()=>{const mq=window.matchMedia('(max-width: 760px)');const sync=()=>{setMobile(mq.matches);if(!mq.matches)setLite(false);else setLite(true)};mq.addEventListener('change',sync);return()=>mq.removeEventListener('change',sync)},[]);
+
 useEffect(()=>{document.title='Free Online Tools | AMSOULNESS';return()=>{document.title='AMSOULNESS | Emmanuel Cherian'}},[]);const selected=cards.find(c=>c.id===active);const filtered=cards.filter(c=>(category==='ALL'||c.tag===category)&&`${c.name} ${c.desc}`.toLowerCase().includes(query.toLowerCase()));return <main className={`th th-v13 ${mobile&&lite?'th-lite':''}`}><ImmersiveMotion enabled={!lite}/><MotionFX enabled={!lite && (typeof window==="undefined" || !window.matchMedia("(prefers-reduced-motion: reduce)").matches)}/><CosmicCanvas active={!lite}/><div className="th-atmosphere" aria-hidden="true"><div className="th-energy-core"/><div className="th-portal th-portal-outer"/><div className="th-portal th-portal-middle"/><div className="th-portal th-portal-inner"/><div className="th-light-ribbon th-light-ribbon-a"/><div className="th-light-ribbon th-light-ribbon-b"/><div className="th-satellite th-satellite-a"/><div className="th-satellite th-satellite-b"/><div className="th-aurora th-a"/><div className="th-aurora th-b"/><div className="th-aurora th-c"/><div className="th-stars">{Array.from({length:42},(_,i)=><i key={i} style={{left:`${(i*37.13)%100}%`,top:`${(i*61.77)%100}%`,animationDelay:`-${(i%9)*.7}s`}}/>)}</div><div className="th-gridlight"/><div className="th-nebula"/><div className="th-prism th-prism-one"/><div className="th-prism th-prism-two"/><div className="th-wave th-wave-a"/><div className="th-wave th-wave-b"/><div className="th-particle-cloud">{Array.from({length:130},(_,i)=><i key={i} style={{left:`${(i*73.31+13)%100}%`,top:`${(i*47.91+7)%100}%`,animationDelay:`-${(i*1.37)%18}s`,animationDuration:`${7+(i%13)}s`,width:i%9===0?3:1.5,height:i%9===0?3:1.5}}/>)}</div><div className="th-beam th-beam-one"/><div className="th-beam th-beam-two"/><div className="th-orbit th-orbit-one"/><div className="th-orbit th-orbit-two"/><div className="th-meteors">{Array.from({length:9},(_,i)=><i key={i} style={{left:`${(i*17.7+9)%100}%`,top:`${(i*13.7+5)%80}%`,animationDelay:`-${i*2.6}s`}}/>)}</div><div className="th-sparks">{Array.from({length:28},(_,i)=><i key={i} style={{left:`${(i*29.3+4)%100}%`,top:`${(i*43.7+9)%100}%`,animationDelay:`-${i*.53}s`}}/>)}</div></div><header className="th-nav th-nav-v21">
+
   <div className="th-nav-v21-main">
+
     <a className="th-v21-identity" href="/" aria-label="AMSOULNESS portfolio homepage">
+
       <span className="th-v21-emblem" aria-hidden="true"><span>A</span><i/></span>
+
       <span className="th-v21-name"><strong>AMSOUL<span>NESS.</span></strong><small>CREATIVE SYSTEMS <b>✦</b> DIGITAL UNIVERSE</small></span>
+
     </a>
+
     <div className="th-v21-location" aria-label="Current section"><span className="th-v21-live"/> <span>THE TOOL LAB</span><span className="th-v21-slash">/ 001</span></div>
+
     <nav className="th-v21-actions" aria-label="Tools page navigation">
+
       {mobile&&<button className="th-v21-mode" type="button" aria-pressed={!lite} aria-label={lite?'Enable cinematic effects':'Enable smooth mobile mode'} onClick={()=>setLite(v=>!v)}><span aria-hidden="true">{lite?'⚡':'✦'}</span><span>{lite?'SMOOTH':'CINEMATIC'}</span></button>}
+
       <a className="th-v21-return" href="/"><span className="th-v21-return-icon" aria-hidden="true">←</span><span>PORTFOLIO</span></a>
+
     </nav>
+
   </div>
+
   <div className="th-v21-track" aria-hidden="true"><span/></div>
-</header><div className="th-wrap"><div className="th-hero"><div className="th-hero-circuit" aria-hidden="true"><span/><span/><span/><span/></div><div className="th-halo" aria-hidden="true"><div/></div><div className="th-eyebrow"><span className="th-dot"/> ASLNS / THE CREATIVE TOOLKIT</div><h1 className="th-kinetic-title th-v20-title"><span className="th-v20-line">TOOLS FOR</span><span className="th-v20-line th-v20-gradient">BIG IDEAS<span className="th-title-period">.</span></span></h1><p>Eight powerful tools for creators and developers. Simple, fast, and ready when inspiration strikes.</p><div className="th-hero-manifesto"><span className="th-manifesto-line"/> <span>YOUR NEXT BIG IDEA STARTS HERE</span> <span className="th-manifesto-line"/></div><div className="th-hero-rule"/><div className="th-hero-meta"><span>✦ 08 CREATIVE ESSENTIALS</span><span>✦ MADE FOR EVERY SCREEN</span><span>✦ YOUR FILES, YOUR DEVICE</span></div></div>{active&&selected?<section className="th-workspace"><button className="th-back" onClick={()=>setActive(null)}>← BACK TO THE LAB</button><div className="th-workspace-heading"><span className="th-big-icon">{selected.icon}</span><div><div className="th-kicker">ASLNS LAB / {selected.tag}</div><h2>{selected.name}</h2><p>{selected.desc}</p></div></div><div className="th-panel">{active==='compress'&&<ImageTool mode="compress"/>}{active==='convert'&&<ImageTool mode="convert"/>}{active==='qr'&&<QRTool/>}{active==='json'&&<JSONTool/>}{active==='color'&&<ColorTool/>}{active==='text'&&<TextTool/>}{active==='password'&&<PasswordTool/>}{active==='developer'&&<DeveloperTool/>}</div></section>:<><div className="th-toolbar"><label className="th-search"><span>⌕</span><input aria-label="Search tools" placeholder="What will you create today?" value={query} onChange={e=>setQuery(e.target.value)}/></label><div className="th-filters">{['ALL','CREATOR','DEVELOPER','DESIGN','UTILITY','SECURITY'].map(c=><button key={c} className={category===c?'selected':''} onClick={()=>setCategory(c)}>{cap(c.toLowerCase())}</button>)}</div></div><div className="th-collection-heading"><div className="th-collection-kicker">/ EXPLORE THE LAB</div><h2 className="th-v20-section-title">Find your <em>creative edge.</em></h2><p>Little tools. Limitless possibilities.</p></div><div className="th-grid">{filtered.map((tool,i)=><button className="th-card th-v22-card" style={{animationDelay:`${Math.min(i,7)*85}ms`}} key={tool.id} onClick={()=>{setActive(tool.id);window.scrollTo({top:0,behavior:'auto'})}}><div className="th-card-top"><span className="th-card-icon">{tool.icon}</span><span className="th-card-number">0{i+1} / 08</span></div><div className="th-tag">{tool.tag} / CREATIVE LAB</div><h2 className="th-card-title">{tool.name}</h2><p>{tool.desc}</p><div className="th-card-bottom">LAUNCH EXPERIENCE <span>↗</span></div></button>)}</div>{!filtered.length&&<p className="th-empty">Nothing in this orbit yet. Try a different search.</p>}</>}<footer className="th-footer"><span>© 2026 AMSOULNESS / ASLNS</span><span>BUILT FOR THE CURIOUS · <a href="/">BACK TO PORTFOLIO ↗</a></span></footer></div></main>}
+
+</header><div className="th-wrap"><div className="th-hero"><div className="th-hero-circuit" aria-hidden="true"><span/><span/><span/><span/></div><div className="th-halo" aria-hidden="true"><div/></div><div className="th-eyebrow"><span className="th-dot"/> ASLNS / THE CREATIVE TOOLKIT</div><h1 className="th-kinetic-title th-v20-title"><span className="th-v20-line">TOOLS FOR</span><span className="th-v20-line th-v20-gradient">BIG IDEAS<span className="th-title-period">.</span></span></h1><p>Nine powerful tools for creators and developers. Simple, fast, and ready when inspiration strikes.</p><div className="th-hero-manifesto"><span className="th-manifesto-line"/> <span>YOUR NEXT BIG IDEA STARTS HERE</span> <span className="th-manifesto-line"/></div><div className="th-hero-rule"/><div className="th-hero-meta"><span>✦ 09 CREATIVE ESSENTIALS</span><span>✦ MADE FOR EVERY SCREEN</span><span>✦ YOUR FILES, YOUR DEVICE</span></div></div>{active&&selected?<section className="th-workspace"><button className="th-back" onClick={()=>setActive(null)}>← BACK TO THE LAB</button><div className="th-workspace-heading"><span className="th-big-icon">{selected.icon}</span><div><div className="th-kicker">ASLNS LAB / {selected.tag}</div><h2>{selected.name}</h2><p>{selected.desc}</p></div></div><div className="th-panel">{active==='compress'&&<ImageTool mode="compress"/>}{active==='convert'&&<ImageTool mode="convert"/>}{active==='qr'&&<QRTool/>}{active==='json'&&<JSONTool/>}{active==='color'&&<ColorTool/>}{active==='text'&&<TextTool/>}{active==='password'&&<PasswordTool/>}{active==='developer'&&<DeveloperTool/>}{active==='youtube'&&<YouTubeTool/>}</div></section>:<><div className="th-toolbar"><label className="th-search"><span>⌕</span><input aria-label="Search tools" placeholder="What will you create today?" value={query} onChange={e=>setQuery(e.target.value)}/></label><div className="th-filters">{['ALL','CREATOR','DEVELOPER','DESIGN','UTILITY','SECURITY','MEDIA'].map(c=><button key={c} className={category===c?'selected':''} onClick={()=>setCategory(c)}>{cap(c.toLowerCase())}</button>)}</div></div><div className="th-collection-heading"><div className="th-collection-kicker">/ EXPLORE THE LAB</div><h2 className="th-v20-section-title">Find your <em>creative edge.</em></h2><p>Little tools. Limitless possibilities.</p></div><div className="th-grid">{filtered.map((tool,i)=><button className="th-card th-v22-card" style={{animationDelay:`${Math.min(i,7)*85}ms`}} key={tool.id} onClick={()=>{setActive(tool.id);window.scrollTo({top:0,behavior:'auto'})}}><div className="th-card-top"><span className="th-card-icon">{tool.icon}</span><span className="th-card-number">{String(i+1).padStart(2,'0')} / 09</span></div><div className="th-tag">{tool.tag} / CREATIVE LAB</div><h2 className="th-card-title">{tool.name}</h2><p>{tool.desc}</p><div className="th-card-bottom">LAUNCH EXPERIENCE <span>↗</span></div></button>)}</div>{!filtered.length&&<p className="th-empty">Nothing in this orbit yet. Try a different search.</p>}</>}<footer className="th-footer"><span>© 2026 AMSOULNESS / ASLNS</span><span>BUILT FOR THE CURIOUS · <a href="/">BACK TO PORTFOLIO ↗</a></span></footer></div></main>}
