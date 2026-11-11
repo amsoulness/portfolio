@@ -6,6 +6,8 @@
 
 ### `DESIGN × CODE × CURIOSITY`
 
+`STATUS: 99% creativity · 1% debugging · 100% caffeine-powered`
+
 **A little code. A little chaos. A whole lot of curiosity.**
 
 <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=19&duration=3200&pause=1100&color=A78BFA&center=true&vCenter=true&repeat=true&width=760&height=50&lines=Designing+experiences%2C+not+just+pages.;Turning+curiosity+into+working+code.;One+idea.+Eight+tools.+Endless+possibilities." alt="Animated typing introduction" />
@@ -32,6 +34,10 @@
 
 <div align="center"><img src="assets/aslns-marquee.gif" alt="Scrolling creative motto" width="100%" /></div>
 
+<div align="center">
+<img src="assets/joke-carousel.gif" alt="Animated rotating developer jokes" width="100%" />
+</div>
+
 ## ✧ The Story
 
 > **Not just another portfolio. A place for things worth making.**
@@ -56,6 +62,10 @@ This repository brings together two connected experiences:
 </div>
 
 ---
+
+<div align="center">
+<img src="assets/creativity-loader.gif" alt="Funny loading creativity progress animation" width="100%" />
+</div>
 
 ## ◈ Two Worlds. One Website.
 
@@ -97,6 +107,10 @@ This repository brings together two connected experiences:
 
 <div align="center"><img src="assets/aslns-pulse.gif" alt="Animated audio-style light bars" width="100%" /></div>
 
+<div align="center">
+<img src="assets/bug-chase.gif" alt="Cartoon bug being chased by mouse cursor" width="100%" />
+</div>
+
 ## ✦ What Makes It ASLNS?
 
 <table>
@@ -133,6 +147,10 @@ A portfolio and a Tools Hub that share a creative identity while serving differe
 </td>
 </tr>
 </table>
+
+<div align="center">
+<img src="assets/coffee-meter.gif" alt="Animated developer coffee fuel meter" width="100%" />
+</div>
 
 ## 🧬 Built With
 
@@ -250,6 +268,10 @@ For a new Vercel project, import the GitHub repository, use the **Vite** preset,
 
 ---
 
+<div align="center">
+<img src="assets/deploy-rocket.gif" alt="Animated rocket shipping code to production" width="100%" />
+</div>
+
 ## 🧭 The Journey Continues
 
 *A personal project is never really finished. It just reaches its next version.*
@@ -314,6 +336,6 @@ This repository does not currently declare an open-source license. Unless a lice
 <details>
 <summary><b>✨ About the motion elements in this README</b></summary>
 
-The cinematic banner, scrolling marquee, terminal, and pulse visualization are locally hosted GIFs under <code>assets/</code>. The section dividers and workflow illustration are SVGs, whose motion may not play in GitHub’s image proxy. The typing headline uses a third-party image service. Motion may be reduced by browser or accessibility settings.
+The cinematic banner, scrolling marquee, terminal, pulse visualization, bug chase, coffee meter, creative loader, joke carousel, and rocket are locally hosted GIFs under <code>assets/</code>. The section dividers and workflow illustration are SVGs, whose motion may not play in GitHub’s image proxy. The typing headline uses a third-party image service. Motion may be reduced by browser or accessibility settings.
 
 </details>
