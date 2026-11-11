@@ -1,8 +1,0 @@
-/* Append these styles to the end of your existing ToolsHub.css */
-.th-youtube .th-yt-eyebrow{font-size:11px;letter-spacing:.2em;color:#c4a5ff;font-weight:800}
-.th-youtube .th-yt-video{display:grid;gap:18px;padding:18px;border:1px solid rgba(173,126,255,.3);border-radius:20px;background:linear-gradient(145deg,rgba(104,53,168,.18),rgba(13,8,29,.6))}
-.th-youtube .th-yt-thumbnail{display:block;width:100%;max-height:330px;object-fit:cover;border-radius:13px}
-.th-youtube .th-yt-info{display:grid;gap:6px}
-.th-youtube .th-yt-info strong{font-size:clamp(16px,2vw,22px);line-height:1.35;color:#fff}
-.th-youtube .th-yt-info span{color:#bcaed2;font-size:13px}
-.th-youtube input[type=url]{width:100%;box-sizing:border-box}

@@ -1,1 +1,0 @@
-{"name":"aslns-media-provider-adapter","private":true,"type":"module","scripts":{"start":"node server.mjs","check":"node --check server.mjs"},"engines":{"node":">=20"},"dependencies":{"cors":"^2.8.5","express":"^4.21.2","yt-dlp-exec":"^1.0.2"}}

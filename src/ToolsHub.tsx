@@ -166,7 +166,7 @@ function ImmersiveMotion({enabled}:{enabled:boolean}){
 
 
 
-type ToolId='compress'|'convert'|'qr'|'json'|'color'|'text'|'password'|'developer'|'youtube'
+type ToolId='compress'|'convert'|'qr'|'json'|'color'|'text'|'password'|'developer'
 
 const cards:{id:ToolId;icon:string;name:string;desc:string;tag:string}[]=[
 
@@ -184,8 +184,7 @@ const cards:{id:ToolId;icon:string;name:string;desc:string;tag:string}[]=[
 
 {id:'password',icon:'✳',name:'Password Generator',desc:'Strong by design. Random by nature.',tag:'SECURITY'},
 
-{id:'developer',icon:'</>',name:'Developer Encoder',desc:'Translate the web, one character at a time.',tag:'DEVELOPER'},
-{id:'youtube',icon:'▶',name:'YouTube Downloader',desc:'Preview a video and choose available download formats.',tag:'MEDIA'}]
+{id:'developer',icon:'</>',name:'Developer Encoder',desc:'Translate the web, one character at a time.',tag:'DEVELOPER'}]
 
 const cap=(s:string)=>s.charAt(0).toUpperCase()+s.slice(1)
 
@@ -218,54 +217,6 @@ const htmlEncode=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>
 const htmlDecode=(s:string)=>{const el=document.createElement('textarea');el.innerHTML=s;return el.value}
 
 function DeveloperTool(){const [source,setSource]=useState(''),[mode,setMode]=useState('base64'),[output,setOutput]=useState(''),[notice,setNotice]=useState('');const run=(decode:boolean)=>{try{let result='';if(mode==='base64')result=decode?new TextDecoder('utf-8',{fatal:true}).decode(Uint8Array.from(atob(source.trim()),c=>c.charCodeAt(0))):btoa(Array.from(new TextEncoder().encode(source),b=>String.fromCharCode(b)).join(''));if(mode==='url')result=decode?decodeURIComponent(source):encodeURIComponent(source);if(mode==='html')result=decode?htmlDecode(source):htmlEncode(source);setOutput(result);setNotice('Success ✓')}catch(e){setOutput('');setNotice(e instanceof Error?e.message:'Invalid input')}};return <div className="th-fields"><label>Operation<select value={mode} onChange={e=>{setMode(e.target.value);setOutput('');setNotice('')}}><option value="base64">Base64 (UTF-8)</option><option value="url">URL component</option><option value="html">HTML entities</option></select></label><label>Input<textarea rows={6} value={source} onChange={e=>setSource(e.target.value)}/></label><div className="th-actions"><button onClick={()=>run(false)}>Encode</button><button className="th-secondary" onClick={()=>run(true)}>Decode</button></div><label>Output<textarea rows={6} value={output} readOnly/></label><button className="th-secondary" disabled={!output} onClick={()=>copy(output,setNotice)}>Copy output</button><p role="status" className="th-hint">{notice}</p></div>}
-
-type VideoFormat={id:string;label:string;ext:string;resolution:string;size?:number|null}
-type VideoInfo={title:string;thumbnail:string;duration:number|null;uploader:string;formats:VideoFormat[]}
-const MEDIA_API=(import.meta.env.VITE_MEDIA_API_URL || '').replace(/\/$/,'')
-function YouTubeTool(){
- const [url,setUrl]=useState(''),[info,setInfo]=useState<VideoInfo|null>(null)
- const [format,setFormat]=useState(''),[loading,setLoading]=useState(false)
- const [busy,setBusy]=useState(false),[message,setMessage]=useState('')
- const inspect=async()=>{
-  setLoading(true);setMessage('');setInfo(null);setFormat('')
-  try{
-   if(!MEDIA_API)throw new Error('Downloader backend not configured. Set VITE_MEDIA_API_URL in Vercel.')
-   const response=await fetch(`${MEDIA_API}/api/video/info`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url})})
-   const data=await response.json()
-   if(!response.ok)throw new Error(data.detail||'Unable to inspect this video.')
-   setInfo(data);setFormat(data.formats?.[0]?.id||'')
-  }catch(e){setMessage(e instanceof Error?e.message:'Could not load video information.')}
-  finally{setLoading(false)}
- }
- const startDownload=async()=>{
-  if(!info||!format||busy)return
-  setBusy(true);setMessage('Preparing your download. Large files may take a while…')
-  try{
-   const response=await fetch(`${MEDIA_API}/api/video/download`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url,format_id:format})})
-   if(!response.ok){let detail='Download failed.';try{detail=(await response.json()).detail||detail}catch{};throw new Error(detail)}
-   const blob=await response.blob()
-   const chosen=info.formats.find(f=>f.id===format)
-   const extension=chosen?.ext==='webm'?'webm':'mp4'
-   download(blob,`aslns-video.${extension}`)
-   setMessage('Download ready ✓')
-  }catch(e){setMessage(e instanceof Error?e.message:'Download failed.')}
-  finally{setBusy(false)}
- }
- const duration=(seconds:number|null)=>seconds==null?'—':`${Math.floor(seconds/3600)?Math.floor(seconds/3600)+':':''}${String(Math.floor(seconds%3600/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`
- return <div className="th-fields th-youtube">
-  <div className="th-yt-eyebrow">▶ ASLNS MEDIA LAB / VIDEO</div>
-  <label>YouTube video link<input type="url" value={url} onChange={e=>setUrl(e.target.value)} placeholder="https://www.youtube.com/watch?v=..." autoComplete="off"/></label>
-  <button onClick={inspect} disabled={loading||!url.trim()}>{loading?'Finding available formats…':'Analyze video ↗'}</button>
-  {info&&<div className="th-yt-video">
-   {info.thumbnail&&<img className="th-yt-thumbnail" src={info.thumbnail} alt="Video thumbnail"/>}
-   <div className="th-yt-info"><strong>{info.title}</strong><span>{info.uploader} · {duration(info.duration)}</span></div>
-   <label>Available quality and format<select value={format} onChange={e=>setFormat(e.target.value)}>{info.formats.map(f=><option key={f.id} value={f.id}>{f.label}</option>)}</select></label>
-   <button disabled={busy||!format} onClick={startDownload}>{busy?'Processing download…':'Download selected format ↓'}</button>
-  </div>}
-  <p className="th-hint">Only download videos you own or are authorized to save. Available qualities depend on the source. Restricted or DRM-protected videos are not supported. Large downloads require a capable backend.</p>
-  {message&&<p className="th-result" role="status">{message}</p>}
- </div>
-}
 
 export default function ToolsHub(){const [active,setActive]=useState<ToolId|null>(null),[query,setQuery]=useState(''),[category,setCategory]=useState('ALL');
 
@@ -301,4 +252,4 @@ useEffect(()=>{document.title='Free Online Tools | AMSOULNESS';return()=>{docume
 
   <div className="th-v21-track" aria-hidden="true"><span/></div>
 
-</header><div className="th-wrap"><div className="th-hero"><div className="th-hero-circuit" aria-hidden="true"><span/><span/><span/><span/></div><div className="th-halo" aria-hidden="true"><div/></div><div className="th-eyebrow"><span className="th-dot"/> ASLNS / THE CREATIVE TOOLKIT</div><h1 className="th-kinetic-title th-v20-title"><span className="th-v20-line">TOOLS FOR</span><span className="th-v20-line th-v20-gradient">BIG IDEAS<span className="th-title-period">.</span></span></h1><p>Nine powerful tools for creators and developers. Simple, fast, and ready when inspiration strikes.</p><div className="th-hero-manifesto"><span className="th-manifesto-line"/> <span>YOUR NEXT BIG IDEA STARTS HERE</span> <span className="th-manifesto-line"/></div><div className="th-hero-rule"/><div className="th-hero-meta"><span>✦ 09 CREATIVE ESSENTIALS</span><span>✦ MADE FOR EVERY SCREEN</span><span>✦ YOUR FILES, YOUR DEVICE</span></div></div>{active&&selected?<section className="th-workspace"><button className="th-back" onClick={()=>setActive(null)}>← BACK TO THE LAB</button><div className="th-workspace-heading"><span className="th-big-icon">{selected.icon}</span><div><div className="th-kicker">ASLNS LAB / {selected.tag}</div><h2>{selected.name}</h2><p>{selected.desc}</p></div></div><div className="th-panel">{active==='compress'&&<ImageTool mode="compress"/>}{active==='convert'&&<ImageTool mode="convert"/>}{active==='qr'&&<QRTool/>}{active==='json'&&<JSONTool/>}{active==='color'&&<ColorTool/>}{active==='text'&&<TextTool/>}{active==='password'&&<PasswordTool/>}{active==='developer'&&<DeveloperTool/>}{active==='youtube'&&<YouTubeTool/>}</div></section>:<><div className="th-toolbar"><label className="th-search"><span>⌕</span><input aria-label="Search tools" placeholder="What will you create today?" value={query} onChange={e=>setQuery(e.target.value)}/></label><div className="th-filters">{['ALL','CREATOR','DEVELOPER','DESIGN','UTILITY','SECURITY','MEDIA'].map(c=><button key={c} className={category===c?'selected':''} onClick={()=>setCategory(c)}>{cap(c.toLowerCase())}</button>)}</div></div><div className="th-collection-heading"><div className="th-collection-kicker">/ EXPLORE THE LAB</div><h2 className="th-v20-section-title">Find your <em>creative edge.</em></h2><p>Little tools. Limitless possibilities.</p></div><div className="th-grid">{filtered.map((tool,i)=><button className="th-card th-v22-card" style={{animationDelay:`${Math.min(i,7)*85}ms`}} key={tool.id} onClick={()=>{setActive(tool.id);window.scrollTo({top:0,behavior:'auto'})}}><div className="th-card-top"><span className="th-card-icon">{tool.icon}</span><span className="th-card-number">{String(i+1).padStart(2,'0')} / 09</span></div><div className="th-tag">{tool.tag} / CREATIVE LAB</div><h2 className="th-card-title">{tool.name}</h2><p>{tool.desc}</p><div className="th-card-bottom">LAUNCH EXPERIENCE <span>↗</span></div></button>)}</div>{!filtered.length&&<p className="th-empty">Nothing in this orbit yet. Try a different search.</p>}</>}<footer className="th-footer"><span>© 2026 AMSOULNESS / ASLNS</span><span>BUILT FOR THE CURIOUS · <a href="/">BACK TO PORTFOLIO ↗</a></span></footer></div></main>}
+</header><div className="th-wrap"><div className="th-hero"><div className="th-hero-circuit" aria-hidden="true"><span/><span/><span/><span/></div><div className="th-halo" aria-hidden="true"><div/></div><div className="th-eyebrow"><span className="th-dot"/> ASLNS / THE CREATIVE TOOLKIT</div><h1 className="th-kinetic-title th-v20-title"><span className="th-v20-line">TOOLS FOR</span><span className="th-v20-line th-v20-gradient">BIG IDEAS<span className="th-title-period">.</span></span></h1><p>Eight powerful tools for creators and developers. Simple, fast, and ready when inspiration strikes.</p><div className="th-hero-manifesto"><span className="th-manifesto-line"/> <span>YOUR NEXT BIG IDEA STARTS HERE</span> <span className="th-manifesto-line"/></div><div className="th-hero-rule"/><div className="th-hero-meta"><span>✦ 08 CREATIVE ESSENTIALS</span><span>✦ MADE FOR EVERY SCREEN</span><span>✦ YOUR FILES, YOUR DEVICE</span></div></div>{active&&selected?<section className="th-workspace"><button className="th-back" onClick={()=>setActive(null)}>← BACK TO THE LAB</button><div className="th-workspace-heading"><span className="th-big-icon">{selected.icon}</span><div><div className="th-kicker">ASLNS LAB / {selected.tag}</div><h2>{selected.name}</h2><p>{selected.desc}</p></div></div><div className="th-panel">{active==='compress'&&<ImageTool mode="compress"/>}{active==='convert'&&<ImageTool mode="convert"/>}{active==='qr'&&<QRTool/>}{active==='json'&&<JSONTool/>}{active==='color'&&<ColorTool/>}{active==='text'&&<TextTool/>}{active==='password'&&<PasswordTool/>}{active==='developer'&&<DeveloperTool/>}</div></section>:<><div className="th-toolbar"><label className="th-search"><span>⌕</span><input aria-label="Search tools" placeholder="What will you create today?" value={query} onChange={e=>setQuery(e.target.value)}/></label><div className="th-filters">{['ALL','CREATOR','DEVELOPER','DESIGN','UTILITY','SECURITY'].map(c=><button key={c} className={category===c?'selected':''} onClick={()=>setCategory(c)}>{cap(c.toLowerCase())}</button>)}</div></div><div className="th-collection-heading"><div className="th-collection-kicker">/ EXPLORE THE LAB</div><h2 className="th-v20-section-title">Find your <em>creative edge.</em></h2><p>Little tools. Limitless possibilities.</p></div><div className="th-grid">{filtered.map((tool,i)=><button className="th-card th-v22-card" style={{animationDelay:`${Math.min(i,7)*85}ms`}} key={tool.id} onClick={()=>{setActive(tool.id);window.scrollTo({top:0,behavior:'auto'})}}><div className="th-card-top"><span className="th-card-icon">{tool.icon}</span><span className="th-card-number">{String(i+1).padStart(2,'0')} / 08</span></div><div className="th-tag">{tool.tag} / CREATIVE LAB</div><h2 className="th-card-title">{tool.name}</h2><p>{tool.desc}</p><div className="th-card-bottom">LAUNCH EXPERIENCE <span>↗</span></div></button>)}</div>{!filtered.length&&<p className="th-empty">Nothing in this orbit yet. Try a different search.</p>}</>}<footer className="th-footer"><span>© 2026 AMSOULNESS / ASLNS</span><span>BUILT FOR THE CURIOUS · <a href="/">BACK TO PORTFOLIO ↗</a></span></footer></div></main>}
