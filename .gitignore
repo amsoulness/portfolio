@@ -29,3 +29,23 @@ dist-ssr
 !.env.example
 __pycache__/
 *.pyc
+
+# WhatsApp DP Studio private data
+whatsapp-backend/.wwebjs_auth/
+whatsapp-backend/.wwebjs_cache/
+whatsapp-backend/uploads/
+whatsapp-backend/audit-report.json
+whatsapp-backend/.env
+
+# Local backend checkpoints
+whatsapp-backend/backups/
+
+# ASLNS backend recovery and local checkpoints
+whatsapp-backend/.aslns-instance-lock*/
+whatsapp-backend/*.backup*
+whatsapp-backend/*.bak
+whatsapp-backend/**/*.backup*
+whatsapp-backend/**/*.bak
+
+# Frontend local checkpoints
+*.backup-fasttrack-*

@@ -1,5 +1,5 @@
-import ToolsHub from './ToolsHub'
-import { useEffect, useRef, useState } from 'react'
+const ToolsHub = lazy(() => import('./ToolsHub'))
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import type { ReactNode, CSSProperties } from 'react'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
 
@@ -679,5 +679,7 @@ function PortfolioApp(){
 }
 
 export default function App(){
-  return window.location.pathname.replace(/\/$/,'') === '/tools' ? <ToolsHub/> : <PortfolioApp/>
+  return window.location.pathname.replace(/\/$/,'') === '/tools'
+    ? <Suspense fallback={<div role="status">Loading Tools Hub…</div>}><ToolsHub/></Suspense>
+    : <PortfolioApp/>
 }
