@@ -51,6 +51,7 @@ const {
 const app = express();
 
 const PORT = Number(process.env.PORT || 3001);
+const HOST = process.env.HOST || '127.0.0.1';
 const SHUTDOWN_TIMEOUT_MS = 10_000;
 
 const uploadDir = path.join(__dirname, 'uploads');
@@ -1059,7 +1060,7 @@ async function startServer() {
     await new Promise((resolve, reject) => {
       const httpServer = app.listen(
         PORT,
-        '127.0.0.1'
+        HOST
       );
 
       server = httpServer;
