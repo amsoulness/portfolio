@@ -3,6 +3,7 @@
 
 const express = require('express');
 const cors = require('cors');
+const { rateLimit } = require('express-rate-limit');
 const multer = require('multer');
 const crypto = require('node:crypto');
 const fs = require('node:fs/promises');
@@ -100,6 +101,22 @@ app.use(
     limit: '32kb'
   })
 );
+
+const sessionCreationLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: { error: 'Too many session requests. Please try again later.' }
+});
+
+const pairingLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: { error: 'Too many pairing requests. Please try again later.' }
+});
 
 function noStore(res) {
   res.set('Cache-Control', 'no-store');
@@ -310,7 +327,7 @@ app.get('/api/health', (_req, res) => {
 // CREATE SESSION
 // =====================================================
 
-app.post('/api/sessions', (_req, res) => {
+app.post('/api/sessions', sessionCreationLimiter, (_req, res) => {
   const session = createSession();
 
   noStore(res);
@@ -483,6 +500,7 @@ app.post('/api/upload', (req, res) => {
 
 app.post(
   '/api/sessions/:id/pairing',
+  pairingLimiter,
   async (req, res) => {
     const session = authorizeSession(req, res);
     if (!session) return;
