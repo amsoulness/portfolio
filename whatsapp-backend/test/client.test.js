@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const { EventEmitter } = require('node:events');
 const { WhatsAppClient } = require('../client');
 
-test('requests the ASLNS code, disables history sync, and exposes link lifecycle events', async () => {
+test('uses the WhatsApp-generated pairing code, disables history sync, and exposes link lifecycle events', async () => {
   // Reserved fictional North American test number; no real account is used.
   const testPhone = '15550100123';
   const events = [];
@@ -14,14 +14,14 @@ test('requests the ASLNS code, disables history sync, and exposes link lifecycle
     ev: socketEvents,
     user: { id: `${testPhone}@s.whatsapp.net` },
     async waitForSocketOpen() { events.push('open'); },
-    async requestPairingCode(phone, code) { events.push(['pair', phone, code]); return code; },
+    async requestPairingCode(...args) { events.push(['pair', ...args]); return 'AB12CD34'; },
     async updateProfilePicture(...args) { events.push(['picture', ...args]); },
     async logout() { events.push('logout'); },
     end() { events.push('end'); }
   };
   const state = { creds: { registered: false } };
   const client = new WhatsAppClient({
-    authDir: 'runtime/session/auth', phoneNumber: testPhone, pairingCode: 'ASLNSABC',
+    authDir: 'runtime/session/auth', phoneNumber: testPhone,
     loadBaileys: async () => ({
       default: config => { events.push(config); return socket; },
       Browsers: { macOS: () => ['Chrome'] },
@@ -33,8 +33,8 @@ test('requests the ASLNS code, disables history sync, and exposes link lifecycle
   client.on('code', code => codes.push(code));
   client.on('ready', () => ready.push(true));
   await client.initialize();
-  assert.equal(codes[0], 'ASLNSABC');
-  assert.equal(events.some(event => Array.isArray(event) && event[0] === 'pair' && event[1] === testPhone), true);
+  assert.equal(codes[0], 'AB12CD34');
+  assert.deepEqual(events.find(event => Array.isArray(event) && event[0] === 'pair'), ['pair', testPhone]);
   const config = events.find(event => event && typeof event === 'object' && 'syncFullHistory' in event);
   assert.equal(config.syncFullHistory, false);
   assert.equal(config.shouldSyncHistoryMessage(), false);

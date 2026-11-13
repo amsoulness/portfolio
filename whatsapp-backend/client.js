@@ -4,9 +4,9 @@ const { EventEmitter } = require('node:events');
 const pino = require('pino');
 
 class WhatsAppClient extends EventEmitter {
-  constructor({ authDir, phoneNumber, pairingCode, loadBaileys = () => import('@whiskeysockets/baileys') }) {
+  constructor({ authDir, phoneNumber, loadBaileys = () => import('@whiskeysockets/baileys') }) {
     super();
-    Object.assign(this, { authDir, phoneNumber, pairingCode, loadBaileys });
+    Object.assign(this, { authDir, phoneNumber, loadBaileys });
     this.closing = false;
     this.connected = false;
     this.saveQueue = Promise.resolve();
@@ -34,7 +34,7 @@ class WhatsAppClient extends EventEmitter {
         ? socket.waitForConnectionUpdate(update => update.connection === 'connecting' || Boolean(update.qr), 30000)
         : Promise.resolve();
       await Promise.all([socket.waitForSocketOpen(), pairingReady]);
-      const code = await socket.requestPairingCode(this.phoneNumber, this.pairingCode);
+      const code = await socket.requestPairingCode(this.phoneNumber);
       await this.persistCredentials();
       this.emit('code', code);
     } else await socket.waitForSocketOpen();
