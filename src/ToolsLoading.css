@@ -1,0 +1,103 @@
+.tools-loading {
+  --loader-ink: #f3edff;
+  --loader-muted: #aaa1bd;
+  --loader-violet: #bd9cff;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex: 1;
+  min-height: 100svh;
+  width: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: clamp(22px, 5vw, 56px) clamp(20px, 6vw, 72px) 24px;
+  color: var(--loader-ink);
+  text-align: left;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(106, 63, 165, .22), transparent 38%),
+    radial-gradient(ellipse at 15% 100%, rgba(50, 48, 128, .2), transparent 45%),
+    #0c0a12;
+  font-family: var(--sans, system-ui, sans-serif);
+}
+
+.tools-loading::before,
+.tools-loading::after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  pointer-events: none;
+}
+
+.tools-loading::before {
+  inset: 0;
+  opacity: .22;
+  background-image: radial-gradient(rgba(215, 195, 255, .8) .7px, transparent .7px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(transparent, #000 25%, #000 75%, transparent);
+}
+
+.tools-loading::after {
+  width: 130%;
+  height: 1px;
+  top: 52%;
+  left: -15%;
+  transform: rotate(-13deg);
+  background: linear-gradient(90deg, transparent, rgba(189, 156, 255, .22), transparent);
+  box-shadow: 0 0 38px 8px rgba(111, 73, 170, .09);
+}
+
+.tools-loading-topbar,
+.tools-loading-footer,
+.tools-loading-brand,
+.tools-loading-index,
+.tools-loading-footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tools-loading-topbar { position: relative; z-index: 1; }
+.tools-loading-brand { gap: 11px; color: var(--loader-ink); text-decoration: none; font-size: 13px; font-weight: 800; letter-spacing: .12em; }
+.tools-loading-brand small { display: block; margin-top: 2px; color: var(--loader-muted); font-size: 8px; font-weight: 500; letter-spacing: .2em; }
+.tools-loading-brand-mark { position: relative; display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid rgba(215, 195, 255, .38); border-radius: 50%; font-family: Georgia, serif; font-size: 21px; }
+.tools-loading-brand-mark span { position: absolute; top: -4px; right: -5px; color: #d0baff; font-family: var(--sans, sans-serif); font-size: 10px; }
+.tools-loading-index,.tools-loading-footer,.tools-loading-footnote { color: var(--loader-muted); font-size: 9px; letter-spacing: .18em; }
+.tools-loading-index { gap: 10px; }
+.tools-loading-index i,.tools-loading-kicker span { width: 5px; height: 5px; border-radius: 50%; background: #c8a9ff; box-shadow: 0 0 12px #b58aff; }
+
+.tools-loading-center { position: relative; z-index: 1; width: min(100%, 490px); margin: auto; padding: 44px 0 52px; text-align: center; }
+.tools-loading-orbit { position: relative; width: 154px; height: 154px; margin: 0 auto 33px; display: grid; place-items: center; }
+.tools-loading-ring { position: absolute; inset: 10px; border: 1px solid rgba(206, 180, 255, .25); border-radius: 50%; }
+.tools-loading-ring-one { animation: loader-spin 13s linear infinite; border-style: dashed; }
+.tools-loading-ring-two { inset: 28px; border-color: rgba(206, 180, 255, .18); box-shadow: 0 0 44px rgba(165, 120, 231, .16), inset 0 0 25px rgba(165, 120, 231, .08); }
+.tools-loading-core { display: grid; width: 60px; height: 60px; place-items: center; border: 1px solid rgba(218, 197, 255, .55); border-radius: 19px; color: #f1e9ff; background: linear-gradient(145deg, rgba(194, 162, 255, .24), rgba(91, 61, 134, .12)); box-shadow: 0 0 50px rgba(165, 120, 231, .25); font-family: Georgia, serif; font-size: 30px; }
+.tools-loading-orbit-icon { position: absolute; display: grid; width: 26px; height: 26px; place-items: center; border: 1px solid rgba(215, 195, 255, .25); border-radius: 9px; color: #d6c3ff; background: #16111f; font-size: 12px; animation: loader-float 3s ease-in-out infinite; }
+.orbit-icon-1 { top: 2px; left: 63px; }.orbit-icon-2 { top: 35px; right: -1px; animation-delay: -.5s; }.orbit-icon-3 { right: 5px; bottom: 22px; animation-delay: -1s; }.orbit-icon-4 { bottom: 0; left: 62px; animation-delay: -1.5s; }.orbit-icon-5 { bottom: 29px; left: -1px; animation-delay: -2s; }.orbit-icon-6 { top: 34px; left: 2px; animation-delay: -2.5s; }
+.tools-loading-kicker { display: flex; align-items: center; justify-content: center; gap: 9px; color: #c6b2e7; font-size: 9px; letter-spacing: .24em; }
+.tools-loading-center h1 { margin: 17px 0 10px; color: var(--loader-ink); font-size: clamp(38px, 7vw, 60px); font-weight: 500; letter-spacing: -.055em; line-height: .98; }
+.tools-loading-center h1 em { color: #c8aaff; font-family: Georgia, serif; font-weight: 400; }
+.tools-loading-center p { color: var(--loader-muted); font-size: 13px; letter-spacing: .04em; }
+.tools-loading-progress { width: min(230px, 68%); height: 2px; overflow: hidden; margin: 31px auto 13px; background: rgba(214, 195, 255, .14); }
+.tools-loading-progress span { display: block; width: 34%; height: 100%; background: linear-gradient(90deg, transparent, #c6a4ff, #f0e6ff, transparent); animation: loader-progress 1.8s ease-in-out infinite; }
+.tools-loading-footnote { width: min(310px, 100%); margin: auto; font-size: 8px; }
+.tools-loading-footer { position: relative; z-index: 1; border-top: 1px solid rgba(207, 188, 238, .14); padding-top: 14px; font-size: 8px; }
+.tools-loading-footer b { color: #c5a2ff; }
+
+@keyframes loader-spin { to { transform: rotate(360deg); } }
+@keyframes loader-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes loader-progress { from { transform: translateX(-120%); } to { transform: translateX(330%); } }
+
+@media (max-width: 520px) {
+  .tools-loading { min-height: 100svh; padding-inline: 19px; }
+  .tools-loading-index { font-size: 7px; letter-spacing: .12em; }
+  .tools-loading-center { padding-block: 25px; }
+  .tools-loading-orbit { transform: scale(.88); margin-bottom: 17px; }
+  .tools-loading-footer { font-size: 7px; letter-spacing: .11em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tools-loading-ring-one,.tools-loading-orbit-icon,.tools-loading-progress span { animation: none; }
+  .tools-loading-progress span { width: 52%; margin-inline: auto; }
+}

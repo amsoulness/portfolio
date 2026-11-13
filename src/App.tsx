@@ -1,4 +1,5 @@
 const ToolsHub = lazy(() => import('./ToolsHub'))
+import ToolsLoading from './ToolsLoading'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import type { ReactNode, CSSProperties } from 'react'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
@@ -680,6 +681,6 @@ function PortfolioApp(){
 
 export default function App(){
   return window.location.pathname.replace(/\/$/,'') === '/tools'
-    ? <Suspense fallback={<div role="status">Loading Tools Hub…</div>}><ToolsHub/></Suspense>
+    ? <Suspense fallback={<ToolsLoading/>}><ToolsHub/></Suspense>
     : <PortfolioApp/>
 }
