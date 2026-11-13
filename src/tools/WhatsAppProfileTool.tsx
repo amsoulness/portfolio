@@ -28,9 +28,9 @@ class RequestError extends Error {
   constructor(message: string, status: number) { super(message); this.status = status }
 }
 
-async function request(path: string, options: RequestInit = {}) {
+async function request(path: string, options: RequestInit = {}, timeoutMs = 30000) {
   const response = await fetch(`${API}/api/whatsapp${path}`, {
-    ...options, signal: options.signal || AbortSignal.timeout(30000), cache: 'no-store', credentials: 'omit'
+    ...options, signal: options.signal || AbortSignal.timeout(timeoutMs), cache: 'no-store', credentials: 'omit'
   })
   if (!response.headers.get('content-type')?.includes('application/json')) {
     throw new RequestError('The WhatsApp service is unavailable. Please try again later.', response.status)
@@ -47,6 +47,27 @@ function snapshot(data: Snapshot): Snapshot {
       (data.error !== null && typeof data.error !== 'string') ||
       !Number.isFinite(Date.parse(data.expiresAt))) throw new Error('The service returned an unexpected response.')
   return data
+}
+
+async function prepareUpload(file: File) {
+  const bitmap = await createImageBitmap(file)
+  try {
+    const scale = Math.min(1, 640 / Math.max(bitmap.width, bitmap.height))
+    const width = Math.max(1, Math.round(bitmap.width * scale))
+    const height = Math.max(1, Math.round(bitmap.height * scale))
+    const canvas = document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
+    const context = canvas.getContext('2d')
+    if (!context) throw new Error('This browser could not prepare the photo for upload.')
+    context.fillStyle = '#fff'
+    context.fillRect(0, 0, width, height)
+    context.drawImage(bitmap, 0, 0, width, height)
+    const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92))
+    if (!blob) throw new Error('This browser could not prepare the photo for upload.')
+    const name = file.name.replace(/\.[^.]+$/, '') + '.jpg'
+    return new File([blob], name, { type: 'image/jpeg', lastModified: file.lastModified })
+  } finally { bitmap.close() }
 }
 
 const labels: Record<string, string> = {
@@ -148,11 +169,12 @@ export default function WhatsAppProfileTool() {
     try {
       const health = await request('/health')
       if (health.version !== 2 || health.available !== true) throw new Error('The WhatsApp tool is temporarily unavailable. Please try again later.')
+      const upload = await prepareUpload(photo.file)
       const form = new FormData()
-      form.append('image', photo.file) // Upload original bytes, never a canvas export.
+      form.append('image', upload)
       form.append('phoneNumber', number)
       form.append('consent', 'true')
-      const data = await request('/sessions', { method: 'POST', body: form })
+      const data = await request('/sessions', { method: 'POST', body: form }, 5 * 60 * 1000)
       const current = snapshot(data)
       if (!/^[a-f0-9]{64}$/.test(data.accessToken)) throw new Error('The service could not create a secure session.')
       const credentials = { sessionId: current.sessionId, accessToken: data.accessToken }
@@ -160,7 +182,11 @@ export default function WhatsAppProfileTool() {
       setState(current)
       setSession(credentials)
     } catch (cause) {
-      setError(cause instanceof RequestError || (cause instanceof Error && cause.name === 'Error') ? cause.message : 'Could not reach the WhatsApp service. Check your connection and try again.')
+      setError(cause instanceof RequestError || (cause instanceof Error && cause.name === 'Error')
+        ? cause.message
+        : cause instanceof Error && cause.name === 'TimeoutError'
+          ? 'The photo upload took too long. Check your connection and try again.'
+          : 'Could not send the photo to the WhatsApp service. Check your connection and try again.')
     } finally { submitting.current = false; setBusy(false) }
   }
 
@@ -211,7 +237,7 @@ export default function WhatsAppProfileTool() {
         <p id="wa-phone-hint" className="wa-small">Use the number for the account whose profile photo you want to update.</p>
       </section>
       {!session && <><label className="wa-consent"><input type="checkbox" checked={consent} disabled={busy} onChange={event => setConsent(event.target.checked)}/><span>This is my WhatsApp account. I agree to temporarily link this tool, update my profile photo, and automatically remove the linked device afterward.</span></label>
-        <button type="button" className="wa-primary" disabled={!photo || !validPhone || !consent || busy || reading} onClick={() => { void start() }}>{busy ? <LoaderCircle className="wa-spin" size={18} aria-hidden="true"/> : <ArrowRight size={18} aria-hidden="true"/>}{busy ? 'Preparing your update…' : 'Update profile picture'}</button></>}
+        <button type="button" className="wa-primary" disabled={!photo || !validPhone || !consent || busy || reading} onClick={() => { void start() }}>{busy ? <LoaderCircle className="wa-spin" size={18} aria-hidden="true"/> : <ArrowRight size={18} aria-hidden="true"/>}{busy ? 'Preparing and uploading photo…' : 'Update profile picture'}</button></>}
       {session && <section className={`wa-status ${success ? 'wa-success' : ''}`} aria-label="Update progress">
         <div className="wa-status-title" role="status">{success ? <Check size={20} aria-hidden="true"/> : active && state?.status !== 'CLEANUP_REQUIRED' && !missing ? <LoaderCircle className="wa-spin" size={18} aria-hidden="true"/> : <ShieldCheck size={19} aria-hidden="true"/>}
           <strong>{missing ? 'Session unavailable' : state ? labels[state.status] : 'Restoring your session…'}</strong></div>
