@@ -5,9 +5,18 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ASLNS | Emmanuel Cherian</title>
+    <style>
+      #site-boot-progress, #site-boot-progress span { position: fixed; top: 0; left: 0; height: 3px; }
+      #site-boot-progress { z-index: 10001; width: 100vw; overflow: hidden; background: rgba(185,151,240,.14); pointer-events: none; transition: opacity .28s ease, visibility .28s ease; }
+      #site-boot-progress span { width: 32%; background: linear-gradient(90deg,transparent,#a879e8 32%,#e6d7ff 72%,transparent); box-shadow: 0 0 14px rgba(190,150,255,.85); animation: site-boot-sweep 1s ease-in-out infinite; }
+      #root:not(:empty) + #site-boot-progress { opacity: 0; visibility: hidden; }
+      @keyframes site-boot-sweep { from { transform: translateX(-120%); } to { transform: translateX(420%); } }
+      @media (prefers-reduced-motion: reduce) { #site-boot-progress span { animation: none; width: 54%; left: 23%; } }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+    <div id="site-boot-progress" class="site-boot-progress" aria-hidden="true"><span></span></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

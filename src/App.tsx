@@ -1,6 +1,6 @@
 const ToolsHub = lazy(() => import('./ToolsHub'))
 import ToolsLoading from './ToolsLoading'
-import { lazy, Suspense, useEffect, useRef, useState, useTransition } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import type { ReactNode, CSSProperties, MouseEvent as ReactMouseEvent } from 'react'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
 
@@ -684,29 +684,59 @@ function PortfolioApp(){
 export default function App(){
   const [path, setPath] = useState(() => normalizeSitePath(window.location.pathname))
   const [isPending, startTransition] = useTransition()
+  const [navigationPulse, setNavigationPulse] = useState(false)
+  const navigationTimer = useRef<number | undefined>(undefined)
+
+  const pulseNavigation = useCallback(() => {
+    setNavigationPulse(true)
+    window.clearTimeout(navigationTimer.current)
+    navigationTimer.current = window.setTimeout(() => setNavigationPulse(false), 760)
+  }, [])
 
   useEffect(() => {
-    const syncPath = () => startTransition(() => setPath(normalizeSitePath(window.location.pathname)))
+    const syncPath = () => {
+      pulseNavigation()
+      startTransition(() => setPath(normalizeSitePath(window.location.pathname)))
+    }
     window.addEventListener('popstate', syncPath)
-    return () => window.removeEventListener('popstate', syncPath)
-  }, [])
+    return () => {
+      window.removeEventListener('popstate', syncPath)
+      window.clearTimeout(navigationTimer.current)
+    }
+  }, [pulseNavigation])
 
   const handleNavigation = (event: ReactMouseEvent<HTMLDivElement>) => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
     const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href]')
     if (!link || link.target === '_blank' || link.hasAttribute('download')) return
     const destination = new URL(link.href, window.location.href)
-    if (destination.origin !== window.location.origin || !['/', '/tools'].includes(normalizeSitePath(destination.pathname)) || destination.hash) return
+    if (destination.origin !== window.location.origin) return
     const nextPath = normalizeSitePath(destination.pathname)
+
+    if (destination.hash && nextPath === path) {
+      const section = document.getElementById(decodeURIComponent(destination.hash.slice(1)))
+      if (!section) return
+      event.preventDefault()
+      window.history.pushState({}, '', `${destination.pathname}${destination.search}${destination.hash}`)
+      pulseNavigation()
+      section.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })
+      return
+    }
+
+    if (!['/', '/tools'].includes(nextPath)) return
     if (nextPath === path) return
     event.preventDefault()
     window.history.pushState({}, '', `${destination.pathname}${destination.search}`)
     window.scrollTo({ top: 0, behavior: 'instant' })
+    pulseNavigation()
     startTransition(() => setPath(nextPath))
   }
 
   return <div className="site-navigation-shell" onClick={handleNavigation}>
-    {isPending && <div className="site-navigation-progress" role="status" aria-label="Loading page"><span /></div>}
+    {(isPending || navigationPulse) && <div className="site-navigation-progress" role="status" aria-label="Navigating the website">
+      <div className="site-navigation-progress-track"><span /></div>
+      <div className="site-navigation-progress-label"><span className="site-navigation-orbit" aria-hidden="true"><i /></span><span>ASLNS / TRANSITION</span><b aria-hidden="true">✦</b></div>
+    </div>}
     {path === '/tools'
       ? <Suspense fallback={<ToolsLoading/>}><ToolsHub/></Suspense>
       : <PortfolioApp/>}
