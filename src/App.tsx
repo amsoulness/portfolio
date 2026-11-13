@@ -693,7 +693,7 @@ export default function App(){
 
   const handleNavigation = (event: ReactMouseEvent<HTMLDivElement>) => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
-    const link = (event.target as HTMLElement).closest('a[href]')
+    const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href]')
     if (!link || link.target === '_blank' || link.hasAttribute('download')) return
     const destination = new URL(link.href, window.location.href)
     if (destination.origin !== window.location.origin || !['/', '/tools'].includes(normalizeSitePath(destination.pathname)) || destination.hash) return
