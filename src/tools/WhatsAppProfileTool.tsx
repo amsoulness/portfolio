@@ -215,7 +215,7 @@ export default function WhatsAppProfileTool() {
       {session && <section className={`wa-status ${success ? 'wa-success' : ''}`} aria-label="Update progress">
         <div className="wa-status-title" role="status">{success ? <Check size={20} aria-hidden="true"/> : active && state?.status !== 'CLEANUP_REQUIRED' && !missing ? <LoaderCircle className="wa-spin" size={18} aria-hidden="true"/> : <ShieldCheck size={19} aria-hidden="true"/>}
           <strong>{missing ? 'Session unavailable' : state ? labels[state.status] : 'Restoring your session…'}</strong></div>
-        {code && state?.status === 'CODE_READY' && <><span className="wa-badge wa-code-brand">✦ AMSOULNESS · SECURE PAIRING</span><div className="wa-code" aria-label={`Pairing code ${code}`}>{code.slice(0, 4)}<span>–</span>{code.slice(4)}</div>
+        {code && state?.status === 'CODE_READY' && <><span className="wa-badge wa-code-brand">✦ AMSOULNESS · SECURE PAIRING</span><div className="wa-code" aria-label={`Pairing code ${code}`}>{code.slice(0, 5)}<span>–</span>{code.slice(5)}</div>
           <button className="wa-secondary" type="button" onClick={() => { void copyCode() }}><Copy size={15} aria-hidden="true"/>{copied === code ? 'Code copied' : 'Copy code'}</button>
           <ol className="wa-instructions"><li>Open WhatsApp on your phone.</li><li>Go to <strong>Settings → Linked devices → Link a device</strong>.</li><li>Tap <strong>Link with phone number instead</strong> and enter the code.</li></ol><p className="wa-small">Keep this tab open. The photo updates automatically after linking. Never share your pairing code.</p></>}
         {state?.status === 'STARTING' && <p className="wa-small">Preparing a temporary connection. Your pairing code will appear here.</p>}

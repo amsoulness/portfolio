@@ -1,27 +1,15 @@
 'use strict';
 
-// whatsapp-web.js's public setProfilePicture() always crops to a square.
-// Send our already-prepared, uncropped images through the same underlying API.
-// Keep this compatibility boundary isolated and fail rather than silently crop.
-async function sendPicture(client, { picture, thumbnail }) {
-  const id = client.info?.wid?._serialized;
-  if (!id || typeof client.pupPage?.evaluate !== 'function') {
+// Pass the prepared image dimensions so the client library preserves its aspect ratio.
+async function sendPicture(client, image) {
+  if (typeof client?.updateProfilePicture !== 'function') {
     throw new Error('WhatsApp profile transport is unavailable');
   }
-  return client.pupPage.evaluate(async (chatId, thumb, full) => {
-    const wid = window.require('WAWebWidFactory').createWid(chatId);
-    const collection = window.require('WAWebCollections').ProfilePicThumb;
-    const profile = collection.get(chatId) || await collection.find(chatId);
-    if (!profile?.canSet()) return false;
-    try {
-      const result = await window.require('WAWebContactProfilePicThumbBridge')
-        .sendSetPicture(wid, thumb, full);
-      return result?.status === 200;
-    } catch (error) {
-      if (error.name === 'ServerStatusCodeError') return false;
-      throw error;
-    }
-  }, id, thumbnail, picture);
+  if (typeof image?.picture !== 'string' || !image.picture.startsWith('data:image/jpeg;base64,')) return false;
+  const bytes = Buffer.from(image.picture.slice('data:image/jpeg;base64,'.length), 'base64');
+  if (!bytes.length || !Number.isInteger(image.width) || !Number.isInteger(image.height)) return false;
+  await client.updateProfilePicture(bytes, { width: image.width, height: image.height });
+  return true;
 }
 
 module.exports = { sendPicture };

@@ -49,28 +49,13 @@ test('rejects unsupported, corrupt and oversized images', async () => {
   await assert.rejects(prepareImage(gif), /still JPG/);
 });
 
-test('transport sends rectangular payloads unchanged and requires a positive acknowledgement', async () => {
-  const picture = 'data:image/jpeg;base64,full';
-  const thumbnail = 'data:image/jpeg;base64,thumb';
-  let calls = 0;
-  const client = {
-    info: { wid: { _serialized: 'test@c.us' } },
-    pupPage: { async evaluate(fn, ...args) {
-      assert.deepEqual(args, ['test@c.us', thumbnail, picture]);
-      // Execute the exact browser callback against stubbed WhatsApp modules.
-      global.window = { require(name) {
-        if (name === 'WAWebWidFactory') return { createWid: id => id };
-        if (name === 'WAWebCollections') return { ProfilePicThumb: { get: () => ({ canSet: () => true }) } };
-        if (name === 'WAWebContactProfilePicThumbBridge') return { sendSetPicture: async (...sent) => {
-          calls++; assert.deepEqual(sent, args); return { status: 200 };
-        } };
-        throw new Error('Unexpected API');
-      } };
-      try { return await fn(...args); } finally { delete global.window; }
-    } },
-    setProfilePicture() { throw new Error('The cropping setter must not be called'); }
-  };
-  assert.equal(await sendPicture(client, { picture, thumbnail }), true);
-  assert.equal(calls, 1);
-  await assert.rejects(sendPicture({}, { picture, thumbnail }), /unavailable/);
+test('transport sends the complete rectangular JPEG with matching dimensions', async () => {
+  const source = await sharp({ create: { width: 300, height: 100, channels: 3, background: '#336699' } }).png().toBuffer();
+  const image = await prepareImage(source);
+  let received;
+  const client = { async updateProfilePicture(...args) { received = args; } };
+  assert.equal(await sendPicture(client, image), true);
+  assert.deepEqual(received, [Buffer.from(image.picture.split(',')[1], 'base64'), { width: 300, height: 100 }]);
+  assert.equal(await sendPicture(client, { ...image, picture: 'bad' }), false);
+  await assert.rejects(sendPicture({}, image), /unavailable/);
 });
