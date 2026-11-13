@@ -1,222 +1,186 @@
-
 'use strict';
+const { randomUUID, randomBytes, timingSafeEqual } = require('node:crypto');
 
-const crypto = require('node:crypto');
-const fs = require('node:fs/promises');
-const path = require('node:path');
+const TERMINAL = new Set(['SUCCESS', 'CANCELLED', 'ERROR']);
+const TTL = 10 * 60 * 1000;
 
-const {
-  releaseSessionPairing
-} = require('./pairing-cleanup');
-
-// =====================================================
-// CONFIGURATION
-// =====================================================
-
-const sessions = new Map();
-
-const SESSION_TTL_MS = 10 * 60 * 1000;
-const CLEANUP_INTERVAL_MS = 60 * 1000;
-
-const UPLOAD_DIR = path.join(__dirname, 'uploads');
-
-const UPLOAD_FILENAME_PATTERN =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(jpg|png|webp)$/;
-
-let cleanupRunning = false;
-
-// =====================================================
-// CREATE SESSION
-// =====================================================
-
-function createSession() {
-  const id = crypto.randomUUID();
-  const now = Date.now();
-
-  const session = {
-    id,
-    accessToken: crypto.randomBytes(32).toString('hex'),
-
-    status: 'CREATED',
-
-    createdAt: now,
-    expiresAt: now + SESSION_TTL_MS,
-
-    pairingCode: null,
-    profileUpdateConsent: false,
-    profileUpdateAuthorized: false,
-    uploadFilename: null,
-    uploadInProgress: false,
-
-    error: null
-  };
-
-  sessions.set(id, session);
-
-  return session;
-}
-
-// =====================================================
-// GET SESSION
-// =====================================================
-
-function getSession(id) {
-  const session = sessions.get(id);
-
-  if (!session) {
-    return null;
+class SessionManager {
+  constructor({ createClient, sendPicture, removeData, ttl = TTL, retention = 30 * 60 * 1000 }) {
+    Object.assign(this, { createClient, sendPicture, removeData, ttl, retention });
+    this.sessions = new Map();
+    this.active = null;
+    this.closing = false;
   }
 
-  if (Date.now() >= session.expiresAt) {
-    if (
-      session.status !== 'COMPLETED' &&
-      session.status !== 'CANCELLED'
-    ) {
-      session.status = 'EXPIRED';
-    }
-  }
-
-  return session;
-}
-
-// =====================================================
-// CANCEL SESSION
-// =====================================================
-
-function cancelSession(id) {
-  const session = getSession(id);
-
-  if (!session) {
-    return null;
-  }
-
-  if (
-    !['COMPLETED', 'EXPIRED', 'FAILED'].includes(
-      session.status
-    )
-  ) {
-    session.status = 'CANCELLED';
-  }
-
-  return session;
-}
-
-// =====================================================
-// DELETE EXPIRED UPLOAD
-// =====================================================
-
-async function deleteExpiredUpload(session) {
-  if (!session.uploadFilename) {
-    return;
-  }
-
-  const filename = session.uploadFilename;
-
-  if (!UPLOAD_FILENAME_PATTERN.test(filename)) {
-    throw new Error('Invalid expired upload filename');
-  }
-
-  const filePath = path.join(UPLOAD_DIR, filename);
-
-  try {
-    await fs.unlink(filePath);
-  } catch (error) {
-    if (error.code !== 'ENOENT') {
-      throw error;
-    }
-  }
-
-  session.uploadFilename = null;
-}
-
-// =====================================================
-// CLEAN UP EXPIRED SESSIONS
-// =====================================================
-
-async function cleanupSessions() {
-  if (cleanupRunning) {
-    return;
-  }
-
-  cleanupRunning = true;
-
-  try {
+  create(image, phoneNumber) {
+    if (this.closing || this.active) throw new Error('The tool is busy with another update. Please try again shortly.');
     const now = Date.now();
-
-    for (const [id, session] of sessions) {
-      if (now < session.expiresAt) {
-        continue;
-      }
-
-      // Mark expired sessions.
-      if (
-        session.status !== 'COMPLETED' &&
-        session.status !== 'CANCELLED'
-      ) {
-        session.status = 'EXPIRED';
-      }
-
-      // Avoid deleting an upload while it is being written.
-      if (session.uploadInProgress) {
-        continue;
-      }
-
-      // First, release any WhatsApp pairing.
-      try {
-        await releaseSessionPairing(id);
-      } catch (error) {
-        console.error(
-          'Expired session pairing cleanup failed:',
-          error.message
-        );
-
-        // Keep session for cleanup retry.
-        continue;
-      }
-
-      // Next, delete the uploaded image.
-      try {
-        await deleteExpiredUpload(session);
-      } catch (error) {
-        console.error(
-          'Expired session upload cleanup failed:',
-          error.message
-        );
-
-        // Keep session for cleanup retry.
-        continue;
-      }
-
-      // Remove session only after local cleanup succeeds.
-      sessions.delete(id);
+    for (const [id, session] of this.sessions) {
+      if (TERMINAL.has(session.status) && now - session.finishedAt > this.retention) this.sessions.delete(id);
     }
-  } finally {
-    cleanupRunning = false;
+    // Bound even lightweight completed records under sustained requests.
+    if (this.sessions.size >= 100) {
+      const oldest = [...this.sessions.values()].find(s => TERMINAL.has(s.status));
+      if (oldest) this.sessions.delete(oldest.id);
+    }
+    const s = {
+      id: randomUUID(), token: randomBytes(32).toString('hex'), image,
+      status: 'STARTING', code: null, expiresAt: now + this.ttl,
+      authenticated: false, updated: false, deviceRemoved: false,
+      cancelled: false, initializing: true, updating: false, cleaning: false,
+      updateStarted: false, error: null, outcome: 'pending'
+    };
+    this.active = s;
+    this.sessions.set(s.id, s);
+    s.timer = setTimeout(() => {
+      s.error = 'The connection timed out. Start again after the session is closed.';
+      this.cancel(s);
+    }, this.ttl);
+    s.timer.unref?.();
+    // Return credentials before asynchronous browser work starts.
+    s.startTask = Promise.resolve().then(() => this.start(s, phoneNumber));
+    return { ...this.snapshot(s), accessToken: s.token };
+  }
+
+  authorize(id, token) {
+    const s = this.sessions.get(id);
+    if (!s || typeof token !== 'string' || !/^[a-f0-9]{64}$/.test(token)) return null;
+    return timingSafeEqual(Buffer.from(token, 'hex'), Buffer.from(s.token, 'hex')) ? s : null;
+  }
+
+  snapshot(s) {
+    return {
+      sessionId: s.id, status: s.status, pairingCode: s.code,
+      expiresAt: new Date(s.expiresAt).toISOString(),
+      updated: s.updated, deviceRemoved: s.deviceRemoved,
+      outcome: s.outcome, error: s.error
+    };
+  }
+
+  async start(s, phone) {
+    try {
+      if (s.cancelled) return;
+      const client = this.createClient(s.id, phone);
+      s.client = client;
+      client.on('code', code => {
+        if (s.cancelled || s.authenticated || s.updateStarted || s.cleaning) return;
+        s.code = String(code);
+        s.status = 'CODE_READY';
+      });
+      client.on('authenticated', () => {
+        s.authenticated = true;
+        s.code = null;
+        if (!s.cancelled && !s.updateStarted && !s.cleaning) s.status = 'LINKED';
+      });
+      client.on('ready', () => {
+        s.authenticated = true;
+        s.code = null;
+        if (s.cancelled || s.updateStarted || s.cleaning) return;
+        s.updateStarted = true;
+        s.updating = true;
+        s.updateTask = this.update(s);
+      });
+      client.on('auth_failure', () => this.fail(s, 'WhatsApp could not link this device.'));
+      client.on('disconnected', () => {
+        if (!s.cleaning && !TERMINAL.has(s.status)) this.fail(s, 'WhatsApp disconnected before the session finished.');
+      });
+      await client.initialize();
+    } catch {
+      s.error = 'WhatsApp could not start the connection. Please try again after cleanup.';
+      s.cancelled = true;
+    } finally {
+      s.initializing = false;
+      if (s.cancelled || s.updateStarted) await this.cleanup(s);
+    }
+  }
+
+  fail(s, message) {
+    if (TERMINAL.has(s.status)) return;
+    s.error = message;
+    this.cancel(s);
+  }
+
+  async update(s) {
+    s.status = 'UPDATING';
+    try {
+      if (await s.client.getState() !== 'CONNECTED') throw new Error('Disconnected');
+      if (s.cancelled) return;
+      const result = await this.sendPicture(s.client, s.image);
+      if (result !== true) {
+        s.outcome = 'failed';
+        s.error = 'WhatsApp did not accept this photo. The profile update was not confirmed.';
+      } else {
+        s.updated = true;
+        s.outcome = 'confirmed';
+      }
+    } catch {
+      s.outcome = 'unconfirmed';
+      s.error = 'The update could not be confirmed. Check your profile in WhatsApp before trying again.';
+    } finally {
+      s.image = null;
+      s.updating = false;
+      await this.cleanup(s);
+    }
+  }
+
+  cancel(s) {
+    if (TERMINAL.has(s.status)) return this.snapshot(s);
+    s.cancelled = true;
+    s.code = null;
+    // Never race logout against an update or browser initialization.
+    if (!s.cleaning) s.status = 'CANCELLING';
+    void this.cleanup(s);
+    return this.snapshot(s);
+  }
+
+  cleanup(s) {
+    if (s.cleaning) return s.cleanupTask;
+    if (TERMINAL.has(s.status) || s.updating || s.initializing) return Promise.resolve();
+    s.cleanupTask = this.performCleanup(s);
+    return s.cleanupTask;
+  }
+
+  async performCleanup(s) {
+    s.cleaning = true;
+    s.code = null;
+    s.status = 'REMOVING_DEVICE';
+    try {
+      if (s.client) {
+        // A successful logout must precede deletion of authenticated credentials.
+        if (s.authenticated && !s.deviceRemoved) {
+          await s.client.logout();
+          s.deviceRemoved = true;
+        }
+        await s.client.destroy();
+        if (s.client.pupBrowser?.isConnected()) throw new Error('Browser still connected');
+      }
+      await this.removeData(s.id);
+      s.status = s.updated ? 'SUCCESS' : s.error ? 'ERROR' : 'CANCELLED';
+      s.finishedAt = Date.now();
+      s.image = null;
+      s.client = null;
+      clearTimeout(s.timer);
+      if (this.active === s) this.active = null;
+    } catch {
+      s.status = 'CLEANUP_REQUIRED';
+      s.error = s.updated
+        ? 'Your photo was updated, but device removal is not confirmed. Retry cleanup or remove this device in WhatsApp → Linked devices.'
+        : 'Session cleanup is incomplete. Retry cleanup or remove this device in WhatsApp → Linked devices.';
+    } finally {
+      s.cleaning = false;
+    }
+  }
+
+  async close() {
+    this.closing = true;
+    const s = this.active;
+    if (!s) return;
+    this.cancel(s);
+    await s.startTask;
+    await s.updateTask;
+    await this.cleanup(s);
+    if (this.active) throw new Error('Session cleanup is incomplete');
   }
 }
 
-// =====================================================
-// AUTOMATIC CLEANUP SCHEDULER
-// =====================================================
-
-const cleanupTimer = setInterval(() => {
-  cleanupSessions().catch(error => {
-    console.error(
-      'Session cleanup error:',
-      error.message
-    );
-  });
-}, CLEANUP_INTERVAL_MS);
-
-cleanupTimer.unref();
-
-// =====================================================
-// EXPORTS
-// =====================================================
-
-module.exports = {
-  createSession,
-  getSession,
-  cancelSession,
-  cleanupSessions
-};
+module.exports = { SessionManager };

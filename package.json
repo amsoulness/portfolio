@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:whatsapp-ui": "playwright test"
   },
   "dependencies": {
     "diff": "^9.0.0",
@@ -20,11 +21,11 @@
     "qrcode": "^1.5.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "react-easy-crop": "^6.2.5",
     "svgo": "^4.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.0",
     "@types/diff": "^7.0.2",
     "@types/dompurify": "^3.0.5",
     "@types/figlet": "^1.7.0",
