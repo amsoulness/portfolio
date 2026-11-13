@@ -20,13 +20,19 @@ class WhatsAppClient extends EventEmitter {
     this.baileys = baileys;
     this.authState = state;
     this.saveCreds = saveCreds;
-    this.openSocket();
-    await this.socket.waitForSocketOpen();
+    const socket = this.openSocket();
     if (!state.creds.registered) {
-      const code = await this.socket.requestPairingCode(this.phoneNumber, this.pairingCode);
+      // WhatsApp can close a socket when a pairing request is sent before its
+      // stream is ready. Subscribe before waiting for the socket so the
+      // connecting event cannot be missed.
+      const pairingReady = typeof socket.waitForConnectionUpdate === 'function'
+        ? socket.waitForConnectionUpdate(update => update.connection === 'connecting' || Boolean(update.qr), 30000)
+        : Promise.resolve();
+      await Promise.all([socket.waitForSocketOpen(), pairingReady]);
+      const code = await socket.requestPairingCode(this.phoneNumber, this.pairingCode);
       await this.persistCredentials();
       this.emit('code', code);
-    }
+    } else await socket.waitForSocketOpen();
   }
 
   openSocket() {
@@ -56,6 +62,12 @@ class WhatsAppClient extends EventEmitter {
         if (socket !== this.socket) return;
         this.connected = false;
         const statusCode = update.lastDisconnect?.error?.output?.statusCode;
+        console.warn('WhatsApp connection closed', {
+          statusCode: Number.isInteger(statusCode) ? statusCode : null,
+          errorName: typeof update.lastDisconnect?.error?.name === 'string'
+            ? update.lastDisconnect.error.name.slice(0, 48)
+            : null
+        });
         if (statusCode === this.baileys.DisconnectReason?.restartRequired) {
           void this.restartSocket();
         } else if (statusCode === this.baileys.DisconnectReason?.loggedOut) this.emit('auth_failure');
@@ -80,6 +92,10 @@ class WhatsAppClient extends EventEmitter {
       try {
         await this.persistCredentials();
         if (this.closing) return;
+        const { state, saveCreds } = await this.baileys.useMultiFileAuthState(this.authDir);
+        this.authState = state;
+        this.saveCreds = saveCreds;
+        this.saveQueue = Promise.resolve();
         const socket = this.openSocket();
         await socket.waitForSocketOpen();
       } catch (error) {
