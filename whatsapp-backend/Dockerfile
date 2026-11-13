@@ -8,7 +8,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev && chown node:node /app
 COPY patch-baileys.js ./
 RUN node patch-baileys.js
-COPY --chown=node:node server.js sessions.js image.js transport.js client.js ./
+COPY --chown=node:node server.js sessions.js image.js transport.js client.js pairing-code.js ./
 USER node
 EXPOSE 3001
 CMD ["node", "server.js"]
