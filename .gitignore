@@ -49,3 +49,10 @@ whatsapp-backend/**/*.bak
 
 # Frontend local checkpoints
 *.backup-fasttrack-*
+
+# Temporary WhatsApp browser ownership and credentials
+whatsapp-backend/.runtime/
+
+# Browser test artifacts
+test-results/
+playwright-report/
