@@ -53,3 +53,15 @@ textarea {
     scroll-behavior: auto;
   }
 }
+
+
+/* One readable type system across portfolio, tools and embedded controls. */
+:root {
+  --font-body: 'Manrope', Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+}
+body, #root { font-family: var(--font-body) !important; }
+.site { font-family: var(--font-body) !important; }
+.site :is(h1,h2,h3,h4,.logo,.nav-links a,.tools-featured-copy h2) { font-family: var(--font-display) !important; }
+.site :is(.eyebrow,.tag,.tools-featured-topline,.tools-featured-footnote) { font-family: var(--font-mono) !important; }

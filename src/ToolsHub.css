@@ -345,3 +345,16 @@
  .th-v13 .th-extra-frame{height:min(72svh,340px)}
 }
 @media(max-width:360px){.th-v13 .th-wrap{padding-inline:12px}.th-v13 .th-panel{padding:13px}}
+
+
+/* ASLNS 4.0 type system and unified image workspace. */
+.th-v13 { font-family: var(--font-body, 'Manrope', Inter, ui-sans-serif, system-ui, sans-serif) !important; }
+.th-v13 :is(h1,h2,h3,h4,.th-brand,.th-v21-name) { font-family: var(--font-display, 'Space Grotesk', sans-serif) !important; }
+.th-v13 :is(.th-kicker,.th-eyebrow,.th-tag,.th-card-number,.th-footer) { font-family: var(--font-mono, 'IBM Plex Mono', monospace) !important; }
+.th-image-studio-head { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+.th-image-studio-head h3 { font-size:clamp(24px,4vw,34px); margin:6px 0; }
+.th-image-private { border:1px solid rgba(52,211,153,.35); color:#86efac; border-radius:999px; padding:8px 12px; font-size:10px; letter-spacing:1px; }
+.th-image-mode { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.th-fields .th-image-mode button { color:#ded5ef; border:1px solid #65517e; background:#171321; }
+.th-fields .th-image-mode button.selected { color:#150e22; border-color:#c4aaff; background:linear-gradient(110deg,#bea0ff,#c2e8ff); }
+@media(max-width:420px) { .th-image-mode { grid-template-columns:1fr; } .th-image-private { font-size:9px; } }

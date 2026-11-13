@@ -63,11 +63,11 @@ const resourceLinks: Record<string,string> = {
   'Creative':'https://en.wikipedia.org/wiki/Creativity',
   'Automation':'https://en.wikipedia.org/wiki/Automation',
 }
-type Inspiration = { category:string; title:string; subtitle:string; url:string; wiki?:string; monogram:string }
+type Inspiration = { category:string; title:string; subtitle:string; url:string; wiki?:string; image?:string; credit?:string; creditUrl?:string; monogram:string }
 const inspirations: Inspiration[] = [
  {category:'MOVIES',title:'Avengers: Doomsday',subtitle:'Marvel Studios · Film',url:'https://en.wikipedia.org/wiki/Avengers:_Doomsday',wiki:'Avengers: Doomsday',monogram:'A'},
- {category:'WEB SERIES',title:'Game of Thrones',subtitle:'HBO · Fantasy series',url:'https://en.wikipedia.org/wiki/Game_of_Thrones',wiki:'Game of Thrones',monogram:'G'},
- {category:'ANIME',title:'Attack on Titan',subtitle:'Anime · Dark fantasy',url:'https://en.wikipedia.org/wiki/Attack_on_Titan_(TV_series)',wiki:'Attack on Titan (TV series)',monogram:'進'},
+ {category:'WEB SERIES',title:'Game of Thrones',subtitle:'HBO · Fantasy series',url:'https://en.wikipedia.org/wiki/Game_of_Thrones',wiki:'Game of Thrones',image:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/The_castle_walls_of_the_set_for_Game_of_Thrones_%2852205003529%29.jpg/960px-The_castle_walls_of_the_set_for_Game_of_Thrones_%2852205003529%29.jpg',credit:'Steve Jurvetson · CC BY 2.0',creditUrl:'https://commons.wikimedia.org/wiki/File:The_castle_walls_of_the_set_for_Game_of_Thrones_(52205003529).jpg',monogram:'G'},
+ {category:'ANIME',title:'Attack on Titan',subtitle:'Anime · Dark fantasy',url:'https://en.wikipedia.org/wiki/Attack_on_Titan_(TV_series)',wiki:'Attack on Titan (TV series)',image:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Bymurene_i_Attack_on_Titan.jpg/960px-Bymurene_i_Attack_on_Titan.jpg',credit:'EliasEgeMel · CC BY-SA 4.0',creditUrl:'https://commons.wikimedia.org/wiki/File:Bymurene_i_Attack_on_Titan.jpg',monogram:'進'},
  {category:'ANIME',title:'Solo Leveling',subtitle:'Anime · Action fantasy',url:'https://en.wikipedia.org/wiki/Solo_Leveling',wiki:'Solo Leveling',monogram:'S'},
  {category:'K-DRAMA',title:'Guardian: The Lonely and Great God',subtitle:'Goblin · Korean drama',url:'https://en.wikipedia.org/wiki/Guardian:_The_Lonely_and_Great_God',wiki:'Guardian: The Lonely and Great God',monogram:'G'},
  {category:'MUSIC',title:'Angel',subtitle:'Massive Attack · Mezzanine',url:'https://en.wikipedia.org/wiki/Mezzanine_(album)',wiki:'Mezzanine (album)',monogram:'♫'},
@@ -81,6 +81,7 @@ const inspirations: Inspiration[] = [
 // Apple Music catalog artwork, and official product imagery.
 // Cards keep their illustrated fallback if a provider has no usable image.
 async function getInspirationImage(item:Inspiration, signal:AbortSignal):Promise<string|null> {
+  if(item.image)return item.image
   try {
     if(item.category==='BOOKS'){
       const r=await fetch('https://openlibrary.org/search.json?title=The%20Culture%20Code&author=Daniel%20Coyle&limit=5',{signal})
@@ -120,16 +121,19 @@ function InspirationCard({item,index}:{item:Inspiration,index:number}) {
     return ()=>controller.abort()
   },[item.title])
   const logo=item.title==='ChatGPT'||item.title==='Gemini'||item.title==='Adobe After Effects'
-  return <motion.a className="inspiration-card" href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${item.title} in a new tab`}
+  return <motion.div className="inspiration-card" role="group"
     initial={{opacity:0,y:25}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.12}}
     transition={{duration:.45,delay:Math.min(index%4,3)*.07}} whileHover={{y:-9,scale:1.025}} whileTap={{scale:.965}}>
     <div className={`inspiration-art inspiration-art-${index%6}${logo?' inspiration-logo-art':''}`}>
-      {image&&!failed?<img src={image} alt={`${item.title} artwork`} loading="lazy" referrerPolicy="no-referrer" onError={()=>setFailed(true)}/>:<div className="inspiration-monogram" aria-hidden="true">{item.monogram}</div>}
-      <span className="inspiration-shine" aria-hidden="true"/>
-      <span className="inspiration-category">{item.category}</span>
+      <a className="inspiration-art-link" href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${item.title} in a new tab`}>
+        {image&&!failed?<img src={image} alt={`${item.title} artwork`} loading="lazy" referrerPolicy="no-referrer" onError={()=>setFailed(true)}/>:<div className="inspiration-monogram" aria-hidden="true">{item.monogram}</div>}
+        <span className="inspiration-shine" aria-hidden="true"/>
+        <span className="inspiration-category">{item.category}</span>
+      </a>
+      {item.credit&&item.creditUrl&&<a className="inspiration-credit" href={item.creditUrl} target="_blank" rel="noopener noreferrer" aria-label={`Image credit and license: ${item.credit}`}>{item.credit}</a>}
     </div>
-    <div className="inspiration-info"><strong>{item.title}</strong><span>{item.subtitle}</span><span className="inspiration-arrow" aria-hidden="true">↗</span></div>
-  </motion.a>
+    <a className="inspiration-info inspiration-info-link" href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${item.title} in a new tab`}><strong>{item.title}</strong><span>{item.subtitle}</span><span className="inspiration-arrow" aria-hidden="true">↗</span></a>
+  </motion.div>
 }
 function ResourceTag({name}:{name:string}) {
   const url=resourceLinks[name]
@@ -551,6 +555,11 @@ function PortfolioApp(){
       .contact-actions-v27 .btn span[aria-hidden]{margin-left:2px;font-size:15px}
       @media(max-width:650px){.contact-actions-v27{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.contact-actions-v27 .btn{min-width:0;white-space:normal;min-height:62px;padding:11px 8px;font-size:9px;letter-spacing:.2px;gap:7px}.contact-brand-icon{width:20px;height:20px}}
       @media(max-width:370px){.contact-actions-v27{grid-template-columns:1fr}.contact-actions-v27 .btn{font-size:11px}}
+      .inspiration-art{position:relative}
+      .inspiration-art-link{position:absolute;inset:0;display:grid;place-items:center;color:inherit;text-decoration:none}
+      .inspiration-info-link{position:relative;display:flex;flex-direction:column;min-width:0;color:inherit;text-decoration:none}
+      .inspiration-credit{position:absolute;right:8px;bottom:8px;z-index:3;max-width:calc(100% - 16px);padding:5px 7px;border:1px solid #ffffff35;border-radius:7px;background:#090711d9;color:#f1eaff;font:500 8px/1.35 var(--font-mono,monospace);text-decoration:none;backdrop-filter:blur(8px)}
+      .inspiration-credit:hover{border-color:#d6bcff;color:#fff}
     `}</style>
     <motion.div className="progress" style={{scaleX:progress}}/>
     <div className="ambient" style={{background:`radial-gradient(circle at ${pointer.x}% ${pointer.y}%,rgba(124,58,237,.24),transparent 37%),radial-gradient(circle at 85% 65%,rgba(34,211,238,.09),transparent 36%)`}}/>
@@ -608,7 +617,7 @@ function PortfolioApp(){
         <div className="tools-featured-copy">
           <p className="tools-featured-eyebrow">✦ MORE THAN A PORTFOLIO</p>
           <h2 id="tools-featured-title">YOUR IDEAS.<br/><span>OUR TOOLKIT.</span></h2>
-          <p className="tools-featured-description">Five powerful creative utilities, one seamless workspace. Compress and convert images, design QR codes, explore color palettes, and generate secure passwords — all in your browser.</p>
+          <p className="tools-featured-description">Five focused tools in one creative lab. Update a WhatsApp profile photo, compress and convert images, design QR codes, explore color and create secure passwords — all in your browser.</p>
           <div className="tools-featured-chips"><span>✧ 5 CREATIVE TOOLS</span><span>◇ NO SIGN-UP</span><span>⚡ BUILT FOR CREATORS</span></div>
           <a href="/tools" className="tools-featured-button"><span>EXPLORE THE DIGITAL LAB</span><span className="tools-featured-button-arrow">↗</span></a>
           <p className="tools-featured-footnote">INSTANT ACCESS <span>•</span> BUILT TO CREATE <span>•</span> EXPLORE MORE</p>
@@ -620,11 +629,11 @@ function PortfolioApp(){
           <div className="tools-featured-center" aria-hidden="true"><span>✦</span><strong>ASLNS</strong><small>TOOLS LAB</small></div>
           <div className="tools-featured-mini tools-featured-mini-a"><span>◈</span><strong>IMAGE</strong><small>COMPRESS / CONVERT</small></div>
           <div className="tools-featured-mini tools-featured-mini-b"><span>▧</span><strong>QR STUDIO</strong><small>DESIGN / EXPORT</small></div>
-          <div className="tools-featured-mini tools-featured-mini-c"><span>◉</span><strong>COLOR LAB</strong><small>PALETTES / SHADES</small></div>
+          <div className="tools-featured-mini tools-featured-mini-c"><span>◎</span><strong>WHATSAPP DP</strong><small>PROFILE PHOTO / FULL IMAGE</small></div>
           <span className="tools-featured-visual-hint">CLICK TO EXPLORE ↗</span>
         </a>
       </div>
-      <div className="tools-featured-marquee" aria-hidden="true"><div>IMAGE COMPRESSOR <b>✦</b> IMAGE CONVERTER <b>✦</b> QR CODE STUDIO <b>✦</b> COLOR LAB <b>✦</b> PASSWORD STUDIO <b>✦</b> IMAGE COMPRESSOR <b>✦</b> IMAGE CONVERTER <b>✦</b> QR CODE STUDIO <b>✦</b> COLOR LAB <b>✦</b> PASSWORD STUDIO <b>✦</b></div></div>
+      <div className="tools-featured-marquee" aria-hidden="true"><div>WHATSAPP DP STUDIO <b>✦</b> IMAGE STUDIO <b>✦</b> QR CODE STUDIO <b>✦</b> COLOR LAB <b>✦</b> PASSWORD STUDIO <b>✦</b> WHATSAPP DP STUDIO <b>✦</b> IMAGE STUDIO <b>✦</b> QR CODE STUDIO <b>✦</b> COLOR LAB <b>✦</b> PASSWORD STUDIO <b>✦</b></div></div>
     </section>
     <section id="about" className="section">
       <Heading index="01" kicker="THE PERSON" title="Two worlds. One mindset."/>
