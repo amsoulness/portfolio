@@ -126,7 +126,8 @@ function InspirationCard({item,index}:{item:Inspiration,index:number}) {
     transition={{duration:.45,delay:Math.min(index%4,3)*.07}} whileHover={{y:-9,scale:1.025}} whileTap={{scale:.965}}>
     <div className={`inspiration-art inspiration-art-${index%6}${logo?' inspiration-logo-art':''}${['Solo Leveling','Attack on Titan','Game of Thrones'].includes(item.title)?' inspiration-wide-art':''}`}>
       <a className="inspiration-art-link" href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${item.title} in a new tab`}>
-        {image&&!failed?<img src={image} alt={`${item.title} artwork`} loading="lazy" referrerPolicy="no-referrer" onError={()=>setFailed(true)}/>:<div className="inspiration-monogram" aria-hidden="true">{item.monogram}</div>}
+        {image&&!failed&&['Solo Leveling','Attack on Titan','Game of Thrones'].includes(item.title)&&<img className="inspiration-art-backdrop" src={image} alt="" aria-hidden="true" loading="lazy" referrerPolicy="no-referrer"/>}
+        {image&&!failed?<img className="inspiration-art-main" src={image} alt={`${item.title} artwork`} loading="lazy" referrerPolicy="no-referrer" onError={()=>setFailed(true)}/>:<div className="inspiration-monogram" aria-hidden="true">{item.monogram}</div>}
         <span className="inspiration-shine" aria-hidden="true"/>
         <span className="inspiration-category">{item.category}</span>
       </a>
@@ -307,9 +308,11 @@ function PortfolioApp(){
       .inspiration-art-3{background:radial-gradient(circle at 70% 25%,#3c81d077,transparent 55%),linear-gradient(135deg,#101a37,#070710)}
       .inspiration-art-4{background:radial-gradient(circle at 30% 30%,#a1846a77,transparent 55%),linear-gradient(135deg,#211b23,#08090e)}
       .inspiration-art-5{background:radial-gradient(circle at 60% 20%,#8e6ac077,transparent 55%),linear-gradient(135deg,#191327,#08080d)}
-      .inspiration-logo-art img{width:48%!important;height:48%!important;object-fit:contain!important;filter:drop-shadow(0 12px 28px #0008)}
       .inspiration-art img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
-      .inspiration-wide-art img{object-fit:contain;background:#08080d}
+      .inspiration-logo-art .inspiration-art-main{width:68%!important;height:68%!important;object-fit:contain!important;filter:drop-shadow(0 12px 28px #0008)}
+      .inspiration-logo-art .inspiration-art-main[src*="chatgpt-art"]{mix-blend-mode:multiply;filter:none}
+      .inspiration-wide-art .inspiration-art-backdrop{position:absolute;inset:-12px;width:calc(100% + 24px);height:calc(100% + 24px);object-fit:cover!important;filter:blur(20px) brightness(.52) saturate(1.2);opacity:.82;transform:scale(1.06)}
+      .inspiration-wide-art .inspiration-art-main{position:relative;z-index:1;object-fit:contain;background:transparent}
       .inspiration-card:hover img{transform:scale(1.08)}
       .inspiration-monogram{font-size:clamp(68px,9vw,125px);font-weight:900;letter-spacing:-.1em;color:#e8d9ff;text-shadow:0 0 60px #b388ff88;transform:rotate(-7deg);opacity:.85}
       .inspiration-shine{position:absolute;inset:0;pointer-events:none;background:linear-gradient(155deg,transparent 40%,#0009)}
