@@ -1,8 +1,10 @@
 const ToolsHub = lazy(() => import('./ToolsHub'))
 import ToolsLoading from './ToolsLoading'
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-import type { ReactNode, CSSProperties } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState, useTransition } from 'react'
+import type { ReactNode, CSSProperties, MouseEvent as ReactMouseEvent } from 'react'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
+
+const normalizeSitePath = (path: string) => path.replace(/\/$/, '') || '/'
 
 const GITHUB = 'https://github.com/amsoulness'
 const LINKEDIN = 'https://linkedin.com/in/aslns/'
@@ -680,7 +682,33 @@ function PortfolioApp(){
 }
 
 export default function App(){
-  return window.location.pathname.replace(/\/$/,'') === '/tools'
-    ? <Suspense fallback={<ToolsLoading/>}><ToolsHub/></Suspense>
-    : <PortfolioApp/>
+  const [path, setPath] = useState(() => normalizeSitePath(window.location.pathname))
+  const [isPending, startTransition] = useTransition()
+
+  useEffect(() => {
+    const syncPath = () => startTransition(() => setPath(normalizeSitePath(window.location.pathname)))
+    window.addEventListener('popstate', syncPath)
+    return () => window.removeEventListener('popstate', syncPath)
+  }, [])
+
+  const handleNavigation = (event: ReactMouseEvent<HTMLDivElement>) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    const link = (event.target as HTMLElement).closest('a[href]')
+    if (!link || link.target === '_blank' || link.hasAttribute('download')) return
+    const destination = new URL(link.href, window.location.href)
+    if (destination.origin !== window.location.origin || !['/', '/tools'].includes(normalizeSitePath(destination.pathname)) || destination.hash) return
+    const nextPath = normalizeSitePath(destination.pathname)
+    if (nextPath === path) return
+    event.preventDefault()
+    window.history.pushState({}, '', `${destination.pathname}${destination.search}`)
+    window.scrollTo({ top: 0, behavior: 'instant' })
+    startTransition(() => setPath(nextPath))
+  }
+
+  return <div className="site-navigation-shell" onClick={handleNavigation}>
+    {isPending && <div className="site-navigation-progress" role="status" aria-label="Loading page"><span /></div>}
+    {path === '/tools'
+      ? <Suspense fallback={<ToolsLoading/>}><ToolsHub/></Suspense>
+      : <PortfolioApp/>}
+  </div>
 }
