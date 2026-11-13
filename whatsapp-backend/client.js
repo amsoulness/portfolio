@@ -2,6 +2,7 @@
 
 const { EventEmitter } = require('node:events');
 const pino = require('pino');
+const { createPairingCode } = require('./pairing-code');
 
 class WhatsAppClient extends EventEmitter {
   constructor({ authDir, phoneNumber, pairingCode, loadBaileys = () => import('@whiskeysockets/baileys') }) {
@@ -20,11 +21,16 @@ class WhatsAppClient extends EventEmitter {
     this.baileys = baileys;
     this.authState = state;
     this.saveCreds = saveCreds;
+
+    const webVersion = await baileys.fetchLatestWaWebVersion({ timeout: 10000 });
+    this.version = Array.isArray(webVersion?.version) ? webVersion.version : baileys.version;
+    console.info('WhatsApp Web protocol version', {
+      version: this.version?.join('.'),
+      latest: Boolean(webVersion?.isLatest)
+    });
+
     const socket = this.openSocket();
     if (!state.creds.registered) {
-      // WhatsApp can close a socket when a pairing request is sent before its
-      // stream is ready. Subscribe before waiting for the socket so the
-      // connecting event cannot be missed.
       const pairingReady = typeof socket.waitForConnectionUpdate === 'function'
         ? socket.waitForConnectionUpdate(update => update.connection === 'connecting' || Boolean(update.qr), 30000)
         : Promise.resolve();
@@ -38,6 +44,7 @@ class WhatsAppClient extends EventEmitter {
   openSocket() {
     const socket = this.baileys.default({
       auth: this.authState,
+      version: this.version,
       logger: pino({ level: 'silent' }),
       browser: this.baileys.Browsers.macOS('Chrome'),
       printQRInTerminal: false,
@@ -68,9 +75,10 @@ class WhatsAppClient extends EventEmitter {
             ? update.lastDisconnect.error.name.slice(0, 48)
             : null
         });
-        if (statusCode === this.baileys.DisconnectReason?.restartRequired) {
+        const reasons = this.baileys.DisconnectReason || {};
+        if (statusCode === reasons.restartRequired || statusCode === reasons.connectionClosed) {
           void this.restartSocket();
-        } else if (statusCode === this.baileys.DisconnectReason?.loggedOut) this.emit('auth_failure');
+        } else if (statusCode === reasons.loggedOut) this.emit('auth_failure');
         else this.emit('disconnected', update.lastDisconnect?.error?.message || 'connection closed');
       }
     });
@@ -86,10 +94,11 @@ class WhatsAppClient extends EventEmitter {
     if (this.restartTask || this.closing) return this.restartTask;
     this.restartTask = (async () => {
       if (++this.restartAttempts > 2) {
-        this.emit('disconnected', 'WhatsApp requested too many connection restarts');
+        this.emit('disconnected', 'WhatsApp could not keep the temporary connection open');
         return;
       }
       try {
+        await new Promise(resolve => setTimeout(resolve, this.restartAttempts * 1000));
         await this.persistCredentials();
         if (this.closing) return;
         const { state, saveCreds } = await this.baileys.useMultiFileAuthState(this.authDir);
@@ -98,6 +107,13 @@ class WhatsAppClient extends EventEmitter {
         this.saveQueue = Promise.resolve();
         const socket = this.openSocket();
         await socket.waitForSocketOpen();
+
+        if (!this.authState.creds.registered && !this.closing) {
+          this.pairingCode = createPairingCode();
+          const code = await socket.requestPairingCode(this.phoneNumber, this.pairingCode);
+          await this.persistCredentials();
+          this.emit('code', code);
+        }
       } catch (error) {
         if (!this.closing) this.emit('disconnected', error?.message || 'connection restart failed');
       } finally {
@@ -131,4 +147,3 @@ class WhatsAppClient extends EventEmitter {
 }
 
 module.exports = { WhatsAppClient };
-
