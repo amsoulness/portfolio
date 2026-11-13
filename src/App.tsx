@@ -66,16 +66,16 @@ const resourceLinks: Record<string,string> = {
 type Inspiration = { category:string; title:string; subtitle:string; url:string; wiki?:string; image?:string; credit?:string; creditUrl?:string; monogram:string }
 const inspirations: Inspiration[] = [
  {category:'MOVIES',title:'Avengers: Doomsday',subtitle:'Marvel Studios · Film',url:'https://en.wikipedia.org/wiki/Avengers:_Doomsday',wiki:'Avengers: Doomsday',monogram:'A'},
- {category:'WEB SERIES',title:'Game of Thrones',subtitle:'HBO · Fantasy series',url:'https://en.wikipedia.org/wiki/Game_of_Thrones',wiki:'Game of Thrones',image:'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/The_castle_walls_of_the_set_for_Game_of_Thrones_%2852205003529%29.jpg/960px-The_castle_walls_of_the_set_for_Game_of_Thrones_%2852205003529%29.jpg',credit:'Steve Jurvetson · CC BY 2.0',creditUrl:'https://commons.wikimedia.org/wiki/File:The_castle_walls_of_the_set_for_Game_of_Thrones_(52205003529).jpg',monogram:'G'},
- {category:'ANIME',title:'Attack on Titan',subtitle:'Anime · Dark fantasy',url:'https://en.wikipedia.org/wiki/Attack_on_Titan_(TV_series)',wiki:'Attack on Titan (TV series)',image:'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Bymurene_i_Attack_on_Titan.jpg/960px-Bymurene_i_Attack_on_Titan.jpg',credit:'EliasEgeMel · CC BY-SA 4.0',creditUrl:'https://commons.wikimedia.org/wiki/File:Bymurene_i_Attack_on_Titan.jpg',monogram:'進'},
- {category:'ANIME',title:'Solo Leveling',subtitle:'Anime · Action fantasy',url:'https://en.wikipedia.org/wiki/Solo_Leveling',wiki:'Solo Leveling',monogram:'S'},
+ {category:'WEB SERIES',title:'Game of Thrones',subtitle:'HBO · Fantasy series',url:'https://en.wikipedia.org/wiki/Game_of_Thrones',wiki:'Game of Thrones',image:'/game-of-thrones-art.jpg',monogram:'G'},
+ {category:'ANIME',title:'Attack on Titan',subtitle:'Anime · Dark fantasy',url:'https://en.wikipedia.org/wiki/Attack_on_Titan_(TV_series)',wiki:'Attack on Titan (TV series)',image:'/attack-on-titan-art.jpg',monogram:'進'},
+ {category:'ANIME',title:'Solo Leveling',subtitle:'Anime · Action fantasy',url:'https://en.wikipedia.org/wiki/Solo_Leveling',wiki:'Solo Leveling',image:'/solo-leveling-art.jpg',monogram:'S'},
  {category:'K-DRAMA',title:'Guardian: The Lonely and Great God',subtitle:'Goblin · Korean drama',url:'https://en.wikipedia.org/wiki/Guardian:_The_Lonely_and_Great_God',wiki:'Guardian: The Lonely and Great God',monogram:'G'},
  {category:'MUSIC',title:'Angel',subtitle:'Massive Attack · Mezzanine',url:'https://en.wikipedia.org/wiki/Mezzanine_(album)',wiki:'Mezzanine (album)',monogram:'♫'},
  {category:'MUSIC',title:'Lilith',subtitle:'Saint Avangeline · Music',url:'https://www.youtube.com/results?search_query=Saint+Avangeline+Lilith',monogram:'♪'},
  {category:'BOOKS',title:'The Culture Code',subtitle:'Daniel Coyle · Book',url:'https://en.wikipedia.org/wiki/Daniel_Coyle_(author)',wiki:'Daniel Coyle (author)',monogram:'C'},
- {category:'TECHNOLOGY',title:'ChatGPT',subtitle:'OpenAI · AI assistant',url:'https://chatgpt.com/',wiki:'ChatGPT',monogram:'✳'},
- {category:'TECHNOLOGY',title:'Gemini',subtitle:'Google · AI assistant',url:'https://gemini.google.com/',wiki:'Gemini (chatbot)',monogram:'✦'},
- {category:'VIDEO EDITING',title:'Adobe After Effects',subtitle:'Motion graphics · VFX',url:'https://www.adobe.com/products/aftereffects.html',monogram:'Ae'},
+ {category:'TECHNOLOGY',title:'ChatGPT',subtitle:'OpenAI · AI assistant',url:'https://chatgpt.com/',wiki:'ChatGPT',image:'/chatgpt-art.png',monogram:'✳'},
+ {category:'TECHNOLOGY',title:'Gemini',subtitle:'Google · AI assistant',url:'https://gemini.google.com/',wiki:'Gemini (chatbot)',image:'/gemini-art.webp',monogram:'✦'},
+ {category:'VIDEO EDITING',title:'Adobe After Effects',subtitle:'Motion graphics · VFX',url:'https://www.adobe.com/products/aftereffects.html',image:'/after-effects-art.webp',monogram:'Ae'},
 ]
 // Online artwork: Wikimedia article thumbnails, Open Library book covers,
 // Apple Music catalog artwork, and official product imagery.
@@ -124,7 +124,7 @@ function InspirationCard({item,index}:{item:Inspiration,index:number}) {
   return <motion.div className="inspiration-card" role="group"
     initial={{opacity:0,y:25}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.12}}
     transition={{duration:.45,delay:Math.min(index%4,3)*.07}} whileHover={{y:-9,scale:1.025}} whileTap={{scale:.965}}>
-    <div className={`inspiration-art inspiration-art-${index%6}${logo?' inspiration-logo-art':''}`}>
+    <div className={`inspiration-art inspiration-art-${index%6}${logo?' inspiration-logo-art':''}${['Solo Leveling','Attack on Titan','Game of Thrones'].includes(item.title)?' inspiration-wide-art':''}`}>
       <a className="inspiration-art-link" href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${item.title} in a new tab`}>
         {image&&!failed?<img src={image} alt={`${item.title} artwork`} loading="lazy" referrerPolicy="no-referrer" onError={()=>setFailed(true)}/>:<div className="inspiration-monogram" aria-hidden="true">{item.monogram}</div>}
         <span className="inspiration-shine" aria-hidden="true"/>
@@ -309,6 +309,7 @@ function PortfolioApp(){
       .inspiration-art-5{background:radial-gradient(circle at 60% 20%,#8e6ac077,transparent 55%),linear-gradient(135deg,#191327,#08080d)}
       .inspiration-logo-art img{width:48%!important;height:48%!important;object-fit:contain!important;filter:drop-shadow(0 12px 28px #0008)}
       .inspiration-art img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+      .inspiration-wide-art img{object-fit:contain;background:#08080d}
       .inspiration-card:hover img{transform:scale(1.08)}
       .inspiration-monogram{font-size:clamp(68px,9vw,125px);font-weight:900;letter-spacing:-.1em;color:#e8d9ff;text-shadow:0 0 60px #b388ff88;transform:rotate(-7deg);opacity:.85}
       .inspiration-shine{position:absolute;inset:0;pointer-events:none;background:linear-gradient(155deg,transparent 40%,#0009)}
