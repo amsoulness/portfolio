@@ -67,3 +67,6 @@
 @keyframes wa-spin{to{transform:rotate(360deg)}}
 @media(max-width:800px){.wa-layout{grid-template-columns:1fr;gap:25px}.wa-aside .wa-card{padding:21px}.wa-how{gap:17px}.wa-intro{margin-bottom:24px}.wa-card{padding:18px}.wa-tool .wa-has-photo{height:310px}.wa-step-note{font-size:7px;letter-spacing:.7px}.wa-tool .wa-drop{min-height:230px}.wa-code{letter-spacing:4px}.wa-status{padding:17px}}
 @media(prefers-reduced-motion:reduce){.wa-spin{animation:none}.wa-tool button{transition:none}}
+@media(max-width:760px){.wa-layout,.wa-main,.wa-aside,.wa-card,.wa-status{min-width:0}.wa-consent{font-size:12px;line-height:1.7}.wa-tool .wa-phone input{font-size:16px}.wa-tool .wa-primary,.wa-tool .wa-secondary{min-height:46px}}
+@media(max-width:560px){.wa-tool .wa-drop{min-height:200px;padding:20px 12px}.wa-tool .wa-has-photo{height:min(72vw,310px)}.wa-code{font-size:clamp(19px,7vw,27px);letter-spacing:clamp(2px,1vw,4px)}}
+@media(max-width:360px){.wa-card,.wa-status{padding:15px}.wa-tool .wa-step-note{width:100%;margin-left:33px}}

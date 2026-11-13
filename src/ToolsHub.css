@@ -322,3 +322,26 @@
 @media(prefers-reduced-motion:reduce){.th-v13 .th-v22-stage{display:none!important}.th-v13 .th-v22-card{animation:none!important}}
 /* ASLNS 35-tool expansion — retains the existing cinematic design */
 .th-extra{max-width:780px}.th-extra-preview{min-height:120px;border-radius:16px;border:1px solid #a78bfa55;margin:18px 0}.th-extra-frame{width:100%;height:340px;background:#fff;border:1px solid #a78bfa55;border-radius:16px}.th-markdown{padding:20px;background:#171629;color:#f1eaff;overflow-wrap:anywhere}.th-markdown a{color:#8de6ef}.th-markdown p{margin:8px 0}.th-color-row,.th-extra .th-actions{display:flex;gap:12px;flex-wrap:wrap}.th-wheel{display:grid;place-items:center;min-height:180px;max-width:360px;margin:16px auto;border:7px dashed #ad89ff;border-radius:50%;background:radial-gradient(circle,#6d4db0,#231839);color:white;font-size:22px;font-weight:800;text-align:center;animation:th-wheel-spin .9s ease-out}.th-timer{text-align:center;font-size:clamp(45px,8vw,84px);font-weight:800;color:#c6afff;font-variant-numeric:tabular-nums}.th-typing-prompt{line-height:1.8;padding:16px;border:1px solid #ad89ff55;border-radius:12px}@keyframes th-wheel-spin{from{transform:rotate(-720deg) scale(.75)}to{transform:rotate(0) scale(1)}}@media(prefers-reduced-motion:reduce){.th-wheel{animation:none}}
+
+/* Final responsive refinements for narrow phones and touch controls. */
+.th-v13 .th-wrap,.th-v13 .th-workspace,.th-v13 .th-panel,.th-v13 .th-card,.th-v13 .th-fields,.th-v13 .th-extra{min-width:0}
+.th-v13 .th-card,.th-v13 .th-result,.th-v13 .th-value{overflow-wrap:anywhere}
+.th-v13 .th-extra-frame{max-width:100%}
+@media(max-width:760px){
+ .th-v13 .th-wrap{width:100%;padding-inline:clamp(14px,4.5vw,24px)}
+ .th-v13 .th-workspace{width:100%}
+ .th-v13 .th-panel{padding:clamp(14px,4vw,24px);border-radius:clamp(16px,4vw,22px)}
+ .th-v13 .th-filters{width:100%}
+ .th-v13 .th-filters button{min-height:42px}
+ .th-v13 .th-fields input:not([type=checkbox]):not([type=color]):not([type=range]),.th-v13 .th-fields textarea,.th-v13 .th-fields select{font-size:16px}
+ .th-v13 .th-fields button,.th-v13 .th-actions button{min-height:46px}
+}
+@media(max-width:560px){
+ .th-v13 .th-grid{grid-template-columns:minmax(0,1fr)}
+ .th-v13 .th-card{min-height:0;padding:clamp(18px,5vw,24px)}
+ .th-v13 .th-card-bottom{margin-top:22px}
+ .th-v13 .th-split,.th-v13 .th-checks{grid-template-columns:minmax(0,1fr)}
+ .th-v13 .th-value{align-items:flex-start;flex-wrap:wrap}
+ .th-v13 .th-extra-frame{height:min(72svh,340px)}
+}
+@media(max-width:360px){.th-v13 .th-wrap{padding-inline:12px}.th-v13 .th-panel{padding:13px}}
