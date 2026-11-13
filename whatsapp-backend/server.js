@@ -2,6 +2,8 @@
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const { ipKeyGenerator } = rateLimit;
+const { isIP } = require('node:net');
 const multer = require('multer');
 const fs = require('node:fs/promises');
 const path = require('node:path');
@@ -12,8 +14,6 @@ const { sendPicture } = require('./transport');
 function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'] }) {
   const app = express();
   app.disable('x-powered-by');
-  // Set the exact proxy hop count only when deployed behind a trusted proxy.
-  if (process.env.ASLNS_PROXY_HOPS) app.set('trust proxy', Number(process.env.ASLNS_PROXY_HOPS));
   app.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
   app.use((req, res, next) => {
     if (req.headers.origin && !origins.includes(req.headers.origin)) {
@@ -24,6 +24,15 @@ function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'] }
   app.use(cors({ origin: origins, allowedHeaders: ['Content-Type', 'X-Session-Token'] }));
   app.get('/api/whatsapp/health', (_req, res) => res.json({ available: liveEnabled, version: 2 }));
   const limiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 8, standardHeaders: 'draft-8', legacyHeaders: false,
+    // Railway documents X-Real-IP as the client address and overwrites the
+    // header at public ingress. X-Forwarded-For is not used as its proxy hop
+    // count is not a stable contract. Keep Express trust proxy disabled.
+    keyGenerator: req => {
+      const railwayIp = req.get('X-Real-IP')?.trim();
+      const clientIp = railwayIp && isIP(railwayIp) ? railwayIp : req.ip;
+      return ipKeyGenerator(clientIp);
+    },
+    validate: { xForwardedForHeader: false },
     message: { error: 'Too many attempts. Please try again in 15 minutes.' } });
   const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: MAX_BYTES, files: 1, fields: 2, fieldSize: 256, parts: 3 } });
   app.post('/api/whatsapp/sessions', limiter, (req, res, next) => {
