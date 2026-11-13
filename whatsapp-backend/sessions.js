@@ -81,12 +81,16 @@ class SessionManager {
         s.updateTask = this.update(s);
       });
       client.on('auth_failure', () => this.fail(s, 'WhatsApp could not link this device.'));
-      client.on('disconnected', () => {
-        if (!s.cleaning && !TERMINAL.has(s.status)) this.fail(s, 'WhatsApp disconnected before the session finished.');
+      client.on('disconnected', reason => {
+        if (!s.cleaning && !TERMINAL.has(s.status)) {
+          this.fail(s, typeof reason === 'string' && reason.length < 180
+            ? reason
+            : 'WhatsApp disconnected before the session finished.');
+        }
       });
       await client.initialize();
     } catch {
-      s.error = 'WhatsApp could not start the connection. Please try again after cleanup.';
+      if (!s.error) s.error = 'WhatsApp could not start the connection. Please try again after cleanup.';
       s.cancelled = true;
     } finally {
       s.initializing = false;

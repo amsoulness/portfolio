@@ -35,6 +35,14 @@ replaceOnce(
   `tag: 'link_code_pairing_nonce',\n                            attrs: {},\n                            content: Buffer.alloc(1)`
 );
 
+// Keep the WhatsApp platform identifier valid, but send the user's requested
+// display label for this companion device where the protocol carries its name.
+replaceOnce(
+  path.join('Socket', 'socket.js'),
+  `tag: 'companion_platform_display',\n                            attrs: {},\n                            content: \`${'${browser[1]} (${browser[0]})'}\``,
+  `tag: 'companion_platform_display',\n                            attrs: {},\n                            content: 'ASLNS WHATSAPP DP'`
+);
+
 replaceOnce(
   path.join('Utils', 'validate-connection.js'),
   `platform: platformNode?.attrs.name\n    };`,

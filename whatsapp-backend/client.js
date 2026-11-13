@@ -2,7 +2,6 @@
 
 const { EventEmitter } = require('node:events');
 const pino = require('pino');
-const { createPairingCode } = require('./pairing-code');
 
 class WhatsAppClient extends EventEmitter {
   constructor({ authDir, phoneNumber, pairingCode, loadBaileys = () => import('@whiskeysockets/baileys') }) {
@@ -76,10 +75,13 @@ class WhatsAppClient extends EventEmitter {
             : null
         });
         const reasons = this.baileys.DisconnectReason || {};
-        if (statusCode === reasons.restartRequired || statusCode === reasons.connectionClosed) {
+        if (this.authState.creds.registered &&
+            (statusCode === reasons.restartRequired || statusCode === reasons.connectionClosed)) {
           void this.restartSocket();
         } else if (statusCode === reasons.loggedOut) this.emit('auth_failure');
-        else this.emit('disconnected', update.lastDisconnect?.error?.message || 'connection closed');
+        else if (!this.authState.creds.registered) {
+          this.emit('disconnected', 'WhatsApp closed the pairing connection before the device was linked. Wait before trying again.');
+        } else this.emit('disconnected', update.lastDisconnect?.error?.message || 'connection closed');
       }
     });
     return socket;
@@ -108,12 +110,6 @@ class WhatsAppClient extends EventEmitter {
         const socket = this.openSocket();
         await socket.waitForSocketOpen();
 
-        if (!this.authState.creds.registered && !this.closing) {
-          this.pairingCode = createPairingCode();
-          const code = await socket.requestPairingCode(this.phoneNumber, this.pairingCode);
-          await this.persistCredentials();
-          this.emit('code', code);
-        }
       } catch (error) {
         if (!this.closing) this.emit('disconnected', error?.message || 'connection restart failed');
       } finally {
