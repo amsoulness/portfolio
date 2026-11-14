@@ -10,6 +10,7 @@ type Session = { sessionId: string; accessToken: string }
 type Snapshot = {
   sessionId: string; status: string; pairingCode: string | null; expiresAt: string
   updated: boolean; deviceRemoved: boolean; outcome: string; error: string | null
+  confirmationSent?: boolean | null
 }
 type Photo = { file: File; url: string; width: number; height: number }
 
@@ -82,6 +83,7 @@ export default function WhatsAppProfileTool() {
   const [photo, setPhoto] = useState<Photo | null>(null)
   const [phone, setPhone] = useState('')
   const [consent, setConsent] = useState(false)
+  const [sendConfirmation, setSendConfirmation] = useState(false)
   const [session, setSession] = useState<Session | null>(restore)
   const [state, setState] = useState<Snapshot | null>(null)
   const [busy, setBusy] = useState(false)
@@ -174,6 +176,7 @@ export default function WhatsAppProfileTool() {
       form.append('image', upload)
       form.append('phoneNumber', number)
       form.append('consent', 'true')
+      form.append('sendConfirmation', String(sendConfirmation))
       const data = await request('/sessions', { method: 'POST', body: form }, 5 * 60 * 1000)
       const current = snapshot(data)
       if (!/^[a-f0-9]{64}$/.test(data.accessToken)) throw new Error('The service could not create a secure session.')
@@ -205,7 +208,7 @@ export default function WhatsAppProfileTool() {
   function reset() {
     if (active && !missing) return
     try { sessionStorage.removeItem(STORAGE_KEY) } catch { /* No stored credentials. */ }
-    setSession(null); setState(null); setPhoto(null); setPhone(''); setConsent(false)
+    setSession(null); setState(null); setPhoto(null); setPhone(''); setConsent(false); setSendConfirmation(false)
     setError(''); setPollError(''); setMissing(false); setCopied('')
   }
 
@@ -237,6 +240,7 @@ export default function WhatsAppProfileTool() {
         <p id="wa-phone-hint" className="wa-small">Use the number for the account whose profile photo you want to update.</p>
       </section>
       {!session && <><label className="wa-consent"><input type="checkbox" checked={consent} disabled={busy} onChange={event => setConsent(event.target.checked)}/><span>This is my WhatsApp account. I agree to temporarily link this tool, update my profile photo, and automatically remove the linked device afterward.</span></label>
+        <label className="wa-consent"><input type="checkbox" checked={sendConfirmation} disabled={busy} onChange={event => setSendConfirmation(event.target.checked)}/><span>Send a one-time thank-you message with the website link to this same WhatsApp account after the photo update succeeds.</span></label>
         <button type="button" className="wa-primary" disabled={!photo || !validPhone || !consent || busy || reading} onClick={() => { void start() }}>{busy ? <LoaderCircle className="wa-spin" size={18} aria-hidden="true"/> : <ArrowRight size={18} aria-hidden="true"/>}{busy ? 'Preparing and uploading photo…' : 'Update profile picture'}</button></>}
       {session && <section className={`wa-status ${success ? 'wa-success' : ''}`} aria-label="Update progress">
         <div className="wa-status-title" role="status">{success ? <Check size={20} aria-hidden="true"/> : active && state?.status !== 'CLEANUP_REQUIRED' && !missing ? <LoaderCircle className="wa-spin" size={18} aria-hidden="true"/> : <ShieldCheck size={19} aria-hidden="true"/>}
@@ -245,7 +249,7 @@ export default function WhatsAppProfileTool() {
           <button className="wa-secondary" type="button" onClick={() => { void copyCode() }}><Copy size={15} aria-hidden="true"/>{copied === code ? 'Code copied' : 'Copy code'}</button>
           <ol className="wa-instructions"><li>Open WhatsApp on your phone.</li><li>Go to <strong>Settings → Linked devices → Link a device</strong>.</li><li>Tap <strong>Link with phone number instead</strong> and enter the code.</li></ol><p className="wa-small">Keep this tab open. The photo updates automatically after linking. Never share your pairing code.</p></>}
         {state?.status === 'STARTING' && <p className="wa-small">Preparing a temporary connection. Your pairing code will appear here.</p>}
-        {success && <p className="wa-small">The profile update and removal of the temporary linked device are confirmed.</p>}
+        {success && <><p className="wa-small">The profile update and removal of the temporary linked device are confirmed.</p>{state.confirmationSent === true && <p className="wa-small">Your thank-you message and website link were sent to this WhatsApp account.</p>}{state.confirmationSent === false && <p className="wa-small">Your photo was updated, but WhatsApp could not send the thank-you message.</p>}</>}
         {state?.status === 'CANCELLED' && <p className="wa-small">This session has been closed. You can choose another photo when you are ready.</p>}
         {state?.error && !success && <p className="wa-status-error">{state.error}</p>}
         {pollError && <p className="wa-status-error" role="status">{pollError}</p>}
@@ -254,7 +258,7 @@ export default function WhatsAppProfileTool() {
       </section>}
       {error && <p className="wa-error" role="alert">{error}</p>}
     </div><aside className="wa-aside"><div className="wa-card"><div className="wa-aside-heading">HOW IT WORKS</div><ol className="wa-how"><li><ImageIcon size={19} aria-hidden="true"/><span>Select a photo in any aspect ratio.</span></li><li><Phone size={19} aria-hidden="true"/><span>Enter your number to receive a pairing code.</span></li><li><ShieldCheck size={19} aria-hidden="true"/><span>Link the temporary device in WhatsApp settings.</span></li><li><Check size={19} aria-hidden="true"/><span>Wait for the update and device-removal confirmation.</span></li></ol></div>
-      <div className="wa-privacy"><ShieldCheck size={21} aria-hidden="true"/><div><strong>A temporary connection.</strong><p>Your photo is uploaded only when you start. The tool requests no messages or contacts. It removes its temporary session data after cleanup.</p></div></div>
+      <div className="wa-privacy"><ShieldCheck size={21} aria-hidden="true"/><div><strong>A temporary connection.</strong><p>Your photo is uploaded only when you start. The tool never reads your messages or contacts. If you opt in, it sends one thank-you message with the website link to this account after a successful update. Session data is removed after cleanup.</p></div></div>
       <p className="wa-footnote">The full image is sent without cropping or stretching. Images are resized and encoded as JPEG for WhatsApp; transparent areas become white. WhatsApp controls the final display, including circular thumbnails.</p>
     </aside></div>
   </section>

@@ -12,7 +12,7 @@ class SessionManager {
     this.closing = false;
   }
 
-  create(image, phoneNumber) {
+  create(image, phoneNumber, sendConfirmation = false) {
     if (this.closing || this.active) throw new Error('The tool is busy with another update. Please try again shortly.');
     const now = Date.now();
     for (const [id, session] of this.sessions) {
@@ -25,6 +25,7 @@ class SessionManager {
     }
     const s = {
       id: randomUUID(), token: randomBytes(32).toString('hex'), image,
+      sendConfirmation: sendConfirmation === true, confirmationSent: null,
       status: 'STARTING', code: null, expiresAt: now + this.ttl,
       authenticated: false, updated: false, deviceRemoved: false,
       cancelled: false, initializing: true, updating: false, cleaning: false,
@@ -53,7 +54,7 @@ class SessionManager {
       sessionId: s.id, status: s.status, pairingCode: s.code,
       expiresAt: new Date(s.expiresAt).toISOString(),
       updated: s.updated, deviceRemoved: s.deviceRemoved,
-      outcome: s.outcome, error: s.error
+      outcome: s.outcome, error: s.error, confirmationSent: s.confirmationSent
     };
   }
 
@@ -116,6 +117,16 @@ class SessionManager {
       } else {
         s.updated = true;
         s.outcome = 'confirmed';
+        if (s.sendConfirmation) {
+          try {
+            await s.client.sendSelfMessage('Thanks for using the AMSOULNESS WhatsApp DP tool! Your profile photo update is complete. https://aslns.online/tools');
+            s.confirmationSent = true;
+          } catch {
+            // Notification failure must not turn a confirmed photo update
+            // into a failure or interfere with linked-device cleanup.
+            s.confirmationSent = false;
+          }
+        }
       }
     } catch {
       s.outcome = 'unconfirmed';

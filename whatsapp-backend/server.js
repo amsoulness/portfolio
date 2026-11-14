@@ -47,7 +47,7 @@ function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'] }
     let image;
     try { image = await prepareImage(req.file.buffer); }
     catch { return res.status(400).json({ error: 'Choose a valid still JPG, PNG, or WebP image, up to 20 MB and 40 megapixels.' }); }
-    try { return res.status(201).json(manager.create(image, req.body.phoneNumber)); }
+    try { return res.status(201).json(manager.create(image, req.body.phoneNumber, req.body.sendConfirmation === 'true')); }
     catch { return res.status(409).json({ error: 'Another update is in progress. Please try again shortly.' }); }
   });
   app.use('/api/whatsapp/sessions/:id', (req, res, next) => {
