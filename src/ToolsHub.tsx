@@ -4,6 +4,7 @@ import QRCode from 'qrcode'
 
 import './ToolsHub.css'
 import WhatsAppProfileTool from './tools/WhatsAppProfileTool'
+import ThemeToggle, { type SiteTheme } from './ThemeToggle'
 
 
 /* ASLNS / Unified interactive dropdown and navigation design */
@@ -584,7 +585,7 @@ function PasswordTool(){
 }
 
 
-export default function ToolsHub({pathname='/tools'}:{pathname?:string}){const active=cards.find(card=>pathname===`/tools/${card.id}`)?.id??null,[query,setQuery]=useState(''),[category,setCategory]=useState('ALL');
+export default function ToolsHub({pathname='/tools',theme='dark',onToggleTheme=()=>{}}:{pathname?:string;theme?:SiteTheme;onToggleTheme?:()=>void}){const active=cards.find(card=>pathname===`/tools/${card.id}`)?.id??null,[query,setQuery]=useState(''),[category,setCategory]=useState('ALL');
 
 const [mobile,setMobile]=useState(()=>typeof window!=='undefined'&&window.matchMedia('(max-width: 760px)').matches);
 
@@ -607,6 +608,8 @@ useEffect(()=>{const tool=cards.find(card=>pathname===`/tools/${card.id}`);const
     <div className="th-v21-location" aria-label="Current section"><span className="th-v21-live"/> <span>THE TOOL LAB</span><span className="th-v21-slash">/ 001</span></div>
 
     <nav className="th-v21-actions" aria-label="Tools page navigation">
+
+      <ThemeToggle theme={theme} onToggle={onToggleTheme} className="tools-theme-toggle"/>
 
       {mobile&&<button className="th-v21-mode" type="button" aria-pressed={!lite} aria-label={lite?'Enable cinematic effects':'Enable smooth mobile mode'} onClick={()=>setLite(v=>!v)}><span aria-hidden="true">{lite?'⚡':'✦'}</span><span>{lite?'SMOOTH':'CINEMATIC'}</span></button>}
 

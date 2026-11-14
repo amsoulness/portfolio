@@ -3,6 +3,7 @@ import ToolsLoading from './ToolsLoading'
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import type { ReactNode, CSSProperties, MouseEvent as ReactMouseEvent } from 'react'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
+import ThemeToggle, { type SiteTheme } from './ThemeToggle'
 
 const normalizeSitePath = (path: string) => path.replace(/\/$/, '') || '/'
 const navigationLabelFor = (path: string) => {
@@ -199,7 +200,7 @@ function MagneticLink({href,children,primary=false,external=false}:{href:string,
   const reduce=useReducedMotion()
   return <motion.a ref={ref} href={href} target={external?'_blank':undefined} rel={external?'noopener noreferrer':undefined} className={`btn ${primary?'primary':'outline'}`} animate={reduce?{}:offset} transition={{type:'spring',stiffness:180,damping:15}} whileHover={reduce?{}:{scale:1.045}} whileTap={{scale:.94}} onPointerMove={e=>{if(reduce||e.pointerType!=='mouse')return;const r=ref.current?.getBoundingClientRect();if(r)setOffset({x:(e.clientX-r.left-r.width/2)*.12,y:(e.clientY-r.top-r.height/2)*.12})}} onPointerLeave={()=>setOffset({x:0,y:0})}>{children}</motion.a>
 }
-function PortfolioApp(){
+function PortfolioApp({theme,onToggleTheme}:{theme:SiteTheme,onToggleTheme:()=>void}){
   const [pointer,setPointer]=useState({x:50,y:40})
   const [menuOpen,setMenuOpen]=useState(false)
   const navigationRef=useRef<HTMLElement|null>(null)
@@ -624,6 +625,7 @@ function PortfolioApp(){
         <a href="/tools" className="tools-nav-spotlight" onClick={()=>setMenuOpen(false)}><span className="tools-nav-spark">✦</span> TOOLS <span className="tools-nav-new">EXPLORE ↗</span></a>
         <a href="#experience" onClick={()=>setMenuOpen(false)}>EXPERIENCE</a><a href="#contact" onClick={()=>setMenuOpen(false)}>CONTACT ↗</a>
       </div>
+      <ThemeToggle theme={theme} onToggle={onToggleTheme} className="portfolio-theme-toggle"/>
     </nav>
     <section id="home" className="hero" aria-label="Main content" tabIndex={-1}>
       <div className="visual-field" aria-hidden="true">
@@ -724,11 +726,24 @@ function PortfolioApp(){
 
 export default function App(){
   const [path, setPath] = useState(() => normalizeSitePath(window.location.pathname))
+  const [theme, setTheme] = useState<SiteTheme>(() => {
+    const saved = window.localStorage.getItem('aslns-theme')
+    if (saved === 'light' || saved === 'dark') return saved
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+  })
   const [isPending, startTransition] = useTransition()
   const [navigationPulse, setNavigationPulse] = useState(false)
   const [navigationLabel, setNavigationLabel] = useState(() => navigationLabelFor(normalizeSitePath(window.location.pathname)))
   const [initialLoading, setInitialLoading] = useState(true)
   const navigationTimer = useRef<number | undefined>(undefined)
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    document.documentElement.style.colorScheme = theme
+    window.localStorage.setItem('aslns-theme', theme)
+  }, [theme])
+
+  const toggleTheme = useCallback(() => setTheme(current => current === 'dark' ? 'light' : 'dark'), [])
 
   const pulseNavigation = useCallback((label = 'Opening the page') => {
     setNavigationPulse(true)
@@ -783,7 +798,7 @@ export default function App(){
     {isNavigating
       ? <ToolsLoading message={navigationLabel}/>
       : path === '/tools' || path.startsWith('/tools/')
-        ? <Suspense fallback={<ToolsLoading message={navigationLabel}/> }><ToolsHub pathname={path}/></Suspense>
-        : <PortfolioApp/>}
+        ? <Suspense fallback={<ToolsLoading message={navigationLabel}/> }><ToolsHub pathname={path} theme={theme} onToggleTheme={toggleTheme}/></Suspense>
+        : <PortfolioApp theme={theme} onToggleTheme={toggleTheme}/>}
   </div>
 }
