@@ -11,7 +11,6 @@ const { SessionManager } = require('./sessions');
 const { prepareImage, MAX_BYTES } = require('./image');
 const { sendPicture } = require('./transport');
 const { WhatsAppClient } = require('./client');
-const { createPairingCode } = require('./pairing-code');
 
 function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'] }) {
   const app = express();
@@ -79,7 +78,7 @@ async function start() {
   await fs.writeFile(path.join(owner, 'pid'), String(process.pid), { mode: 0o600 });
   const manager = new SessionManager({
     createClient(id, phoneNumber) {
-      return new WhatsAppClient({ authDir: path.join(owner, id, 'auth'), phoneNumber, pairingCode: createPairingCode() });
+      return new WhatsAppClient({ authDir: path.join(owner, id, 'auth'), phoneNumber });
     },
     sendPicture,
     removeData: id => fs.rm(path.join(owner, id), { recursive: true, force: true, maxRetries: 3 })
