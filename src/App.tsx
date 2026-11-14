@@ -190,6 +190,7 @@ function MagneticLink({href,children,primary=false,external=false}:{href:string,
 function PortfolioApp(){
   const [pointer,setPointer]=useState({x:50,y:40})
   const [menuOpen,setMenuOpen]=useState(false)
+  const navigationRef=useRef<HTMLElement|null>(null)
   const [effectsOn,setEffectsOn]=useState(true)
   const [compact,setCompact]=useState(false)
   const [lowPower,setLowPower]=useState(false)
@@ -210,6 +211,20 @@ function PortfolioApp(){
     window.addEventListener('scroll',onScroll,{passive:true})
     return ()=>window.removeEventListener('scroll',onScroll)
   },[])
+  useEffect(()=>{
+    if(!menuOpen)return
+    const closeMenu=(event:PointerEvent)=>{
+      if(event.target instanceof Node&&!navigationRef.current?.contains(event.target))setMenuOpen(false)
+    }
+    const closeOnEscape=(event:KeyboardEvent)=>{
+      if(event.key!=='Escape')return
+      setMenuOpen(false)
+      document.getElementById('portfolio-menu-toggle')?.focus()
+    }
+    document.addEventListener('pointerdown',closeMenu)
+    document.addEventListener('keydown',closeOnEscape)
+    return()=>{document.removeEventListener('pointerdown',closeMenu);document.removeEventListener('keydown',closeOnEscape)}
+  },[menuOpen])
   const [ripples,setRipples]=useState<{id:number,x:number,y:number}[]>([])
   const rippleId=useRef(0)
   const rippleTimers=useRef<ReturnType<typeof setTimeout>[]>([])
@@ -459,7 +474,7 @@ function PortfolioApp(){
       @media(prefers-reduced-motion:reduce){.v10-dust,.v10-ribbons,.v10-vignette{display:none}.site .skill-v7 .skill-visual,.site .editing-tool .tech-icon{transition:none}}
 
       /* V11: low-cost mobile presentation. Full effects remain available via button. */
-      .mobile-quality-button{position:fixed;left:12px;bottom:14px;z-index:85;min-height:44px;padding:10px 14px;border:1px solid #a68bdb88;border-radius:999px;background:#171126ed;color:#f4edff;font:600 12px system-ui,sans-serif;box-shadow:0 4px 18px #0006;cursor:pointer;backdrop-filter:blur(6px)}
+      .mobile-quality-button{position:fixed;left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:85;min-height:44px;padding:10px 14px;border:1px solid #a68bdb88;border-radius:999px;background:#171126ed;color:#f4edff;font:600 12px system-ui,sans-serif;box-shadow:0 4px 18px #0006;cursor:pointer;backdrop-filter:blur(6px)}
       .mobile-quality-button:focus-visible{outline:2px solid #c8a8ff;outline-offset:3px}
       .site.lite-mode .v8-aurora,.site.lite-mode .v8-comets,.site.lite-mode .v9-nebula,.site.lite-mode .v9-scanlines,.site.lite-mode .v9-hero-halo,.site.lite-mode .v10-dust,.site.lite-mode .v10-ribbons,.site.lite-mode .v10-vignette,.site.lite-mode .v8-ripples{display:none!important}
       .site.lite-mode .v9-stars i{animation:none;box-shadow:none;opacity:.35}
@@ -585,10 +600,11 @@ function PortfolioApp(){
       <button type="button" className="v9-float-btn" onClick={()=>setEffectsOn(v=>!v)} aria-pressed={effectsOn} title={effectsOn?'Pause decorative effects':'Enable decorative effects'}>{effectsOn?'◉':'◎'}<span>{effectsOn?'FX on':'FX off'}</span></button>
       {showTop&&<button type="button" className="v9-float-btn v9-top" onClick={()=>window.scrollTo({top:0,behavior:reduce?'auto':'smooth'})} aria-label="Back to top" title="Back to top">↑<span>Top</span></button>}
     </div>
-    <nav className="nav">
+    <a className="site-skip-link" href="#home">Skip to main content</a>
+    <nav className="nav" aria-label="Main navigation" ref={navigationRef}>
       <motion.a href="#home" className="logo" whileHover={reduce?{}:{scale:1.12,rotate:-6}}>AMSOUL<span style={{color:'#a78bfa'}}>NESS.</span></motion.a>
-      <button className="menu-toggle" aria-label="Toggle navigation" aria-expanded={menuOpen} onClick={()=>setMenuOpen(!menuOpen)}>☰</button>
-      <div className={`nav-links ${menuOpen?'open':''}`}>
+      <button id="portfolio-menu-toggle" className="menu-toggle" aria-label={menuOpen?'Close navigation':'Open navigation'} aria-controls="portfolio-navigation" aria-expanded={menuOpen} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}</button>
+      <div id="portfolio-navigation" className={`nav-links ${menuOpen?'open':''}`}>
         <a href="#about" onClick={()=>setMenuOpen(false)}>ABOUT</a>
         <a href="#skills" onClick={()=>setMenuOpen(false)}>SKILLS</a>
         <a href="#projects" onClick={()=>setMenuOpen(false)}>WORK</a>
@@ -597,7 +613,7 @@ function PortfolioApp(){
         <a href="#experience" onClick={()=>setMenuOpen(false)}>EXPERIENCE</a><a href="#contact" onClick={()=>setMenuOpen(false)}>CONTACT ↗</a>
       </div>
     </nav>
-    <section id="home" className="hero">
+    <section id="home" className="hero" aria-label="Main content" tabIndex={-1}>
       <div className="visual-field" aria-hidden="true">
         <motion.div className="visual-ring ring-one" animate={reduce?{}:{rotate:360}} transition={{duration:32,repeat:Infinity,ease:'linear'}}><span className="ring-node"/></motion.div>
         <motion.div className="visual-ring ring-two" animate={reduce?{}:{rotate:-360}} transition={{duration:44,repeat:Infinity,ease:'linear'}}><span className="ring-node"/></motion.div>

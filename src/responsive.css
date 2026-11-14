@@ -36,6 +36,29 @@ textarea {
   min-width: 0;
 }
 
+.site-skip-link {
+  position: fixed;
+  z-index: 20000;
+  top: 10px;
+  left: 10px;
+  transform: translateY(calc(-100% - 16px));
+  padding: 12px 16px;
+  border: 1px solid #cdb4ff;
+  border-radius: 10px;
+  background: #120d1e;
+  color: #fff;
+  font: 700 14px/1.2 var(--font-body, system-ui, sans-serif);
+  text-decoration: none;
+  box-shadow: 0 8px 26px #0009;
+  transition: transform .16s ease;
+}
+
+.site-skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid #d9c7ff;
+  outline-offset: 3px;
+}
+
 @media (max-width: 760px) {
   body {
     min-width: 320px;
