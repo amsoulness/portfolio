@@ -162,6 +162,57 @@ html[data-theme="light"] .th-v13 .th-back-sub { color: #62596e; }
 html[data-theme="light"] .th-v13 .th-atmosphere { opacity: .45; }
 html[data-theme="light"] .th-v13 .th-motion-fx { opacity: .35; }
 
+/* High-contrast light controls and copy across the portfolio and tool routes. */
+html[data-theme="light"] .site :is(.btn.outline, .menu-toggle, .interest, .resource-tag, .nav-links a, .v9-float-btn) {
+  color: #34224e !important;
+  background: #fff !important;
+  border-color: #bca9d2 !important;
+  box-shadow: 0 5px 18px rgba(45, 29, 65, .1);
+}
+html[data-theme="light"] .site .btn.primary,
+html[data-theme="light"] .site .tools-hero-cta,
+html[data-theme="light"] .site .tools-featured-button {
+  color: #fff !important;
+  background: linear-gradient(115deg, #56308f, #6740aa) !important;
+  border-color: #56308f !important;
+  box-shadow: 0 8px 24px rgba(73, 43, 119, .22);
+}
+html[data-theme="light"] .site .tools-nav-spotlight { color: #422465 !important; background: #f0e9fa !important; }
+html[data-theme="light"] .site .v9-float-btn:hover,
+html[data-theme="light"] .site :is(.btn.outline, .interest, .resource-tag, .nav-links a):hover {
+  color: #21142f !important;
+  background: #eee6f8 !important;
+  border-color: #8864b4 !important;
+}
+html[data-theme="light"] .th-v13 :is(.th-filters button, .th-nav-right a, .th-back, .th-v21-return, .th-studio-trigger) {
+  color: #34224e !important;
+  background: #fff !important;
+  border-color: #bca9d2 !important;
+}
+html[data-theme="light"] .th-v13 .th-fields button:not(.th-secondary),
+html[data-theme="light"] .th-v13 .th-actions button:not(.th-secondary),
+html[data-theme="light"] .th-v13 .th-filters button.selected {
+  color: #fff !important;
+  background: #56308f !important;
+  border-color: #56308f !important;
+  box-shadow: 0 4px 12px rgba(73, 43, 119, .18);
+}
+html[data-theme="light"] .th-v13 :is(.th-fields button.th-secondary, .th-actions button.th-secondary) {
+  color: #34224e !important;
+  background: #eee7f7 !important;
+  border-color: #bca9d2 !important;
+}
+html[data-theme="light"] .th-v13 .th-result { color: #2d1a42 !important; background: #eee7f7 !important; border: 1px solid #c7b5dc; }
+html[data-theme="light"] .th-v13 :is(.th-card-number, .th-empty, .th-hint, .th-footer) { color: #554b61 !important; }
+html[data-theme="light"] .th-v13 .th-eyebrow,
+html[data-theme="light"] .th-v13 .th-kicker,
+html[data-theme="light"] .th-v13 .th-tag,
+html[data-theme="light"] .th-v13 .th-collection-kicker { color: #583684 !important; }
+html[data-theme="light"] .th-v13 .th-card-icon,
+html[data-theme="light"] .th-v13 .th-big-icon { color: #56308f !important; background: #eee7f7 !important; border-color: #c8b5df !important; }
+html[data-theme="light"] .th-v13 .th-hero h1 em { background-image: linear-gradient(110deg, #4c2e79, #6740aa 60%, #24647d) !important; }
+html[data-theme="light"] .th-v13 :is(.th-fields input[type=checkbox], .th-fields input[type=range], .th-checks input) { accent-color: #56308f; }
+
 /* A subtle entrance and responsive interactive feedback on every route. */
 .site-navigation-shell > :is(main, .site) { animation: aslns-page-enter .48s cubic-bezier(.2,.75,.25,1) both; }
 .site .section-heading .rule,
