@@ -7,15 +7,15 @@ import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'mo
 const normalizeSitePath = (path: string) => path.replace(/\/$/, '') || '/'
 const navigationLabelFor = (path: string) => {
   const labels: Record<string, string> = {
-    '/': 'PORTFOLIO',
-    '/tools': 'THE TOOL LAB',
-    '/tools/whatsapp': 'WHATSAPP PROFILE UPDATER',
-    '/tools/image': 'IMAGE STUDIO',
-    '/tools/qr': 'QR CODE STUDIO',
-    '/tools/color': 'COLOR LAB',
-    '/tools/password': 'PASSWORD STUDIO',
+    '/': 'Opening the Portfolio',
+    '/tools': 'Opening the Tool Lab',
+    '/tools/whatsapp': 'Opening WhatsApp Profile Updater',
+    '/tools/image': 'Opening Image Studio',
+    '/tools/qr': 'Opening QR Code Studio',
+    '/tools/color': 'Opening Color Lab',
+    '/tools/password': 'Opening Password Studio',
   }
-  return `ASLNS / OPENING ${labels[path] ?? 'EXPERIENCE'}`
+  return labels[path] ?? 'Opening the page'
 }
 
 const GITHUB = 'https://github.com/amsoulness'
@@ -726,17 +726,19 @@ export default function App(){
   const [path, setPath] = useState(() => normalizeSitePath(window.location.pathname))
   const [isPending, startTransition] = useTransition()
   const [navigationPulse, setNavigationPulse] = useState(false)
-  const [navigationLabel, setNavigationLabel] = useState('ASLNS / TRANSITION')
+  const [navigationLabel, setNavigationLabel] = useState(() => navigationLabelFor(normalizeSitePath(window.location.pathname)))
+  const [initialLoading, setInitialLoading] = useState(true)
   const navigationTimer = useRef<number | undefined>(undefined)
 
-  const pulseNavigation = useCallback((label = 'ASLNS / TRANSITION') => {
+  const pulseNavigation = useCallback((label = 'Opening the page') => {
     setNavigationPulse(true)
     setNavigationLabel(label)
     window.clearTimeout(navigationTimer.current)
-    navigationTimer.current = window.setTimeout(() => setNavigationPulse(false), 900)
+    navigationTimer.current = window.setTimeout(() => setNavigationPulse(false), 1000)
   }, [])
 
   useEffect(() => {
+    const initialTimer = window.setTimeout(() => setInitialLoading(false), 1000)
     const syncPath = () => {
       pulseNavigation(navigationLabelFor(normalizeSitePath(window.location.pathname)))
       startTransition(() => setPath(normalizeSitePath(window.location.pathname)))
@@ -745,6 +747,7 @@ export default function App(){
     return () => {
       window.removeEventListener('popstate', syncPath)
       window.clearTimeout(navigationTimer.current)
+      window.clearTimeout(initialTimer)
     }
   }, [pulseNavigation])
 
@@ -761,7 +764,6 @@ export default function App(){
       if (!section) return
       event.preventDefault()
       window.history.pushState({}, '', `${destination.pathname}${destination.search}${destination.hash}`)
-      pulseNavigation('ASLNS / MOVING THROUGH THE PAGE')
       section.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })
       return
     }
@@ -775,13 +777,13 @@ export default function App(){
     startTransition(() => setPath(nextPath))
   }
 
+  const isNavigating = initialLoading || isPending || navigationPulse
+
   return <div className="site-navigation-shell" onClick={handleNavigation}>
-    {(isPending || navigationPulse) && <div className="site-navigation-progress" role="status" aria-label="Navigating the website">
-      <div className="site-navigation-progress-track"><span /></div>
-      <div className="site-navigation-progress-label"><span className="site-navigation-orbit" aria-hidden="true"><i /></span><span>{navigationLabel}</span><b aria-hidden="true">✦</b></div>
-    </div>}
-    {path === '/tools' || path.startsWith('/tools/')
-      ? <Suspense fallback={<ToolsLoading/>}><ToolsHub pathname={path}/></Suspense>
-      : <PortfolioApp/>}
+    {isNavigating
+      ? <ToolsLoading message={navigationLabel}/>
+      : path === '/tools' || path.startsWith('/tools/')
+        ? <Suspense fallback={<ToolsLoading message={navigationLabel}/> }><ToolsHub pathname={path}/></Suspense>
+        : <PortfolioApp/>}
   </div>
 }
