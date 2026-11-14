@@ -16,6 +16,14 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="AMSOULNESS | Emmanuel Cherian" />
     <meta name="twitter:description" content="Software projects, cinematic edits, and a creative lab of free browser-based tools." />
+    <script>
+      if (location.pathname.replace(/\/+$/, '') === '/tools') {
+        document.title = 'Free Online Tools | AMSOULNESS';
+        document.querySelector('meta[name="description"]').content = 'Explore five free browser-based creative tools from AMSOULNESS: WhatsApp profile photo updater, image studio, QR code maker, color lab, and password generator.';
+        document.querySelector('link[rel="canonical"]').href = 'https://aslns.online/tools';
+        document.querySelector('meta[property="og:url"]').content = 'https://aslns.online/tools';
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
