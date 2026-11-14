@@ -5,6 +5,18 @@ import type { ReactNode, CSSProperties, MouseEvent as ReactMouseEvent } from 're
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
 
 const normalizeSitePath = (path: string) => path.replace(/\/$/, '') || '/'
+const navigationLabelFor = (path: string) => {
+  const labels: Record<string, string> = {
+    '/': 'PORTFOLIO',
+    '/tools': 'THE TOOL LAB',
+    '/tools/whatsapp': 'WHATSAPP PROFILE UPDATER',
+    '/tools/image': 'IMAGE STUDIO',
+    '/tools/qr': 'QR CODE STUDIO',
+    '/tools/color': 'COLOR LAB',
+    '/tools/password': 'PASSWORD STUDIO',
+  }
+  return `ASLNS / OPENING ${labels[path] ?? 'EXPERIENCE'}`
+}
 
 const GITHUB = 'https://github.com/amsoulness'
 const LINKEDIN = 'https://linkedin.com/in/aslns/'
@@ -714,17 +726,19 @@ export default function App(){
   const [path, setPath] = useState(() => normalizeSitePath(window.location.pathname))
   const [isPending, startTransition] = useTransition()
   const [navigationPulse, setNavigationPulse] = useState(false)
+  const [navigationLabel, setNavigationLabel] = useState('ASLNS / TRANSITION')
   const navigationTimer = useRef<number | undefined>(undefined)
 
-  const pulseNavigation = useCallback(() => {
+  const pulseNavigation = useCallback((label = 'ASLNS / TRANSITION') => {
     setNavigationPulse(true)
+    setNavigationLabel(label)
     window.clearTimeout(navigationTimer.current)
-    navigationTimer.current = window.setTimeout(() => setNavigationPulse(false), 760)
+    navigationTimer.current = window.setTimeout(() => setNavigationPulse(false), 900)
   }, [])
 
   useEffect(() => {
     const syncPath = () => {
-      pulseNavigation()
+      pulseNavigation(navigationLabelFor(normalizeSitePath(window.location.pathname)))
       startTransition(() => setPath(normalizeSitePath(window.location.pathname)))
     }
     window.addEventListener('popstate', syncPath)
@@ -747,7 +761,7 @@ export default function App(){
       if (!section) return
       event.preventDefault()
       window.history.pushState({}, '', `${destination.pathname}${destination.search}${destination.hash}`)
-      pulseNavigation()
+      pulseNavigation('ASLNS / MOVING THROUGH THE PAGE')
       section.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' })
       return
     }
@@ -757,14 +771,14 @@ export default function App(){
     event.preventDefault()
     window.history.pushState({}, '', `${destination.pathname}${destination.search}`)
     window.scrollTo({ top: 0, behavior: 'instant' })
-    pulseNavigation()
+    pulseNavigation(navigationLabelFor(nextPath))
     startTransition(() => setPath(nextPath))
   }
 
   return <div className="site-navigation-shell" onClick={handleNavigation}>
     {(isPending || navigationPulse) && <div className="site-navigation-progress" role="status" aria-label="Navigating the website">
       <div className="site-navigation-progress-track"><span /></div>
-      <div className="site-navigation-progress-label"><span className="site-navigation-orbit" aria-hidden="true"><i /></span><span>ASLNS / TRANSITION</span><b aria-hidden="true">✦</b></div>
+      <div className="site-navigation-progress-label"><span className="site-navigation-orbit" aria-hidden="true"><i /></span><span>{navigationLabel}</span><b aria-hidden="true">✦</b></div>
     </div>}
     {path === '/tools' || path.startsWith('/tools/')
       ? <Suspense fallback={<ToolsLoading/>}><ToolsHub pathname={path}/></Suspense>
