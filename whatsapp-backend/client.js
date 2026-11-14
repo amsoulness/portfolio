@@ -2,7 +2,8 @@
 
 const { EventEmitter } = require('node:events');
 const pino = require('pino');
-const { createPairingCode } = require('./pairing-code');
+
+const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 class WhatsAppClient extends EventEmitter {
   constructor({ authDir, phoneNumber, pairingCode, loadBaileys = () => import('@whiskeysockets/baileys') }) {
@@ -35,14 +36,39 @@ class WhatsAppClient extends EventEmitter {
   }
 
   async requestPairingCode(socket) {
-    const pairingReady = typeof socket.waitForConnectionUpdate === 'function'
-      ? socket.waitForConnectionUpdate(update => update.connection === 'connecting' || Boolean(update.qr), 30000)
-      : Promise.resolve();
-    await Promise.all([socket.waitForSocketOpen(), pairingReady]);
-    if (this.closing || socket !== this.socket) return;
-    const code = await socket.requestPairingCode(this.phoneNumber, this.pairingCode);
-    await this.persistCredentials();
-    if (!this.closing && socket === this.socket) this.emit('code', code);
+    try {
+      // Baileys emits `qr` after the pairing handshake is ready (also in
+      // phone-number pairing mode). `connecting` may arrive too early and can
+      // race the link-code request, producing a 428 Connection Closed.
+      await new Promise((resolve, reject) => {
+        const finish = error => {
+          clearTimeout(timeout);
+          socket.ev.off('connection.update', onUpdate);
+          if (error) reject(error);
+          else resolve();
+        };
+        const onUpdate = update => {
+          if (update.qr) finish();
+          else if (update.connection === 'close') {
+            finish(update.lastDisconnect?.error || new Error('WhatsApp pairing connection closed'));
+          }
+        };
+        const timeout = setTimeout(() => finish(new Error('WhatsApp pairing handshake timed out')), 30000);
+        socket.ev.on('connection.update', onUpdate);
+      });
+      if (this.closing || socket !== this.socket) return;
+      const code = await socket.requestPairingCode(this.phoneNumber, this.pairingCode);
+      await this.persistCredentials();
+      if (!this.closing && socket === this.socket) this.emit('code', code);
+    } catch (error) {
+      const statusCode = error?.output?.statusCode;
+      const closed = this.baileys.DisconnectReason?.connectionClosed;
+      if (statusCode === closed && !this.closing && socket === this.socket) {
+        void this.restartSocket();
+        return;
+      }
+      throw error;
+    }
   }
 
   openSocket() {
@@ -67,6 +93,7 @@ class WhatsAppClient extends EventEmitter {
     socket.ev.on('connection.update', update => {
       if (update.connection === 'open') {
         this.connected = true;
+        if (this.authState.creds.registered) this.restartAttempts = 0;
         this.emit('authenticated');
         this.emit('ready');
       } else if (update.connection === 'close' && !this.closing) {
@@ -101,12 +128,20 @@ class WhatsAppClient extends EventEmitter {
   restartSocket() {
     if (this.restartTask || this.closing) return this.restartTask;
     this.restartTask = (async () => {
-      if (++this.restartAttempts > 2) {
-        this.emit('disconnected', 'WhatsApp could not keep the temporary connection open');
+      const isPairing = !this.authState.creds.registered;
+      const maxAttempts = isPairing ? 3 : 2;
+      if (++this.restartAttempts > maxAttempts) {
+        this.emit('disconnected', isPairing
+          ? 'WhatsApp closed the pairing connection again. Wait a few minutes before starting a new attempt.'
+          : 'WhatsApp could not keep the temporary connection open');
         return;
       }
       try {
-        await new Promise(resolve => setTimeout(resolve, this.restartAttempts * 1000));
+        // Avoid rapid reconnect/code churn while WhatsApp is closing an
+        // unregistered pairing socket. Registered sessions keep a short retry.
+        // Back off on pairing retries so WhatsApp has time to settle and the
+        // user can enter the still-current branded code on their phone.
+        await delay(isPairing ? 5000 * (2 ** (this.restartAttempts - 1)) : this.restartAttempts * 1000);
         await this.persistCredentials();
         if (this.closing) return;
         const { state, saveCreds } = await this.baileys.useMultiFileAuthState(this.authDir);
@@ -115,9 +150,17 @@ class WhatsAppClient extends EventEmitter {
         this.saveQueue = Promise.resolve();
         const socket = this.openSocket();
         if (!state.creds.registered) {
-          // Request codes only after Baileys reports the restarted socket ready.
-          this.pairingCode = createPairingCode();
-          await this.requestPairingCode(socket);
+          // Keep the branded code stable while recovering. Starting the next
+          // socket's pairing request asynchronously lets a subsequent close
+          // schedule the next bounded retry instead of being swallowed by the
+          // active restart task.
+          void this.requestPairingCode(socket).catch(error => {
+            if (!this.closing && socket === this.socket) {
+              const statusCode = error?.output?.statusCode;
+              if (statusCode === this.baileys.DisconnectReason?.connectionClosed) void this.restartSocket();
+              else this.emit('disconnected', error?.message || 'WhatsApp pairing could not be restarted');
+            }
+          });
         } else await socket.waitForSocketOpen();
       } catch (error) {
         if (!this.closing) this.emit('disconnected', error?.message || 'connection restart failed');
