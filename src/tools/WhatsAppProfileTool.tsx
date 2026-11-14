@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, Check, Copy, Image as ImageIcon, LoaderCircle, Phone, RefreshCw, ShieldCheck, Upload, X } from 'lucide-react'
 import './WhatsAppProfileTool.css'
 
-const API = (import.meta.env.VITE_WHATSAPP_API_URL || '').replace(/\/$/, '')
+const API = (import.meta.env.VITE_WHATSAPP_API_URL || 'https://portfolio-production-fe0b1536.up.railway.app').replace(/\/$/, '')
 const STORAGE_KEY = 'aslns.whatsapp-profile.v2'
 const terminal = new Set(['SUCCESS', 'CANCELLED', 'ERROR'])
 const statuses = new Set(['STARTING', 'CODE_READY', 'LINKED', 'UPDATING', 'REMOVING_DEVICE', 'CANCELLING', 'CLEANUP_REQUIRED', ...terminal])

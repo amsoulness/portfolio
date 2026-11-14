@@ -4,7 +4,7 @@ import './PageViewCounter.css'
 
 export type TrackedPage = 'portfolio' | 'tools' | 'whatsapp' | 'image' | 'qr' | 'color' | 'password' | 'status'
 
-const API_ORIGIN = (import.meta.env.VITE_WHATSAPP_API_URL || '').replace(/\/$/, '')
+const API_ORIGIN = (import.meta.env.VITE_WHATSAPP_API_URL || 'https://portfolio-production-fe0b1536.up.railway.app').replace(/\/$/, '')
 
 export default function PageViewCounter({ page, className = '' }: { page: TrackedPage; className?: string }) {
   const [views, setViews] = useState<number | null>(null)

@@ -10,7 +10,7 @@ const statusInputStyles = `
 html[data-theme='light'] .wa-tool textarea{background:#fff;color:#20172d;border-color:#c9bbdf}
 `;
 
-const API = (import.meta.env.VITE_WHATSAPP_API_URL || '').replace(/\/$/, '')
+const API = (import.meta.env.VITE_WHATSAPP_API_URL || 'https://portfolio-production-fe0b1536.up.railway.app').replace(/\/$/, '')
 const KEY = 'aslns.whatsapp-status.v1'
 const terminal = new Set(['SUCCESS', 'CANCELLED', 'ERROR'])
 const allowed = new Set(['STARTING', 'CODE_READY', 'LINKED', 'UPDATING', 'REMOVING_DEVICE', 'CANCELLING', 'CLEANUP_REQUIRED', ...terminal])
