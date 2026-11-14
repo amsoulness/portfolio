@@ -752,7 +752,7 @@ export default function App(){
       return
     }
 
-    if (!['/', '/tools'].includes(nextPath)) return
+    if (!['/', '/tools'].includes(nextPath) && !/^\/tools\/(whatsapp|image|qr|color|password)$/.test(nextPath)) return
     if (nextPath === path) return
     event.preventDefault()
     window.history.pushState({}, '', `${destination.pathname}${destination.search}`)
@@ -766,8 +766,8 @@ export default function App(){
       <div className="site-navigation-progress-track"><span /></div>
       <div className="site-navigation-progress-label"><span className="site-navigation-orbit" aria-hidden="true"><i /></span><span>ASLNS / TRANSITION</span><b aria-hidden="true">✦</b></div>
     </div>}
-    {path === '/tools'
-      ? <Suspense fallback={<ToolsLoading/>}><ToolsHub/></Suspense>
+    {path === '/tools' || path.startsWith('/tools/')
+      ? <Suspense fallback={<ToolsLoading/>}><ToolsHub pathname={path}/></Suspense>
       : <PortfolioApp/>}
   </div>
 }

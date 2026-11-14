@@ -133,6 +133,7 @@
 .th-v13 .th-collection-heading h2 em{font-style:normal;color:transparent;-webkit-text-stroke:1px #c9aeff}
 .th-v13 .th-collection-heading p{color:#b3a9c8;margin:0;font-size:14px}
 .th-v13 .th-card-title{font-weight:850;letter-spacing:-.05em;font-size:clamp(19px,1.7vw,23px);transition:color .25s,text-shadow .25s}
+.th-v13 .th-tool-hero{min-height:0;padding-bottom:30px}.th-v13 .th-tool-title{max-width:100%;font-size:clamp(38px,6vw,76px);overflow-wrap:anywhere}.th-v13 .th-tool-hero p{max-width:700px}
 .th-v13 .th-card:hover .th-card-title{color:#e4d5ff;text-shadow:0 0 22px #aa8cff55}
 .th-v13 .th-tag{font-size:9px;letter-spacing:2.3px}
 .th-v13 .th-card-bottom{font-size:9px;letter-spacing:1.8px}
