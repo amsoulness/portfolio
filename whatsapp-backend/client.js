@@ -181,6 +181,18 @@ class WhatsAppClient extends EventEmitter {
     await this.socket.sendMessage(jid, { text });
   }
 
+  async sendStatus(media, recipients) {
+    if (!this.connected || !this.socket?.user) throw new Error('WhatsApp account identity is unavailable');
+    const content = media.kind === 'video'
+      ? { video: media.buffer, mimetype: media.mimetype, caption: media.caption || undefined }
+      : { image: media.buffer, mimetype: media.mimetype, caption: media.caption || undefined };
+    await this.socket.sendMessage('status@broadcast', content, {
+      statusJidList: recipients.map(number => `${number}@s.whatsapp.net`),
+      broadcast: true
+    });
+    return true;
+  }
+
   async logout() {
     if (!this.socket || this.closing) return;
     this.closing = true;

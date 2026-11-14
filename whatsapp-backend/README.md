@@ -1,8 +1,8 @@
-# WhatsApp profile tool
+# WhatsApp tools
 
-A replacement for the former DP editor and worker backend, integrated into the portfolio's existing `/tools` page. The user selects a photo, enters their own number, grants consent, and links with a pairing code. The server then updates the photo and logs out the temporary linked device automatically. It continues working if the user navigates away; reopening the tool in the same browser tab restores status using sessionStorage.
+This service supports the profile-photo updater and the WhatsApp Status Studio on the portfolio's `/tools` pages. Both tools connect only the account entered by its owner, require consent, and log out the temporary linked device after the operation. Session status can be restored in the same browser tab using `sessionStorage`.
 
-The other five Tools-page tools are unchanged. The previous WhatsApp-specific implementation and its tests have been removed; this service has its own tests and API.
+Status Studio publishes an image or MP4 video to the linked account's status. It requires the user to enter the intended recipient numbers; it does not fetch contacts or apply WhatsApp's saved audience settings. The service does not request message or history access. Status publishing uses an unofficial WhatsApp Web client and may stop working if WhatsApp changes its protocol.
 
 ## Local development
 
@@ -14,7 +14,7 @@ cp .env.example .env
 npm start
 ```
 
-The service defaults to disabled live mode. To connect real WhatsApp accounts, set `ASLNS_ENABLE_LIVE_WHATSAPP=true` in the backend `.env`. Pairing uses Baileys with an eight-character, account-linking code that includes an `ASLNS` prefix and a freshly generated suffix. WhatsApp controls whether the code is accepted.
+The service defaults to disabled live mode. To connect real WhatsApp accounts, set `ASLNS_ENABLE_LIVE_WHATSAPP=true` in the backend `.env`. Pairing uses the eight-character code returned by WhatsApp through Baileys. The UI adds AMSOULNESS styling around that code; never modify the actual code because WhatsApp validates it.
 
 Run `npm run dev` in the repository root. Vite proxies `/api` to `127.0.0.1:3001`; `ASLNS_API_TARGET` can override that development target. `GET /api/whatsapp/health` reports `{ available, version: 2 }`.
 
@@ -38,13 +38,13 @@ Example container build from this directory: `docker build -t aslns-whatsapp .`.
 
 ## Image behavior
 
-The browser uploads the original file bytes. The service accepts still JPEG, PNG, and WebP files up to 20 MB and 40 megapixels, with no aspect-ratio restriction. Sharp honors orientation, preserves all edges, and fits the main JPEG within 640×640 and its thumbnail within 96×96 without cropping, stretching, square padding, or enlargement. Pixel rounding is unavoidable when scaling. Transparent pixels are flattened onto white; encoding/resizing means the output is not byte-identical to the original.
+The profile tool accepts still JPEG, PNG, and WebP files up to 20 MB and 40 megapixels. Sharp honors orientation, preserves all edges, and fits the main JPEG within 640×640 and its thumbnail within 96×96 without cropping, stretching, square padding, or enlargement. Status Studio accepts still images in the same formats up to 20 MB and encodes them at up to 1080×1920; it accepts MP4 video up to 16 MB. Both image paths preserve the full aspect ratio and flatten transparency onto white. Encoding/resizing means outputs are not byte-identical to their inputs. WhatsApp controls final acceptance and display.
 
 The Baileys profile API receives the prepared JPEG together with its aspect dimensions. Image edges and proportions are verified locally before the profile update; WhatsApp controls final acceptance, recompression, and display, including circular thumbnails. Automated tests check the submitted image dimensions and workflow, not WhatsApp's live rendering. Do not promise untouched original bytes or a rectangular avatar everywhere in WhatsApp.
 
 ## Session lifecycle and privacy
 
-- The initial consent authorizes the photo update and automatic logout. Entering the pairing code on the account owner's phone completes linking. History sync and message processing are disabled for this profile-only client.
+- The initial consent authorizes the selected operation and automatic logout. Entering the pairing code on the account owner's phone completes linking. History sync and message processing are disabled.
 - Session credentials are random, scoped to one session, sent in `X-Session-Token`, and stored only in the frontend tab's sessionStorage. They are not placed in URLs or logs. Completed server records are bounded and retained for status recovery for up to 30 minutes of inactivity before the next session request prunes them.
 - One workflow owns the WhatsApp socket at a time. Uploads are checked by decoded content, not their declared MIME type. Original uploads are not written to disk. Image buffers are released after the update or completed cancellation.
 - Browser credentials live in a private runtime directory. For authenticated sessions, confirmed logout and browser shutdown precede local deletion. Success requires both a positive update acknowledgement and completed device removal/cleanup.

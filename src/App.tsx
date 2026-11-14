@@ -16,6 +16,7 @@ const navigationLabelFor = (path: string) => {
     '/tools/qr': 'Opening QR Code Studio',
     '/tools/color': 'Opening Color Lab',
     '/tools/password': 'Opening Password Studio',
+    '/tools/status': 'Opening WhatsApp Status Studio',
   }
   return labels[path] ?? 'Opening the page'
 }
@@ -613,7 +614,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
         <div className="hero-topline"><motion.p className="eyebrow" initial={reduce?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8}}>✦ DEVELOPER × CREATIVE EDITOR</motion.p><PageViewCounter page="portfolio" className="aslns-view-counter--hero"/></div>
         <h1>{['Emmanuel','Cherian.'].map((word,i)=><div key={word} style={{overflow:'hidden',paddingBottom:9}}><motion.span className={i===1?'gradient':''} style={{display:'inline-block'}} initial={reduce?false:{y:'110%',opacity:0}} animate={{y:'0%',opacity:1}} transition={{duration:1.1,delay:.25+i*.25,ease:[.22,1,.36,1]}}>{word}</motion.span></div>)}</h1>
         <Reveal delay={.4}><p className="hero-description">I’m Emmanuel — a BCA student, aspiring software developer, and self-taught video editor. Through AMSOULNESS / ASLNS, I blend code, technology, and cinematic storytelling to turn ideas into experiences.</p></Reveal>
-        <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE 5 CREATIVE TOOLS <span aria-hidden="true">↗</span></a></div>
+        <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE 6 CREATIVE TOOLS <span aria-hidden="true">↗</span></a></div>
       </motion.div>
       <motion.div className="scroll-cue" animate={reduce?{}:{y:[0,10,0]}} transition={{duration:2,repeat:Infinity}}>SCROLL TO EXPLORE ↓</motion.div>
     </section>
@@ -623,8 +624,8 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
         <div className="tools-featured-copy">
           <p className="tools-featured-eyebrow">✦ MORE THAN A PORTFOLIO</p>
           <h2 id="tools-featured-title">YOUR IDEAS.<br/><span>OUR TOOLKIT.</span></h2>
-          <p className="tools-featured-description">Five focused tools in one creative lab. Update a WhatsApp profile photo, compress and convert images, design QR codes, explore color and create secure passwords — all in your browser.</p>
-          <div className="tools-featured-chips"><span>✧ 5 CREATIVE TOOLS</span><span>◇ NO SIGN-UP</span><span>⚡ BUILT FOR CREATORS</span></div>
+          <p className="tools-featured-description">Six focused tools in one creative lab. Update a WhatsApp profile photo, compress and convert images, design QR codes, explore color and create secure passwords — all in your browser.</p>
+          <div className="tools-featured-chips"><span>✧ 6 CREATIVE TOOLS</span><span>◇ NO SIGN-UP</span><span>⚡ BUILT FOR CREATORS</span></div>
           <a href="/tools" className="tools-featured-button"><span>EXPLORE THE DIGITAL LAB</span><span className="tools-featured-button-arrow">↗</span></a>
           <p className="tools-featured-footnote">INSTANT ACCESS <span>•</span> BUILT TO CREATE <span>•</span> EXPLORE MORE</p>
         </div>
@@ -765,7 +766,7 @@ export default function App(){
       return
     }
 
-    if (!['/', '/tools'].includes(nextPath) && !/^\/tools\/(whatsapp|image|qr|color|password)$/.test(nextPath)) return
+    if (!['/', '/tools'].includes(nextPath) && !/^\/tools\/(whatsapp|image|qr|color|password|status)$/.test(nextPath)) return
     if (nextPath === path) return
     event.preventDefault()
     window.history.pushState({}, '', `${destination.pathname}${destination.search}`)

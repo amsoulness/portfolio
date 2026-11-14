@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Eye } from 'lucide-react'
 import './PageViewCounter.css'
 
-export type TrackedPage = 'portfolio' | 'tools' | 'whatsapp' | 'image' | 'qr' | 'color' | 'password'
+export type TrackedPage = 'portfolio' | 'tools' | 'whatsapp' | 'image' | 'qr' | 'color' | 'password' | 'status'
 
 const API_ORIGIN = (import.meta.env.VITE_WHATSAPP_API_URL || '').replace(/\/$/, '')
 
