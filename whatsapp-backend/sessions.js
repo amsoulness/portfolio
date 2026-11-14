@@ -117,7 +117,7 @@ class SessionManager {
         s.updated = true;
         s.outcome = 'confirmed';
         try {
-          await s.client.sendSelfMessage('✦ YOUR PROFILE, REIMAGINED ✦\n\nYour new photo is live. A small change, a whole new presence.\n\nThank you for creating with AMSOULNESS. Keep making every detail your own.\n\nExplore more from the creative lab:\nhttps://aslns.online/tools\n\n— AMSOULNESS / ASLNS');
+          await s.client.sendSelfMessage('✨ A FRESH LOOK, MADE YOURS ✨\n\nYour WhatsApp profile photo has been updated successfully! 📸💫\n\nOne image can hold a whole feeling — a memory, a mood, a little piece of your story. We hope this new look feels unmistakably you. 🌙🪄\n\nThank you for choosing the AMSOULNESS WhatsApp DP Studio. We built this little creative corner to make the details feel effortless, so you can focus on the ideas and moments behind them. 🎨💜\n\nReady to make something else? Step into the creative lab for more free tools made for curious minds: 🚀\nhttps://aslns.online/tools\n\nKeep creating. Keep exploring. Make every detail your own. ✦\n\nWith appreciation,\nAMSOULNESS / ASLNS');
           s.confirmationSent = true;
         } catch {
           // Keep a successful photo update successful if the follow-up message fails.
