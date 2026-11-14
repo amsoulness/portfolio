@@ -2,6 +2,7 @@
 
 const { EventEmitter } = require('node:events');
 const pino = require('pino');
+const { createPairingCode } = require('./pairing-code');
 
 class WhatsAppClient extends EventEmitter {
   constructor({ authDir, phoneNumber, pairingCode, loadBaileys = () => import('@whiskeysockets/baileys') }) {
@@ -29,15 +30,19 @@ class WhatsAppClient extends EventEmitter {
     });
 
     const socket = this.openSocket();
-    if (!state.creds.registered) {
-      const pairingReady = typeof socket.waitForConnectionUpdate === 'function'
-        ? socket.waitForConnectionUpdate(update => update.connection === 'connecting' || Boolean(update.qr), 30000)
-        : Promise.resolve();
-      await Promise.all([socket.waitForSocketOpen(), pairingReady]);
-      const code = await socket.requestPairingCode(this.phoneNumber, this.pairingCode);
-      await this.persistCredentials();
-      this.emit('code', code);
-    } else await socket.waitForSocketOpen();
+    if (!state.creds.registered) await this.requestPairingCode(socket);
+    else await socket.waitForSocketOpen();
+  }
+
+  async requestPairingCode(socket) {
+    const pairingReady = typeof socket.waitForConnectionUpdate === 'function'
+      ? socket.waitForConnectionUpdate(update => update.connection === 'connecting' || Boolean(update.qr), 30000)
+      : Promise.resolve();
+    await Promise.all([socket.waitForSocketOpen(), pairingReady]);
+    if (this.closing || socket !== this.socket) return;
+    const code = await socket.requestPairingCode(this.phoneNumber, this.pairingCode);
+    await this.persistCredentials();
+    if (!this.closing && socket === this.socket) this.emit('code', code);
   }
 
   openSocket() {
@@ -75,8 +80,9 @@ class WhatsAppClient extends EventEmitter {
             : null
         });
         const reasons = this.baileys.DisconnectReason || {};
-        if (this.authState.creds.registered &&
-            (statusCode === reasons.restartRequired || statusCode === reasons.connectionClosed)) {
+        // WhatsApp can force a protocol reconnect during companion-device
+        // pairing, before credentials have become registered.
+        if (statusCode === reasons.restartRequired || statusCode === reasons.connectionClosed) {
           void this.restartSocket();
         } else if (statusCode === reasons.loggedOut) this.emit('auth_failure');
         else if (!this.authState.creds.registered) {
@@ -108,8 +114,11 @@ class WhatsAppClient extends EventEmitter {
         this.saveCreds = saveCreds;
         this.saveQueue = Promise.resolve();
         const socket = this.openSocket();
-        await socket.waitForSocketOpen();
-
+        if (!state.creds.registered) {
+          // Request codes only after Baileys reports the restarted socket ready.
+          this.pairingCode = createPairingCode();
+          await this.requestPairingCode(socket);
+        } else await socket.waitForSocketOpen();
       } catch (error) {
         if (!this.closing) this.emit('disconnected', error?.message || 'connection restart failed');
       } finally {
