@@ -262,7 +262,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       .logo{font-size:30px;font-weight:900;letter-spacing:-2px;text-decoration:none}.nav-links{display:flex;gap:clamp(14px,3vw,36px)}.nav-links a{font-size:11px;letter-spacing:1.5px;font-weight:700;text-decoration:none;color:#b9b6c7}.nav-links a:hover{color:#67e8f9}
       .menu-toggle{display:none;background:#171120;color:white;border:1px solid #55446b;border-radius:10px;padding:10px 14px;cursor:pointer}
       .hero{min-height:max(630px,90svh);position:relative;display:flex;align-items:center;justify-content:center;text-align:center;padding:90px 6% 110px}
-      .hero-content{position:relative;z-index:2;max-width:1100px;width:100%}.eyebrow{color:#b9a1ff;font-size:clamp(10px,1.2vw,12px);font-weight:750;letter-spacing:3px;line-height:1.8}
+      .hero-content{position:relative;z-index:2;max-width:1100px;width:100%}.hero-topline{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}.hero-topline .eyebrow{margin:0}.eyebrow{color:#b9a1ff;font-size:clamp(10px,1.2vw,12px);font-weight:750;letter-spacing:3px;line-height:1.8}
       .hero h1{font-size:clamp(49px,10.2vw,145px);line-height:.99;letter-spacing:-.075em;font-weight:900;margin:30px 0;overflow-wrap:anywhere}
       .gradient{background:linear-gradient(100deg,#fff,#a78bfa,#22d3ee,#f472b6,#fff);background-size:280% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:gradient-flow 8s linear infinite}
       @keyframes gradient-flow{to{background-position:280% center}}
@@ -610,7 +610,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
         <div className="v9-hero-halo" aria-hidden="true"><div className="v9-hero-halo-inner"/>{orbitSparks.map((spark,i)=><span key={i} style={{transform:`rotate(${spark.angle}deg) translateY(-190px)`,animationDelay:`-${spark.delay}s`}}/>)}</div>
       </div>
       <motion.div className="hero-content" style={{y:heroY}}>
-        <motion.p className="eyebrow" initial={reduce?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8}}>✦ DEVELOPER × CREATIVE EDITOR</motion.p>
+        <div className="hero-topline"><motion.p className="eyebrow" initial={reduce?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8}}>✦ DEVELOPER × CREATIVE EDITOR</motion.p><PageViewCounter page="portfolio" className="aslns-view-counter--hero"/></div>
         <h1>{['Emmanuel','Cherian.'].map((word,i)=><div key={word} style={{overflow:'hidden',paddingBottom:9}}><motion.span className={i===1?'gradient':''} style={{display:'inline-block'}} initial={reduce?false:{y:'110%',opacity:0}} animate={{y:'0%',opacity:1}} transition={{duration:1.1,delay:.25+i*.25,ease:[.22,1,.36,1]}}>{word}</motion.span></div>)}</h1>
         <Reveal delay={.4}><p className="hero-description">I’m Emmanuel — a BCA student, aspiring software developer, and self-taught video editor. Through AMSOULNESS / ASLNS, I blend code, technology, and cinematic storytelling to turn ideas into experiences.</p></Reveal>
         <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE 5 CREATIVE TOOLS <span aria-hidden="true">↗</span></a></div>
@@ -692,7 +692,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
         <MagneticLink href={LINKEDIN} external><img className="contact-brand-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg" alt="" loading="lazy" onError={e=>{e.currentTarget.style.display="none"}}/> LINKEDIN <span aria-hidden="true">↗</span></MagneticLink>
       </div></Reveal>
     </section>
-    <footer className="footer"><PageViewCounter page="portfolio"/>© 2026 AMSOULNESS / ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
+    <footer className="footer">© 2026 AMSOULNESS / ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
   </main>
 }
 

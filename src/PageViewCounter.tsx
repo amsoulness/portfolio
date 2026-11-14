@@ -6,7 +6,7 @@ export type TrackedPage = 'portfolio' | 'tools' | 'whatsapp' | 'image' | 'qr' | 
 
 const API_ORIGIN = (import.meta.env.VITE_WHATSAPP_API_URL || '').replace(/\/$/, '')
 
-export default function PageViewCounter({ page }: { page: TrackedPage }) {
+export default function PageViewCounter({ page, className = '' }: { page: TrackedPage; className?: string }) {
   const [views, setViews] = useState<number | null>(null)
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function PageViewCounter({ page }: { page: TrackedPage }) {
     return () => { mounted = false; window.clearInterval(timer) }
   }, [page])
 
-  return <span className="aslns-view-counter" title="Aggregate page visits. No visitor identity is collected." aria-label={`${views === null ? 'Visit count unavailable' : `${views.toLocaleString()} page visits`}; no visitor identity is collected`}>
+  return <span className={`aslns-view-counter ${className}`.trim()} title="Aggregate page visits. No visitor identity is collected." aria-label={`${views === null ? 'Visit count unavailable' : `${views.toLocaleString()} page visits`}; no visitor identity is collected`}>
     <Eye size={14} strokeWidth={1.8} aria-hidden="true" />
     <span>{views === null ? 'VISITS · —' : `${views.toLocaleString()} PAGE VISITS`}</span>
   </span>
