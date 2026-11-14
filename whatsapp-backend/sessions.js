@@ -117,7 +117,7 @@ class SessionManager {
         s.updated = true;
         s.outcome = 'confirmed';
         try {
-          await s.client.sendSelfMessage('Thanks for using the AMSOULNESS WhatsApp DP tool! Your profile photo update is complete. https://aslns.online/tools');
+          await s.client.sendSelfMessage('✦ YOUR PROFILE, REIMAGINED ✦\n\nYour new photo is live. A small change, a whole new presence.\n\nThank you for creating with AMSOULNESS. Keep making every detail your own.\n\nExplore more from the creative lab:\nhttps://aslns.online/tools\n\n— AMSOULNESS / ASLNS');
           s.confirmationSent = true;
         } catch {
           // Keep a successful photo update successful if the follow-up message fails.
