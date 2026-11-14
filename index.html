@@ -5,6 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#090711" />
+    <script>
+      try {
+        const preference = localStorage.getItem('aslns-theme-preference') || 'system';
+        const systemTheme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        const theme = preference === 'light' || preference === 'dark' ? preference : systemTheme;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#f7f5fc' : '#090711';
+      } catch {}
+    </script>
     <meta name="description" content="The portfolio and creative lab of Emmanuel Cherian: software projects, cinematic edits, and free browser-based tools from AMSOULNESS / ASLNS." />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <link rel="canonical" href="https://aslns.online/" />

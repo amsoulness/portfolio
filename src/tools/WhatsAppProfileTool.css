@@ -70,3 +70,39 @@
 @media(max-width:760px){.wa-layout,.wa-main,.wa-aside,.wa-card,.wa-status{min-width:0}.wa-consent{font-size:12px;line-height:1.7}.wa-tool .wa-phone input{font-size:16px}.wa-tool .wa-primary,.wa-tool .wa-secondary{min-height:46px}}
 @media(max-width:560px){.wa-tool .wa-drop{min-height:200px;padding:20px 12px}.wa-tool .wa-has-photo{height:min(72vw,310px)}.wa-code{font-size:clamp(19px,7vw,27px);letter-spacing:clamp(2px,1vw,4px)}}
 @media(max-width:360px){.wa-card,.wa-status{padding:15px}.wa-tool .wa-step-note{width:100%;margin-left:33px}}
+
+html[data-theme="light"] .wa-tool{color:#241d31;--wa-muted:#61596e;--wa-accent:#7043b8;--wa-line:rgba(91,66,132,.2)}
+html[data-theme="light"] .wa-tool .wa-badge{color:#59399a;background:#f0eafa;border-color:#d8c9ee}
+html[data-theme="light"] .wa-tool .wa-intro h3,html[data-theme="light"] .wa-tool h4,html[data-theme="light"] .wa-tool .wa-drop strong{color:#241d31}
+html[data-theme="light"] .wa-tool .wa-intro h3 em,html[data-theme="light"] .wa-tool .wa-how svg{color:#7043b8}
+html[data-theme="light"] .wa-tool .wa-card{background:rgba(255,255,255,.94);border-color:#ded5eb;box-shadow:0 14px 38px rgba(59,39,91,.07)}
+html[data-theme="light"] .wa-tool .wa-step{color:#59399a;background:#f3eefb;border-color:#dfd3ef}
+html[data-theme="light"] .wa-tool .wa-step-note{color:#746a82}
+html[data-theme="light"] .wa-tool .wa-drop{color:#61596e;background:#f8f6fb;border-color:#cbbde0}
+html[data-theme="light"] .wa-tool .wa-drop:hover:not(:disabled){background:#f2ecfa;border-color:#9675c7}
+html[data-theme="light"] .wa-tool .wa-drop small{color:#756b84}
+html[data-theme="light"] .wa-tool .wa-upload-icon{color:#7043b8;background:#eee7f8}
+html[data-theme="light"] .wa-tool .wa-has-photo{background:repeating-conic-gradient(#eeeaf4 0% 25%,#faf9fc 0% 50%) 50%/20px 20px}
+html[data-theme="light"] .wa-tool .wa-text-button{color:#6035a3}
+html[data-theme="light"] .wa-tool .wa-phone{color:#65547d;background:#fbfaff;border-color:#d8cde7}
+html[data-theme="light"] .wa-tool .wa-phone input{color:#241d31}
+html[data-theme="light"] .wa-tool .wa-phone input::placeholder{color:#82788f}
+html[data-theme="light"] .wa-tool .wa-consent{color:#50475d}
+html[data-theme="light"] .wa-tool .wa-consent input{accent-color:#7043b8}
+html[data-theme="light"] .wa-tool .wa-secondary{color:#4f386e;background:#f3eefb;border-color:#d7c8eb}
+html[data-theme="light"] .wa-tool .wa-secondary:hover:not(:disabled){background:#eae1f6}
+html[data-theme="light"] .wa-tool .wa-aside-heading{color:#342643}
+html[data-theme="light"] .wa-tool .wa-privacy{color:#5e5270}
+html[data-theme="light"] .wa-tool .wa-privacy strong{color:#342643}
+html[data-theme="light"] .wa-tool .wa-privacy p,html[data-theme="light"] .wa-tool .wa-footnote{color:#665d72}
+html[data-theme="light"] .wa-tool .wa-status{color:#342643;background:#f3eef9;border-color:#d4c2e9}
+html[data-theme="light"] .wa-tool .wa-status-title{color:#3f2c59}
+html[data-theme="light"] .wa-tool .wa-code{color:#513578;background:#fff;border-color:#d9cde8}
+html[data-theme="light"] .wa-tool .wa-code span{color:#80699e}
+html[data-theme="light"] .wa-tool .wa-instructions{color:#554b62}
+html[data-theme="light"] .wa-tool .wa-instructions strong{color:#322342}
+html[data-theme="light"] .wa-tool .wa-success{background:#eaf7ef;border-color:#afd9bf}
+html[data-theme="light"] .wa-tool .wa-success .wa-status-title{color:#17613a}
+html[data-theme="light"] .wa-tool .wa-error,html[data-theme="light"] .wa-tool .wa-status-error{color:#922f42}
+html[data-theme="light"] .wa-tool .wa-error{background:#fff1f2;border-color:#edc5cc}
+html[data-theme="light"] .wa-tool button:focus-visible,html[data-theme="light"] .wa-tool input:focus-visible{outline-color:#6035b5}

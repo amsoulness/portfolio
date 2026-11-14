@@ -51,24 +51,9 @@ function snapshot(data: Snapshot): Snapshot {
 }
 
 async function prepareUpload(file: File) {
-  const bitmap = await createImageBitmap(file)
-  try {
-    const scale = Math.min(1, 640 / Math.max(bitmap.width, bitmap.height))
-    const width = Math.max(1, Math.round(bitmap.width * scale))
-    const height = Math.max(1, Math.round(bitmap.height * scale))
-    const canvas = document.createElement('canvas')
-    canvas.width = width
-    canvas.height = height
-    const context = canvas.getContext('2d')
-    if (!context) throw new Error('This browser could not prepare the photo for upload.')
-    context.fillStyle = '#fff'
-    context.fillRect(0, 0, width, height)
-    context.drawImage(bitmap, 0, 0, width, height)
-    const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92))
-    if (!blob) throw new Error('This browser could not prepare the photo for upload.')
-    const name = file.name.replace(/\.[^.]+$/, '') + '.jpg'
-    return new File([blob], name, { type: 'image/jpeg', lastModified: file.lastModified })
-  } finally { bitmap.close() }
+  // Send original bytes so the server performs a single orientation-aware,
+  // high-quality conversion instead of a lossy browser encode followed by Sharp.
+  return file
 }
 
 const labels: Record<string, string> = {

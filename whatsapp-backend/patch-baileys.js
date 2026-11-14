@@ -49,4 +49,28 @@ replaceOnce(
   `platform: platformNode?.attrs.name,\n        registered: true\n    };`
 );
 
-console.info('Applied WhatsApp pairing protocol compatibility fixes');
+// Baileys 6.7.24 re-encodes profile photos at JPEG quality 50 after our
+// orientation-aware high-quality conversion. Raise that final encode quality;
+// keep this patch scoped to generateProfilePicture so media thumbnails retain
+// their upstream settings.
+{
+  const relativePath = path.join('Utils', 'messages-media.js');
+  const file = path.join(root, relativePath);
+  const source = fs.readFileSync(file, 'utf8');
+  const marker = 'generateProfilePicture = async';
+  const start = source.indexOf(marker);
+  const end = source.indexOf('\n};', start);
+  if (start < 0 || end < 0 || source.indexOf(marker, start + marker.length) >= 0) {
+    throw new Error(`Could not locate the unique profile-photo encoder in ${relativePath}`);
+  }
+  const block = source.slice(start, end);
+  const sharpEncoder = /\.jpeg\(\{\s*quality:\s*50\s*\}\)/g;
+  const matches = block.match(sharpEncoder) || [];
+  if (matches.length !== 1) {
+    throw new Error(`Expected one Baileys profile-photo JPEG quality setting; found ${matches.length}`);
+  }
+  const patched = block.replace(sharpEncoder, ".jpeg({ quality: 92, chromaSubsampling: '4:4:4' })");
+  fs.writeFileSync(file, source.slice(0, start) + patched + source.slice(end));
+}
+
+console.info('Applied WhatsApp pairing protocol and profile-photo quality fixes');

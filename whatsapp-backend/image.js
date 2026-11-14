@@ -12,8 +12,10 @@ async function prepareImage(bytes) {
   if (!['jpeg', 'png', 'webp'].includes(metadata.format) || (metadata.pages || 1) > 1) {
     throw new Error('Choose a still JPG, PNG, or WebP image.');
   }
-  // WhatsApp accepts JPEG payloads. Preserve the full oriented image; never crop,
-  // stretch, or add a square canvas. Transparency is flattened onto white.
+  // Preserve the full oriented image; never crop, stretch, or add a square canvas.
+  // Keep WhatsApp's conservative 640px profile-image bounds, but avoid a lossy
+  // browser-side encode and use 4:4:4 chroma so fine edges retain more detail.
+  // Transparent source pixels continue to be flattened onto white.
   const image = () => sharp(bytes, { limitInputPixels: MAX_PIXELS }).rotate().flatten({ background: '#fff' });
   const { data, info } = await image()
     .resize({ width: 640, height: 640, fit: 'inside', withoutEnlargement: true })
