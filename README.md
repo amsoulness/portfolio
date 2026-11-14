@@ -12,6 +12,12 @@ Software projects, cinematic edits, and browser tools — because apparently one
 
 ![Portfolio banner](https://capsule-render.vercel.app/api?type=waving&height=150&color=0:171222,50:392466,100:8a63d2&section=header&text=IDEAS%20INTO%20EXPERIENCES&fontSize=25&fontColor=ffffff&animation=fadeIn&fontAlignY=38)
 
+<img src="https://komarev.com/ghpvc/?username=amsoulness&style=for-the-badge&color=6f4aa8&label=CURIOUS+VISITORS" alt="Profile views" />
+
+<br/>
+
+<img src="https://readme-typing-svg.demolab.com?font=Space+Mono&size=14&pause=1200&color=9B82C7&center=true&vCenter=true&width=600&lines=Loading+ideas...;Compiling+creativity...;Deploying+one+more+pixel...;Please+hold%2C+the+CSS+is+thinking." alt="Animated build status messages" />
+
 </div>
 
 ## The short version
@@ -30,6 +36,23 @@ Hey, I’m **Emmanuel Cherian** — a BCA student, aspiring software developer, 
 | **Password Studio** | Generate secure passwords. |
 
 The browser tools are designed to do their work in your browser where practical. The WhatsApp updater uses a backend for its temporary linked-device flow; keep its pairing code private, like a password with a tiny expiry timer.
+
+<details>
+<summary><strong>🪄 Peek behind the curtain</strong> (the code is less magical than the animations)</summary>
+
+The site is a React single-page app. Vite handles local development and production builds, while Motion powers interface animation. The Tools Lab has its own hub and dedicated pages for each tool.
+
+```text
+Idea → component → styling → “one last tweak” → deploy ✨
+```
+
+</details>
+
+<div align="center">
+
+<img src="https://readme-typing-svg.demolab.com?font=Space+Grotesk&weight=600&size=18&pause=1500&color=E2D5FF&center=true&vCenter=true&width=680&lines=Currently+building+small+things+with+big+energy.;The+roadmap+is+mostly+me+and+a+very+long+to-do+list.;Bug+reports+welcome.+Haunted+CSS+is+also+welcome+to+leave." alt="Animated notes from the workshop" />
+
+</div>
 
 ## The tech behind the pixels
 
@@ -71,9 +94,20 @@ I’m interested in software development, cybersecurity, AI, and cinematic editi
 
 🌐 [Portfolio](https://aslns.online/) · 🧰 [Tools Lab](https://aslns.online/tools) · 💻 [GitHub](https://github.com/amsoulness)
 
+### Tiny workshop rules
+
+- Make it useful.
+- Make it feel good to use.
+- If it glows, make sure it still works on a phone.
+- If it breaks, call it a feature briefly, then fix it.
+
 <div align="center">
 
 <sub>Made with curiosity, caffeine, and an unreasonable number of CSS variables. ✦</sub>
+
+<br/><br/>
+
+<img src="https://readme-typing-svg.demolab.com?font=Space+Mono&size=13&pause=1800&color=C9A7FF&center=true&vCenter=true&width=520&lines=Thanks+for+stopping+by.;Now+go+make+something+cool.;(And+please+drink+some+water.)" alt="Animated sign-off" />
 
 ![Footer wave](https://capsule-render.vercel.app/api?type=waving&height=100&color=0:8a63d2,50:392466,100:171222&section=footer)
 
