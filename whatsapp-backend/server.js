@@ -81,12 +81,6 @@ function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'], 
     if (req.body?.consent !== 'true') return res.status(400).json({ error: 'Confirm that this is your account and you want to publish this status.' });
     if (!/^[1-9][0-9]{7,14}$/.test(req.body?.phoneNumber || '')) return res.status(400).json({ error: 'Enter your WhatsApp number with country code.' });
     if (!req.file) return res.status(400).json({ error: 'Choose an image or video first.' });
-    let recipients;
-    try { recipients = JSON.parse(req.body.recipients || '[]'); } catch { recipients = null; }
-    if (!Array.isArray(recipients) || recipients.length < 1 || recipients.length > 100 || recipients.some(number => typeof number !== 'string' || !/^[1-9][0-9]{7,14}$/.test(number))) {
-      return res.status(400).json({ error: 'Enter 1–100 recipient WhatsApp numbers with country codes, separated by commas.' });
-    }
-    const uniqueRecipients = [...new Set(recipients)];
     const mime = req.file.mimetype;
     const kind = mime.startsWith('image/') ? 'image' : mime === 'video/mp4' ? 'video' : null;
     if (!kind || (kind === 'image' && !['image/jpeg', 'image/png', 'image/webp'].includes(mime))) return res.status(400).json({ error: 'Use a JPG, PNG, or WebP image, or an MP4 video.' });
@@ -98,7 +92,7 @@ function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'], 
         media = { ...media, buffer: image.buffer, mimetype: 'image/jpeg' };
       } catch { return res.status(400).json({ error: 'Choose a valid still JPG, PNG, or WebP image up to 20 MB.' }); }
     }
-    try { return res.status(201).json(manager.create(media, req.body.phoneNumber, { operation: 'status', recipients: uniqueRecipients })); }
+    try { return res.status(201).json(manager.create(media, req.body.phoneNumber, { operation: 'status' })); }
     catch { return res.status(409).json({ error: 'Another WhatsApp update is in progress. Try again shortly.' }); }
   });
   app.use('/api/whatsapp/sessions/:id', (req, res, next) => {
@@ -129,8 +123,8 @@ async function start() {
   await fs.mkdir(owner, { mode: 0o700 });
   await fs.writeFile(path.join(owner, 'pid'), String(process.pid), { mode: 0o600 });
   const manager = new SessionManager({
-    createClient(id, phoneNumber) {
-      return new WhatsAppClient({ authDir: path.join(owner, id, 'auth'), phoneNumber });
+    createClient(id, phoneNumber, options = {}) {
+      return new WhatsAppClient({ authDir: path.join(owner, id, 'auth'), phoneNumber, operation: options.operation });
     },
     sendPicture,
     sendStatus: (client, media, recipients) => client.sendStatus(media, recipients),

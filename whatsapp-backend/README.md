@@ -2,7 +2,7 @@
 
 This service supports the profile-photo updater and the WhatsApp Status Studio on the portfolio's `/tools` pages. Both tools connect only the account entered by its owner, require consent, and log out the temporary linked device after the operation. Session status can be restored in the same browser tab using `sessionStorage`.
 
-Status Studio publishes an image or MP4 video to the linked account's status. It requires the user to enter the intended recipient numbers; it does not fetch contacts or apply WhatsApp's saved audience settings. The service does not request message or history access. Status publishing uses an unofficial WhatsApp Web client and may stop working if WhatsApp changes its protocol.
+Status Studio publishes an image or MP4 video to the linked account's status for the account's saved **My contacts** audience. With explicit consent, it processes initial-bootstrap or recent sync data to receive saved-contact app-state entries, uses only named phone-number JIDs as recipients, and verifies that WhatsApp Status privacy is set to `contacts`. It fails closed for other privacy modes; it never changes those settings. Baileys may process recent-history payloads in memory as part of this sync. The service does not store chats or messages, and uses only saved contacts for delivery. The saved-contact phone-number list is cleared on success, error, cancellation, and cleanup. Status publishing uses an unofficial WhatsApp Web client and may stop working if WhatsApp changes its protocol.
 
 ## Local development
 
@@ -44,7 +44,7 @@ The Baileys profile API receives the prepared JPEG together with its aspect dime
 
 ## Session lifecycle and privacy
 
-- The initial consent authorizes the selected operation and automatic logout. Entering the pairing code on the account owner's phone completes linking. History sync and message processing are disabled.
+- The initial consent authorizes the selected operation and automatic logout. Entering the pairing code on the account owner's phone completes linking. Profile updates do not sync history. Status Studio accepts only Baileys' `INITIAL_BOOTSTRAP` or `RECENT` sync types so it can receive saved-contact app-state changes; it never requests `FULL` history, attaches chat/message listeners, or persists message content. The saved-contact recipient list is held in memory only and cleared after use or cleanup.
 - Session credentials are random, scoped to one session, sent in `X-Session-Token`, and stored only in the frontend tab's sessionStorage. They are not placed in URLs or logs. Completed server records are bounded and retained for status recovery for up to 30 minutes of inactivity before the next session request prunes them.
 - One workflow owns the WhatsApp socket at a time. Uploads are checked by decoded content, not their declared MIME type. Original uploads are not written to disk. Image buffers are released after the update or completed cancellation.
 - Browser credentials live in a private runtime directory. For authenticated sessions, confirmed logout and browser shutdown precede local deletion. Success requires both a positive update acknowledgement and completed device removal/cleanup.

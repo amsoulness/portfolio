@@ -6,14 +6,22 @@ const pino = require('pino');
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 class WhatsAppClient extends EventEmitter {
-  constructor({ authDir, phoneNumber, loadBaileys = () => import('@whiskeysockets/baileys') }) {
+  constructor({ authDir, phoneNumber, operation = 'profile', loadBaileys = () => import('@whiskeysockets/baileys') }) {
     super();
-    Object.assign(this, { authDir, phoneNumber, loadBaileys });
+    Object.assign(this, { authDir, phoneNumber, operation, loadBaileys });
     this.closing = false;
     this.connected = false;
     this.saveQueue = Promise.resolve();
     this.restartTask = null;
     this.restartAttempts = 0;
+    this.savedContacts = new Set();
+    this.statusSyncPromise = operation === 'status' ? new Promise((resolve, reject) => {
+      this.resolveStatusSync = resolve;
+      this.rejectStatusSync = reject;
+    }) : null;
+    // A user may cancel before the audience wait starts; mark rejection as
+    // handled while preserving the original promise for the later await.
+    this.statusSyncPromise?.catch(() => {});
   }
 
   async initialize() {
@@ -78,7 +86,13 @@ class WhatsAppClient extends EventEmitter {
       browser: this.baileys.Browsers.macOS('Chrome'),
       printQRInTerminal: false,
       syncFullHistory: false,
-      shouldSyncHistoryMessage: () => false,
+      // A recent sync lets Baileys process WhatsApp's saved-contact app-state
+      // actions. Never request full history; message events remain unhandled.
+      shouldSyncHistoryMessage: message => {
+        if (this.operation !== 'status') return false;
+        const types = this.baileys.proto?.HistorySync?.HistorySyncType;
+        return message?.syncType === types?.RECENT || message?.syncType === types?.INITIAL_BOOTSTRAP;
+      },
       shouldIgnoreJid: () => true,
       markOnlineOnConnect: false,
       fireInitQueries: false,
@@ -86,12 +100,46 @@ class WhatsAppClient extends EventEmitter {
     });
     this.socket = socket;
 
+    if (this.operation === 'status') {
+      socket.ev.on('contacts.upsert', contacts => {
+        for (const contact of contacts || []) {
+          // contacts.upsert from contactAction represents saved address-book
+          // contacts. Require the saved name and a phone-number JID; never
+          // infer recipients from chats, message senders, groups, or LIDs.
+          if (typeof contact?.name !== 'string' || !contact.name.trim()) continue;
+          const jid = String(contact.jid || contact.id || '').replace(/:\d+(?=@)/, '');
+          const match = jid.match(/^([1-9][0-9]{7,14})@s\.whatsapp\.net$/);
+          if (match) this.savedContacts.add(match[1]);
+        }
+      });
+      socket.ev.on('messaging-history.set', event => {
+        const types = this.baileys.proto?.HistorySync?.HistorySyncType;
+        if (event?.syncType !== types?.RECENT && event?.syncType !== types?.INITIAL_BOOTSTRAP) return;
+        // Baileys flushes contacts.upsert immediately after this event. Defer
+        // resolution one turn so the saved-contact actions are collected.
+        setImmediate(() => {
+          if (this.closing || !this.resolveStatusSync) return;
+          const own = String(this.socket?.user?.id || '').replace(/:\d+(?=@)/, '').match(/^([1-9][0-9]{7,14})@s\.whatsapp\.net$/)?.[1];
+          if (own) this.savedContacts.delete(own);
+          this.resolveStatusSync([...this.savedContacts]);
+          this.clearStatusSync();
+        });
+      });
+    }
+
     socket.ev.on('creds.update', () => {
       void this.persistCredentials().catch(() => this.emit('auth_failure'));
     });
     socket.ev.on('connection.update', update => {
       if (update.connection === 'open') {
         this.connected = true;
+        if (this.operation === 'status' && this.authState.creds.registered && this.resolveStatusSync && !this.statusSyncTimer) {
+          this.statusSyncTimer = setTimeout(() => {
+            this.rejectStatusSync?.(this.statusError('WhatsApp did not finish syncing saved contacts. Check the connection and try again.'));
+            this.clearStatusSync();
+          }, 45000);
+          this.statusSyncTimer.unref?.();
+        }
         if (this.authState.creds.registered) this.restartAttempts = 0;
         this.emit('authenticated');
         this.emit('ready');
@@ -181,13 +229,43 @@ class WhatsAppClient extends EventEmitter {
     await this.socket.sendMessage(jid, { text });
   }
 
-  async sendStatus(media, recipients) {
+  statusError(message) {
+    const error = new Error(message);
+    error.publicMessage = message;
+    return error;
+  }
+
+  clearStatusSync() {
+    clearTimeout(this.statusSyncTimer);
+    this.resolveStatusSync = null;
+    this.rejectStatusSync = null;
+  }
+
+  cancelStatusAudienceWait() {
+    this.rejectStatusSync?.(this.statusError('Contact sync cancelled.'));
+    this.clearStatusSync();
+    this.savedContacts.clear();
+  }
+
+  async getStatusAudience() {
+    if (this.operation !== 'status' || !this.statusSyncPromise) throw this.statusError('Status audience is unavailable.');
+    let contacts;
+    try { contacts = await this.statusSyncPromise; }
+    catch (error) { throw error?.publicMessage ? error : this.statusError('Could not sync saved WhatsApp contacts. Try again.'); }
+    this.savedContacts.clear();
+    if (!contacts.length) throw this.statusError('No saved WhatsApp contacts were available for this status.');
+    const privacy = await this.socket.fetchPrivacySettings(true).catch(() => null);
+    if (privacy?.status !== 'contacts') throw this.statusError('Set WhatsApp Status privacy to “My contacts” and try again. The tool does not change your privacy settings.');
+    return contacts.map(number => `${number}@s.whatsapp.net`);
+  }
+
+  async sendStatus(media, audience) {
     if (!this.connected || !this.socket?.user) throw new Error('WhatsApp account identity is unavailable');
     const content = media.kind === 'video'
       ? { video: media.buffer, mimetype: media.mimetype, caption: media.caption || undefined }
       : { image: media.buffer, mimetype: media.mimetype, caption: media.caption || undefined };
     await this.socket.sendMessage('status@broadcast', content, {
-      statusJidList: recipients.map(number => `${number}@s.whatsapp.net`),
+      statusJidList: audience,
       broadcast: true
     });
     return true;
@@ -202,6 +280,8 @@ class WhatsAppClient extends EventEmitter {
   async destroy() {
     this.closing = true;
     this.connected = false;
+    this.cancelStatusAudienceWait();
+    this.savedContacts.clear();
     if (this.socket) this.socket.end();
   }
 }

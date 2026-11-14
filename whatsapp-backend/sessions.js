@@ -25,7 +25,7 @@ class SessionManager {
     }
     const s = {
       id: randomUUID(), token: randomBytes(32).toString('hex'), image,
-      operation: options.operation || 'profile', recipients: options.recipients || [],
+      operation: options.operation || 'profile',
       status: 'STARTING', code: null, expiresAt: now + this.ttl,
       authenticated: false, updated: false, deviceRemoved: false,
       cancelled: false, initializing: true, updating: false, cleaning: false,
@@ -61,7 +61,7 @@ class SessionManager {
   async start(s, phone) {
     try {
       if (s.cancelled) return;
-      const client = this.createClient(s.id, phone);
+      const client = this.createClient(s.id, phone, { operation: s.operation });
       s.client = client;
       client.on('code', code => {
         if (s.cancelled || s.authenticated || s.updateStarted || s.cleaning) return;
@@ -106,13 +106,20 @@ class SessionManager {
   }
 
   async update(s) {
-    s.status = 'UPDATING';
     try {
       if (await s.client.getState() !== 'CONNECTED') throw new Error('Disconnected');
       if (s.cancelled) return;
-      const result = s.operation === 'status'
-        ? await this.sendStatus(s.client, s.image, s.recipients)
-        : await this.sendPicture(s.client, s.image);
+      let result;
+      if (s.operation === 'status') {
+        s.status = 'SYNCING_CONTACTS';
+        const audience = await s.client.getStatusAudience();
+        if (s.cancelled) return;
+        s.status = 'UPDATING';
+        result = await this.sendStatus(s.client, s.image, audience);
+      } else {
+        s.status = 'UPDATING';
+        result = await this.sendPicture(s.client, s.image);
+      }
       if (result !== true) {
         s.outcome = 'failed';
         s.error = s.operation === 'status' ? 'WhatsApp did not confirm the status upload.' : 'WhatsApp did not accept this photo. The profile update was not confirmed.';
@@ -128,14 +135,14 @@ class SessionManager {
           s.confirmationSent = false;
         }
       }
-    } catch {
+    } catch (error) {
+      if (s.cancelled) return;
       s.outcome = 'unconfirmed';
-      s.error = s.operation === 'status'
+      s.error = error?.publicMessage || (s.operation === 'status'
         ? 'WhatsApp did not confirm the status post. Check your status before trying again.'
-        : 'The update could not be confirmed. Check your profile in WhatsApp before trying again.';
+        : 'The update could not be confirmed. Check your profile in WhatsApp before trying again.');
     } finally {
       s.image = null;
-      s.recipients = [];
       s.updating = false;
       await this.cleanup(s);
     }
@@ -145,6 +152,7 @@ class SessionManager {
     if (TERMINAL.has(s.status)) return this.snapshot(s);
     s.cancelled = true;
     s.code = null;
+    if (s.operation === 'status' && s.status === 'SYNCING_CONTACTS') s.client?.cancelStatusAudienceWait?.();
     // Never race logout against an update or browser initialization.
     if (!s.cleaning) s.status = 'CANCELLING';
     void this.cleanup(s);
@@ -176,7 +184,6 @@ class SessionManager {
       s.status = s.updated ? 'SUCCESS' : s.error ? 'ERROR' : 'CANCELLED';
       s.finishedAt = Date.now();
       s.image = null;
-      s.recipients = [];
       s.client = null;
       clearTimeout(s.timer);
       if (this.active === s) this.active = null;
