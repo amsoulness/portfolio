@@ -201,14 +201,10 @@ function MagneticLink({href,children,primary=false,external=false}:{href:string,
   return <motion.a ref={ref} href={href} target={external?'_blank':undefined} rel={external?'noopener noreferrer':undefined} className={`btn ${primary?'primary':'outline'}`} animate={reduce?{}:offset} transition={{type:'spring',stiffness:180,damping:15}} whileHover={reduce?{}:{scale:1.045}} whileTap={{scale:.94}} onPointerMove={e=>{if(reduce||e.pointerType!=='mouse')return;const r=ref.current?.getBoundingClientRect();if(r)setOffset({x:(e.clientX-r.left-r.width/2)*.12,y:(e.clientY-r.top-r.height/2)*.12})}} onPointerLeave={()=>setOffset({x:0,y:0})}>{children}</motion.a>
 }
 function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,themePreference:ThemePreference,onToggleTheme:()=>void}){
-  const [pointer,setPointer]=useState({x:50,y:40})
+  const ambientRef=useRef<HTMLDivElement|null>(null)
   const [menuOpen,setMenuOpen]=useState(false)
   const navigationRef=useRef<HTMLElement|null>(null)
   const [effectsOn,setEffectsOn]=useState(true)
-  const pointerFrame=useRef<number|null>(null)
-  useEffect(()=>{
-    return ()=>{if(pointerFrame.current!==null)cancelAnimationFrame(pointerFrame.current)}
-  },[])
   const [showTop,setShowTop]=useState(false)
   useEffect(()=>{
     const onScroll=()=>setShowTop(window.scrollY>650)
@@ -249,9 +245,9 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
     rippleTimers.current.push(setTimeout(()=>setRipples(prev=>prev.filter(r=>r.id!==id)),750))
     if(target instanceof HTMLElement){target.classList.remove('touch-flash');void target.offsetWidth;target.classList.add('touch-flash');rippleTimers.current.push(setTimeout(()=>target.classList.remove('touch-flash'),500))}
   }} onPointerMove={e=>{
-    if(!fullEffects||e.pointerType!=='mouse'||pointerFrame.current!==null)return
-    const x=e.clientX,y=e.clientY
-    pointerFrame.current=requestAnimationFrame(()=>{setPointer({x:x/window.innerWidth*100,y:y/window.innerHeight*100});pointerFrame.current=null})
+    if(!fullEffects||e.pointerType!=='mouse')return
+    ambientRef.current?.style.setProperty('--pointer-x',`${e.clientX/window.innerWidth*100}%`)
+    ambientRef.current?.style.setProperty('--pointer-y',`${e.clientY/window.innerHeight*100}%`)
   }}>
     <style>{`
       :root{font-family:Inter,system-ui,Arial,sans-serif;color-scheme:dark}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#050509}a{color:inherit}::selection{background:#8b5cf6;color:white}
@@ -259,7 +255,8 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       .progress{position:fixed;inset:0 0 auto;height:3px;z-index:100;transform-origin:left;background:linear-gradient(90deg,#8b5cf6,#22d3ee,#f472b6)}
       .ambient,.grid-bg,.particles{position:fixed;inset:0;pointer-events:none;z-index:0}
       .grid-bg{background-image:linear-gradient(#a78bfa0d 1px,transparent 1px),linear-gradient(90deg,#a78bfa0d 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(black,transparent)}
-      .particle{position:absolute;border-radius:50%;background:#d8b4fe;box-shadow:0 0 12px #a78bfa}
+      .particle{position:absolute;border-radius:50%;background:#d8b4fe;box-shadow:0 0 12px #a78bfa;animation:portfolio-particle-drift var(--particle-duration,5s) ease-in-out var(--particle-delay,0s) infinite}
+      @keyframes portfolio-particle-drift{0%,100%{opacity:.15;transform:translate3d(0,0,0) scale(1)}50%{opacity:.9;transform:translate3d(0,-35px,0) scale(1.7)}}
       .nav{position:relative;z-index:20;max-width:1700px;margin:auto;padding:26px clamp(20px,6vw,100px);display:flex;align-items:center;justify-content:space-between;gap:20px}
       .logo{font-size:30px;font-weight:900;letter-spacing:-2px;text-decoration:none}.nav-links{display:flex;gap:clamp(14px,3vw,36px)}.nav-links a{font-size:11px;letter-spacing:1.5px;font-weight:700;text-decoration:none;color:#b9b6c7}.nav-links a:hover{color:#67e8f9}
       .menu-toggle{display:none;background:#171120;color:white;border:1px solid #55446b;border-radius:10px;padding:10px 14px;cursor:pointer}
@@ -289,9 +286,10 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       .timeline{display:grid;gap:24px}.timeline-card{border-left:2px solid #8b5cf6;padding:15px 0 20px 30px}.timeline-card h3{font-size:clamp(22px,3vw,32px);margin:12px 0}.timeline-card p{color:#aaa6b9;line-height:1.8;max-width:730px}
       .contact{text-align:center;padding-bottom:145px}.contact h2{font-size:clamp(45px,9vw,115px)}.footer{position:relative;z-index:2;text-align:center;border-top:1px solid #24202d;padding:34px 7%;font-size:13px;color:#8b8599}
       @media(max-width:900px){.skill-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.about-layout{grid-template-columns:1fr}.visual-field{width:min(95vw,680px)}}
-      @media(max-width:600px){.nav{padding:20px 6%}.menu-toggle{display:block}.nav-links{position:absolute;right:6%;top:72px;display:none;flex-direction:column;align-items:stretch;min-width:170px;padding:20px;background:#14101f;border:1px solid #443657;border-radius:15px}.nav-links.open{display:flex}.hero{min-height:670px;padding:75px 6% 110px}.hero h1{font-size:clamp(46px,12vw,72px)}.visual-field{width:100vw}.section{padding:75px 7%}.skill{min-height:115px;padding:18px}.eyebrow{letter-spacing:2px}.about-panel{padding:24px}}
+      @media(max-width:600px){.nav{display:grid;grid-template-columns:minmax(0,1fr) 46px 68px;justify-content:stretch;gap:9px;padding:16px 6%;min-height:76px}.logo{grid-column:1;grid-row:1;min-width:0}.menu-toggle{grid-column:2;grid-row:1;display:grid;place-items:center;width:46px;height:46px;padding:0;font-size:20px}.portfolio-theme-toggle{grid-column:3;grid-row:1;width:68px;min-width:68px;min-height:46px;padding:6px 7px;border-radius:14px;gap:5px}.portfolio-theme-toggle .site-theme-toggle-label{display:inline;font-size:9px;letter-spacing:.6px}.portfolio-theme-toggle .site-theme-toggle-icon svg{width:15px;height:15px}.nav-links{position:absolute;right:6%;top:68px;display:none;flex-direction:column;align-items:stretch;min-width:190px;padding:16px;background:#14101f;border:1px solid #443657;border-radius:15px}.nav-links.open{display:flex}.hero{min-height:670px;padding:75px 6% 110px}.hero h1{font-size:clamp(46px,12vw,72px)}.visual-field{width:100vw}.section{padding:75px 7%}.skill{min-height:115px;padding:18px}.eyebrow{letter-spacing:2px}.about-panel{padding:24px}}
 
-      .streak{position:absolute;top:-30vh;height:130px;width:1px;transform:rotate(23deg);background:linear-gradient(transparent,#b6a6ffb3,transparent);filter:drop-shadow(0 0 7px #a78bfa)}
+      .streak{position:absolute;top:-30vh;height:130px;width:1px;background:linear-gradient(transparent,#b6a6ffb3,transparent);filter:drop-shadow(0 0 7px #a78bfa);animation:portfolio-streak-fall var(--streak-duration,6s) linear var(--streak-delay,0s) infinite}
+      @keyframes portfolio-streak-fall{0%{opacity:0;transform:translate3d(0,-15vh,0) rotate(23deg)}15%,85%{opacity:.75}100%{opacity:0;transform:translate3d(0,115vh,0) rotate(23deg)}}
       .tech-icon{width:52px;height:52px;display:grid;place-items:center;border-radius:15px;background:#ffffff10;border:1px solid #ffffff19;flex-shrink:0;font-size:27px;color:#c4b5fd}.tech-icon img{width:34px;height:34px;object-fit:contain}.skill{flex-direction:column;align-items:flex-start;justify-content:space-between;gap:22px}.editing-tool-heading{display:flex;align-items:center;gap:15px;margin-bottom:14px}.editing-tool-heading strong{display:block}.editing-tool-heading span{display:block;color:#aaa6b9;font-size:12px;margin-top:4px}
       .project-art{position:relative;height:190px;margin:-6px 0 25px;border-radius:20px;overflow:hidden;background:radial-gradient(circle at 65% 50%,#5b21b64d,transparent 55%),#0b1020;border:1px solid #a78bfa33;isolation:isolate}.art-grid{position:absolute;inset:0;background-image:linear-gradient(#a78bfa13 1px,transparent 1px),linear-gradient(90deg,#a78bfa13 1px,transparent 1px);background-size:25px 25px}.art-glow{position:absolute;inset:10% 20%;background:#7c3aed50;filter:blur(55px);border-radius:50%;animation:art-pulse 5s ease-in-out infinite alternate}.art-chat{position:absolute;padding:12px 25px;background:#1e2443;border:1px solid #7dd3fc88;color:#67e8f9;border-radius:18px;font-size:23px;box-shadow:0 10px 30px #0008}.chat-a{top:22%;left:15%;animation:art-float 4s ease-in-out infinite}.chat-b{top:46%;right:15%;animation:art-float 4.5s ease-in-out infinite reverse}.art-terminal{position:absolute;bottom:15px;left:20px;color:#e0d4ff;font-weight:800;letter-spacing:2px}.art-terminal span{color:#67e8f9;font-size:11px;margin-left:12px}.art-frame{position:absolute;inset:20px 28%;border:2px solid #f0abfc88;border-radius:10px;transform:rotate(-10deg);background:linear-gradient(135deg,#c084fc55,#22d3ee22);animation:art-float 5s ease-in-out infinite}.frame-b{transform:rotate(9deg);inset:30px 23%;border-color:#67e8f988;animation-delay:-2s}.art-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:50px;color:#fff;text-shadow:0 0 30px #a78bfa}.art-caption{position:absolute;bottom:13px;left:18px;font-size:10px;letter-spacing:2px;color:#d8b4fe}.art-phone{position:absolute;width:80px;height:145px;top:18px;left:calc(50% - 40px);border:5px solid #b6a4ff;border-radius:17px;box-shadow:0 0 35px #8b5cf688;transform:rotate(-8deg);animation:art-float 5s ease-in-out infinite}.art-phone-screen{height:100%;display:grid;place-items:center;font-size:36px;background:linear-gradient(145deg,#7c3aed77,#22d3ee44);color:#fff}.art-diamond{position:absolute;top:35px;left:calc(50% - 55px);font-size:110px;color:#d8b4fe;text-shadow:0 0 35px #a78bfa;animation:art-float 5s ease-in-out infinite}@keyframes art-float{50%{translate:0 -12px}}@keyframes art-pulse{to{opacity:.35;scale:1.2}}.creative-project{min-height:450px}
       @media(max-width:600px){.project-art{height:155px}.tech-icon{width:44px;height:44px}.tech-icon img{width:29px;height:29px}}
@@ -403,7 +401,8 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       .v8-aurora span:nth-child(3){bottom:-20%;left:32%;background:#ab3b8b;animation-delay:-13s;animation-duration:32s}
       @keyframes v8-float{0%{transform:translate3d(-4%,-6%,0) scale(.85)}100%{transform:translate3d(12%,12%,0) scale(1.18)}}
       .v8-comets{z-index:1}
-      .v8-comet{position:absolute;top:0;width:2px;height:85px;border-radius:99px;background:linear-gradient(to bottom,transparent,#b9a4ff66,#e2dcff);filter:drop-shadow(0 0 8px #a78bfa);transform:rotate(16deg);opacity:0}
+      .v8-comet{position:absolute;top:0;width:2px;height:85px;border-radius:99px;background:linear-gradient(to bottom,transparent,#b9a4ff66,#e2dcff);filter:drop-shadow(0 0 8px #a78bfa);animation:portfolio-comet-fall var(--comet-duration,8s) linear var(--comet-delay,0s) infinite}
+      @keyframes portfolio-comet-fall{0%{transform:translate3d(0,-15vh,0) rotate(16deg);opacity:0}50%{opacity:.75}100%{transform:translate3d(0,115vh,0) rotate(16deg);opacity:0}}
       .v8-ripples{z-index:90}
       .v8-ripple{position:absolute;width:18px;height:18px;margin:-9px 0 0 -9px;border:2px solid #c7b0ff;border-radius:50%;box-shadow:0 0 20px #9a6bff88,inset 0 0 20px #9a6bff55;animation:v8-ripple .7s ease-out forwards}
       @keyframes v8-ripple{from{opacity:.9;transform:scale(.4)}to{opacity:0;transform:scale(7)}}
@@ -457,7 +456,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       /* V10 adaptive particle environment: 100 extra dust motes + 8 light ribbons on desktop */
       .v10-dust,.v10-ribbons,.v10-vignette{position:fixed;inset:0;pointer-events:none;overflow:hidden}
       .v10-dust{z-index:1}
-      .v10-dust i{position:absolute;border-radius:50%;background:#d3c5ff;opacity:.25;box-shadow:0 0 7px #9b80ef;animation:v10-dust-drift 7s ease-in-out infinite alternate;will-change:transform,opacity}
+      .v10-dust i{position:absolute;border-radius:50%;background:#d3c5ff;opacity:.25;box-shadow:0 0 7px #9b80ef;animation:v10-dust-drift 7s ease-in-out infinite alternate}
       @keyframes v10-dust-drift{from{opacity:.12;transform:translate3d(-5px,10px,0) scale(.8)}to{opacity:.75;transform:translate3d(10px,-15px,0) scale(1.4)}}
       .v10-ribbons{z-index:1}
       .v10-ribbons span{position:absolute;top:-35vh;width:1px;height:25vh;transform:rotate(24deg);background:linear-gradient(180deg,transparent,#a78bfa12,#c4b5fd66,transparent);filter:drop-shadow(0 0 9px #a78bfa);animation:v10-ribbon-fall linear infinite}
@@ -567,10 +566,10 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       .inspiration-credit:hover{border-color:#d6bcff;color:#fff}
     `}</style>
     <motion.div className="progress" style={{scaleX:progress}}/>
-    <div className="ambient" style={{background:`radial-gradient(circle at ${pointer.x}% ${pointer.y}%,rgba(124,58,237,.24),transparent 37%),radial-gradient(circle at 85% 65%,rgba(34,211,238,.09),transparent 36%)`}}/>
+    <div ref={ambientRef} className="ambient" style={{background:'radial-gradient(circle at var(--pointer-x,50%) var(--pointer-y,40%),rgba(124,58,237,.24),transparent 37%),radial-gradient(circle at 85% 65%,rgba(34,211,238,.09),transparent 36%)'}}/>
     <div className="grid-bg"/>
     <div className="v8-aurora" aria-hidden="true"><span/><span/><span/></div>
-    <div className="v8-comets" aria-hidden="true">{comets.map((c,i)=><motion.span key={i} className="v8-comet" style={{left:`${c.left}%`}} animate={!animateEffects?{}:{y:['-15vh','115vh'],opacity:[0,.75,0]}} transition={{duration:c.duration,delay:c.delay,repeat:Infinity,ease:'linear'}}/>)}</div>
+    <div className="v8-comets" aria-hidden="true">{comets.map((c,i)=><span key={i} className="v8-comet" style={{left:`${c.left}%`,'--comet-duration':`${c.duration}s`,'--comet-delay':`-${c.delay}s`} as React.CSSProperties}/>)}</div>
     <div className="v8-ripples" aria-hidden="true">{ripples.map(r=><span key={r.id} className="v8-ripple" style={{left:r.x,top:r.y}}/>)}</div>
     <div className="v9-nebula" aria-hidden="true"><span/><span/><span/><span/></div>
     <div className="v9-stars" aria-hidden="true">{extraStars.map((star,i)=><i key={i} style={{left:`${star.x}%`,top:`${star.y}%`,width:star.size,height:star.size,animationDelay:`-${star.delay}s`}}/>)}</div>
@@ -578,7 +577,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
     <div className="v10-dust" aria-hidden="true">{dust.map((d,i)=><i key={i} style={{left:`${d.x}%`,top:`${d.y}%`,width:d.size,height:d.size,animationDelay:`-${d.delay}s`}}/>)}</div>
     <div className="v10-ribbons" aria-hidden="true">{ribbons.map((r,i)=><span key={i} style={{left:`${r.x}%`,animationDelay:`-${r.delay}s`,animationDuration:`${r.duration}s`}}/>)}</div>
     <div className="v10-vignette" aria-hidden="true"/>
-    <div className="particles" aria-hidden="true">{streaks.map((streak,i)=><motion.span key={`streak-${i}`} className="streak" style={{left:`${streak.left}%`}} animate={!animateEffects?{}:{y:[-200,1500],opacity:[0,.75,0]}} transition={{duration:streak.duration,delay:streak.delay,repeat:Infinity,ease:"linear"}}/>)}{particles.map((p,i)=><motion.span key={i} className="particle" style={{left:`${p.x}%`,top:`${p.y}%`,width:p.size,height:p.size}} animate={!animateEffects?{}:{y:[0,-35,0],opacity:[.15,.9,.15],scale:[1,1.7,1]}} transition={{duration:p.duration,delay:p.delay,repeat:Infinity,ease:'easeInOut'}}/>)}</div>
+    <div className="particles" aria-hidden="true">{streaks.map((streak,i)=><span key={`streak-${i}`} className="streak" style={{left:`${streak.left}%`,'--streak-duration':`${streak.duration}s`,'--streak-delay':`-${streak.delay}s`} as React.CSSProperties}/>)}{particles.map((p,i)=><span key={i} className="particle" style={{left:`${p.x}%`,top:`${p.y}%`,width:p.size,height:p.size,'--particle-duration':`${p.duration}s`,'--particle-delay':`-${p.delay}s`} as React.CSSProperties}/>)}</div>
     <div className="v9-float-controls" aria-label="Portfolio quick actions">
       <a href="#projects" className="v9-float-btn" aria-label="Jump to projects" title="Explore projects">✦<span>Work</span></a>
       <a href="#inspiration" className="v9-float-btn" aria-label="Jump to my personal favorites" title="My favorite picks">✧<span>My Picks</span></a>
