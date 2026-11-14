@@ -12,7 +12,7 @@ Software projects, cinematic edits, and browser tools — because apparently one
 
 ![Portfolio banner](https://capsule-render.vercel.app/api?type=waving&height=150&color=0:171222,50:392466,100:8a63d2&section=header&text=IDEAS%20INTO%20EXPERIENCES&fontSize=25&fontColor=ffffff&animation=fadeIn&fontAlignY=38)
 
-<img src="https://komarev.com/ghpvc/?username=amsoulness&style=for-the-badge&color=6f4aa8&label=CURIOUS+VISITORS" alt="Profile views" />
+<img src="https://komarev.com/ghpvc/?username=amsoulness&style=for-the-badge&color=6f4aa8&label=README+VISITS" alt="Profile views" />
 
 <br/>
 
