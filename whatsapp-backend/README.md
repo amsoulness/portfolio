@@ -18,6 +18,10 @@ The service defaults to disabled live mode. To connect real WhatsApp accounts, s
 
 Run `npm run dev` in the repository root. Vite proxies `/api` to `127.0.0.1:3001`; `ASLNS_API_TARGET` can override that development target. `GET /api/whatsapp/health` reports `{ available, version: 2 }`.
 
+## Page visit totals
+
+The portfolio and each tool route use `/api/analytics/views` for public aggregate page-visit totals. The backend stores only counts for fixed page IDs in `ASLNS_RUNTIME_DIR/page-views.json`; it does not persist IP addresses, account identifiers, or browser fingerprints. Keep this file on the same persistent volume used for service restart recovery.
+
 ## Production deployment
 
 The frontend can remain on Vercel. The WhatsApp service needs a continuously running Node host; it cannot run as a short-lived Vercel function. No production backend address is included in this repository.

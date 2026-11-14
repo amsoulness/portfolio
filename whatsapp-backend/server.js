@@ -11,11 +11,13 @@ const { SessionManager } = require('./sessions');
 const { prepareImage, MAX_BYTES } = require('./image');
 const { sendPicture } = require('./transport');
 const { WhatsAppClient } = require('./client');
+const { PAGE_IDS, PageViewStore } = require('./page-views');
 
-function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'] }) {
+function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'], viewStore = new PageViewStore(path.join(__dirname, '.runtime', 'page-views.json')) }) {
   const app = express();
   app.disable('x-powered-by');
   app.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
+  app.use(express.json({ limit: '2kb' }));
   app.use((req, res, next) => {
     if (req.headers.origin && !origins.includes(req.headers.origin)) {
       return res.status(403).json({ error: 'This website is not allowed to use the WhatsApp service.' });
@@ -23,6 +25,26 @@ function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'] }
     next();
   });
   app.use(cors({ origin: origins, allowedHeaders: ['Content-Type', 'X-Session-Token'] }));
+  const viewLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 120, standardHeaders: 'draft-8', legacyHeaders: false,
+    keyGenerator: req => {
+      const railwayIp = req.get('X-Real-IP')?.trim();
+      const clientIp = railwayIp && isIP(railwayIp) ? railwayIp : req.ip;
+      return ipKeyGenerator(clientIp);
+    },
+    validate: { xForwardedForHeader: false },
+    message: { error: 'Visit counter requests are temporarily limited. Please try again later.' } });
+  app.get('/api/analytics/views', viewLimiter, async (req, res) => {
+    const page = req.query.page;
+    if (!PAGE_IDS.includes(page)) return res.status(400).json({ error: 'Unknown page.' });
+    try { return res.json(await viewStore.snapshot(page)); }
+    catch { return res.status(503).json({ error: 'Visit totals are temporarily unavailable.' }); }
+  });
+  app.post('/api/analytics/views', viewLimiter, async (req, res) => {
+    const page = req.body?.page;
+    if (!PAGE_IDS.includes(page)) return res.status(400).json({ error: 'Unknown page.' });
+    try { return res.status(201).json(await viewStore.record(page)); }
+    catch { return res.status(503).json({ error: 'Visit totals are temporarily unavailable.' }); }
+  });
   app.get('/api/whatsapp/health', (_req, res) => res.json({ available: liveEnabled, version: 2 }));
   const limiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 8, standardHeaders: 'draft-8', legacyHeaders: false,
     // Railway documents X-Real-IP as the client address and overwrites the
@@ -71,6 +93,7 @@ function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'] }
 async function start() {
   const liveEnabled = process.env.ASLNS_ENABLE_LIVE_WHATSAPP === 'true';
   const runtime = path.resolve(process.env.ASLNS_RUNTIME_DIR || path.join(__dirname, '.runtime'));
+  const viewStore = new PageViewStore(path.join(runtime, 'page-views.json'));
   const owner = path.join(runtime, 'owner');
   await fs.mkdir(runtime, { recursive: true, mode: 0o700 });
   // Exclusive ownership also blocks unsafe automatic recovery after a crash.
@@ -84,7 +107,7 @@ async function start() {
     removeData: id => fs.rm(path.join(owner, id), { recursive: true, force: true, maxRetries: 3 })
   });
   const origins = (process.env.ASLNS_ALLOWED_ORIGINS || 'http://localhost:5173').split(',').map(v => v.trim()).filter(Boolean);
-  const app = createApp({ manager, liveEnabled, origins });
+  const app = createApp({ manager, liveEnabled, origins, viewStore });
   const server = app.listen(Number(process.env.PORT || 3001), process.env.HOST || '127.0.0.1', () => {
     console.log('WhatsApp profile service listening on port', server.address().port);
   });

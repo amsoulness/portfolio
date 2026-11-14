@@ -4,6 +4,7 @@ import { lazy, Suspense, useCallback, useEffect, useRef, useState, useTransition
 import type { ReactNode, CSSProperties, MouseEvent as ReactMouseEvent } from 'react'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
 import ThemeToggle, { type SiteTheme, type ThemePreference } from './ThemeToggle'
+import PageViewCounter from './PageViewCounter'
 
 const normalizeSitePath = (path: string) => path.replace(/\/$/, '') || '/'
 const navigationLabelFor = (path: string) => {
@@ -691,7 +692,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
         <MagneticLink href={LINKEDIN} external><img className="contact-brand-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg" alt="" loading="lazy" onError={e=>{e.currentTarget.style.display="none"}}/> LINKEDIN <span aria-hidden="true">↗</span></MagneticLink>
       </div></Reveal>
     </section>
-    <footer className="footer">© 2026 AMSOULNESS / ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
+    <footer className="footer"><PageViewCounter page="portfolio"/>© 2026 AMSOULNESS / ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
   </main>
 }
 
