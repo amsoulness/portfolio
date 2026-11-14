@@ -227,11 +227,11 @@ type ToolId='image'|'qr'|'color'|'password'|'whatsapp'|'status'
 
 const cards:{id:ToolId;icon:string;name:string;desc:string;tag:string}[]=[
  {id:'whatsapp',icon:'◎',name:'WhatsApp Profile Updater',desc:'Update your profile photo with a full-image preview and temporary linked-device flow.',tag:'CREATOR'},
+ {id:'status',icon:'◉',name:'WhatsApp Status Studio',desc:'Publish a photo or video status from your own connected WhatsApp account.',tag:'CREATOR'},
  {id:'image',icon:'◩',name:'Image Studio',desc:'Compress, convert, resize and export images privately in your browser.',tag:'CREATOR'},
  {id:'qr',icon:'▦',name:'QR Code Studio',desc:'Design polished QR codes for links, text, email and Wi-Fi.',tag:'UTILITY'},
  {id:'color',icon:'◉',name:'Color Lab',desc:'Build accessible palettes, gradients and export-ready color systems.',tag:'DESIGN'},
- {id:'password',icon:'✳',name:'Password Studio',desc:'Create secure passwords and memorable passphrases locally.',tag:'SECURITY'},
- {id:'status',icon:'◉',name:'WhatsApp Status Studio',desc:'Publish an image or MP4 video from your connected WhatsApp account to selected status viewers.',tag:'CREATOR'}]
+ {id:'password',icon:'✳',name:'Password Studio',desc:'Create secure passwords and memorable passphrases locally.',tag:'SECURITY'}]
 
 const cap=(s:string)=>s.charAt(0).toUpperCase()+s.slice(1)
 
