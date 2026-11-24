@@ -1,3 +1,4 @@
+import DoomsdayCountdown from './DoomsdayCountdown'
 const ToolsHub = lazy(() => import('./ToolsHub'))
 const SessionPage = lazy(() => import('./SessionPage'))
 const DeployPage = lazy(() => import('./DeployPage'))
@@ -690,7 +691,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
       <Heading index="04" kicker="EXPERIENCE & EDUCATION" title="Learning by doing."/>
       <div className="timeline">{experiences.map((item,i)=><Reveal key={item.title} delay={i*.12}><motion.div className="timeline-card" whileHover={reduce?{}:{x:12}}><span className="eyebrow">{item.date}</span><h3>{item.title}</h3><strong style={{color:'#a78bfa'}}>{item.company}</strong><p>{item.description}</p></motion.div></Reveal>)}</div>
     </section>
-    <section className="section" id="inspiration"><Heading index="05" kicker="MY PICKS" title="A few things I’m into."/><p className="inspiration-intro">Films, shows, music, books and tools I keep coming back to. Pick a card if you want to find out more.</p><div className="inspiration-grid">{inspirations.map((item,i)=><InspirationCard key={item.title} item={item} index={i}/>)}</div></section>
+    <section className="section" id="inspiration"><Heading index="05" kicker="MY PICKS" title="A few things I’m into."/><p className="inspiration-intro">Films, shows, music, books and tools I keep coming back to. Pick a card if you want to find out more.</p><DoomsdayCountdown/><div className="inspiration-grid">{inspirations.map((item,i)=><InspirationCard key={item.title} item={item} index={i}/>)}</div></section>
     <section id="contact" className="section contact">
       <Reveal><span className="eyebrow"><span className="rich-section-number">06</span><span className="rich-section-divider"> / </span>LET’S CONNECT</span><h2>Let's create<br/><span className="gradient">something bold.</span></h2>
       <p style={{color:'#b4b1c4',fontSize:19,lineHeight:1.8,marginBottom:40}}>Open to conversations about software development, creative editing, collaboration and new opportunities. The fastest way to reach me is WhatsApp.</p>
