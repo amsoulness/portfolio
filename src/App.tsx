@@ -203,11 +203,10 @@ function MagneticLink({href,children,primary=false,external=false}:{href:string,
   const reduce=useReducedMotion()
   return <motion.a ref={ref} href={href} target={external?'_blank':undefined} rel={external?'noopener noreferrer':undefined} className={`btn ${primary?'primary':'outline'}`} animate={reduce?{}:offset} transition={{type:'spring',stiffness:180,damping:15}} whileHover={reduce?{}:{scale:1.045}} whileTap={{scale:.94}} onPointerMove={e=>{if(reduce||e.pointerType!=='mouse')return;const r=ref.current?.getBoundingClientRect();if(r)setOffset({x:(e.clientX-r.left-r.width/2)*.12,y:(e.clientY-r.top-r.height/2)*.12})}} onPointerLeave={()=>setOffset({x:0,y:0})}>{children}</motion.a>
 }
-function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,themePreference:ThemePreference,onToggleTheme:()=>void}){
+function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:SiteTheme,themePreference:ThemePreference,onToggleTheme:()=>void,effectsOn:boolean}){
   const ambientRef=useRef<HTMLDivElement|null>(null)
   const [menuOpen,setMenuOpen]=useState(false)
   const navigationRef=useRef<HTMLElement|null>(null)
-  const [effectsOn,setEffectsOn]=useState(true)
   const [showTop,setShowTop]=useState(false)
   useEffect(()=>{
     const onScroll=()=>setShowTop(window.scrollY>650)
@@ -584,7 +583,6 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
     <div className="v9-float-controls" aria-label="Portfolio quick actions">
       <a href="#projects" className="v9-float-btn" aria-label="Jump to projects" title="Explore projects">✦<span>Work</span></a>
       <a href="#inspiration" className="v9-float-btn" aria-label="Jump to my personal favorites" title="My favorite picks">✧<span>My Picks</span></a>
-      <button type="button" className="v9-float-btn" onClick={()=>setEffectsOn(v=>!v)} aria-pressed={effectsOn} title={effectsOn?'Pause decorative effects':'Enable decorative effects'}>{effectsOn?'◉':'◎'}<span>{effectsOn?'FX on':'FX off'}</span></button>
       {showTop&&<button type="button" className="v9-float-btn v9-top" onClick={()=>window.scrollTo({top:0,behavior:reduce?'auto':'smooth'})} aria-label="Back to top" title="Back to top">↑<span>Top</span></button>}
     </div>
     <a className="site-skip-link" href="#home">Skip to main content</a>
@@ -701,6 +699,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
 
 export default function App(){
   const [path, setPath] = useState(() => normalizeSitePath(window.location.pathname))
+  const [effectsOn, setEffectsOn] = useState(() => window.localStorage.getItem('aslns-smooth-mode') !== 'off')
   const [themePreference, setThemePreference] = useState<ThemePreference>(() => {
     const saved = window.localStorage.getItem('aslns-theme-preference')
     return saved === 'light' || saved === 'dark' || saved === 'system' ? saved : 'system'
@@ -727,6 +726,8 @@ export default function App(){
     document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f7f5fc' : '#090711')
     window.localStorage.setItem('aslns-theme-preference', themePreference)
   }, [theme, themePreference])
+
+  useEffect(() => { window.localStorage.setItem('aslns-smooth-mode', effectsOn ? 'on' : 'off') }, [effectsOn])
 
   const toggleTheme = useCallback(() => setThemePreference(current => current === 'system' ? 'light' : current === 'light' ? 'dark' : 'system'), [])
 
@@ -780,10 +781,12 @@ export default function App(){
   const isNavigating = initialLoading || isPending || navigationPulse
 
   return <div className="site-navigation-shell" onClick={handleNavigation}>
+    <style>{`.mobile-smooth-toggle{display:none}@media(max-width:650px){.mobile-smooth-toggle{position:fixed;z-index:999;display:inline-flex;align-items:center;justify-content:center;gap:9px;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);min-height:44px;padding:0 17px;border:1px solid #b99affaa;border-radius:999px;background:#171126ed;color:#f7efff;box-shadow:0 7px 24px #0009,0 0 20px #8b5cf633;backdrop-filter:blur(14px);font:750 10px/1 Inter,system-ui,sans-serif;letter-spacing:1.15px;white-space:nowrap;cursor:pointer}.mobile-smooth-toggle[aria-pressed=true]{border-color:#c9b0ff;background:linear-gradient(110deg,#392252ed,#171126ed)}.mobile-smooth-toggle:focus-visible{outline:2px solid #e6d5ff;outline-offset:3px}}`}</style>
     {isNavigating
       ? <ToolsLoading message={navigationLabel}/>
       : path === '/tools' || path.startsWith('/tools/')
-        ? <Suspense fallback={<ToolsLoading message={navigationLabel}/> }><ToolsHub pathname={path} theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme}/></Suspense>
-        : <PortfolioApp theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme}/>}
+        ? <Suspense fallback={<ToolsLoading message={navigationLabel}/> }><ToolsHub pathname={path} theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme} smoothMode={effectsOn}/></Suspense>
+        : <PortfolioApp theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme} effectsOn={effectsOn}/>}
+    <button type="button" className="mobile-smooth-toggle" onClick={()=>setEffectsOn(v=>!v)} aria-pressed={effectsOn} aria-label={`Smooth mode ${effectsOn?'on':'off'}`} title="Change smooth mode for the whole website"><span aria-hidden="true">{effectsOn?'✦':'◌'}</span>SMOOTH MODE {effectsOn?'ON':'OFF'}</button>
   </div>
 }
