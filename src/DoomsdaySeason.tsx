@@ -3,6 +3,7 @@ import { DOOMSDAY_END, isDoomsdaySeason } from './doomsday-season.mjs'
 import './DoomsdaySeason.css'
 const SeasonContext=createContext(false)
 export function DoomsdayOnly({children}:{children:ReactNode}){return useContext(SeasonContext)?children:null}
+export function NormalOnly({children}:{children:ReactNode}){return useContext(SeasonContext)?null:children}
 export default function DoomsdaySeason({children}:{children:ReactNode}){
  const [active,setActive]=useState(()=>isDoomsdaySeason())
  useEffect(()=>{
