@@ -1,3 +1,4 @@
+import { DoomsdayChapter } from './DoomsdaySeason'
 import ConnectionGraphic from './ConnectionGraphic'
 import useSessionMotion from './useSessionMotion'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -130,7 +131,7 @@ export default function SessionPage({ theme, themePreference, onToggleTheme }: P
       <a href="/" className="as-session-brand"><span className="as-session-monogram">A<span>·</span></span><span>AMSOULNESS<small>ASLNS / TOOL LAB</small></span></a>
       <nav aria-label="Session navigation"><a href="/">Portfolio</a><a href="/session/plugins">Plugins</a><a href="/session/deploy">Deploy</a><a href="https://github.com/amsoulness/amsoulness-md" target="_blank" rel="noreferrer">GitHub</a><ThemeToggle theme={theme} preference={themePreference} onToggle={onToggleTheme}/></nav>
     </header>
-    <main className="as-session-main">
+    <main className="as-session-main"><DoomsdayChapter number="01" title="Establish the connection." detail="WHATSAPP SESSION / LINK YOUR DEVICE"/>
       <div className="as-session-heading"><span className="as-session-eyebrow"><Link2 size={15}/> WHATSAPP SESSION</span><h1>Your bot.<br/><span>Your connection.</span></h1><p>Link WhatsApp to Amsoulness in a few simple steps.<br className="as-session-desktop"/> Scan a QR or use your phone number. Then copy your session and deploy your bot.</p></div>
       <ConnectionGraphic/><div className="as-session-layout as-session-pairing-only">
         <section id="connect" className="as-pair-panel" aria-labelledby="pair-heading">
