@@ -1,5 +1,6 @@
 const ToolsHub = lazy(() => import('./ToolsHub'))
 const SessionPage = lazy(() => import('./SessionPage'))
+const DeployPage = lazy(() => import('./DeployPage'))
 const PluginsPage = lazy(() => import('./PluginsPage'))
 const RenderDeploy = lazy(() => import('./RenderDeploy'))
 import ToolsLoading from './ToolsLoading'
@@ -17,6 +18,7 @@ const navigationLabelFor = (path: string) => {
     '/session': 'Opening WhatsApp Session',
     '/session/deploy/render': 'Opening Render Deployer',
     '/session/plugins': 'Opening Plugins',
+    '/session/deploy': 'Opening Deployment Hub',
     '/tools/whatsapp': 'Opening WhatsApp Profile Updater',
     '/tools/image': 'Opening Image Studio',
     '/tools/qr': 'Opening QR Code Studio',
@@ -776,7 +778,7 @@ export default function App(){
       return
     }
 
-    if (!['/', '/tools', '/session', '/session/plugins', '/session/deploy/render'].includes(nextPath) && !/^\/tools\/(whatsapp|image|qr|color|password|status)$/.test(nextPath)) return
+    if (!['/', '/tools', '/session', '/session/deploy', '/session/plugins', '/session/deploy/render'].includes(nextPath) && !/^\/tools\/(whatsapp|image|qr|color|password|status)$/.test(nextPath)) return
     if (nextPath === path) return
     event.preventDefault()
     window.history.pushState({}, '', `${destination.pathname}${destination.search}`)
@@ -791,6 +793,8 @@ export default function App(){
     <style>{`.mobile-smooth-toggle{display:none}@media(max-width:650px){.mobile-smooth-toggle{position:fixed;z-index:999;display:inline-flex;align-items:center;justify-content:center;gap:9px;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);min-height:44px;padding:0 17px;border:1px solid #b99affaa;border-radius:999px;background:#171126ed;color:#f7efff;box-shadow:0 7px 24px #0009,0 0 20px #8b5cf633;backdrop-filter:blur(14px);font:750 10px/1 Inter,system-ui,sans-serif;letter-spacing:1.15px;white-space:nowrap;cursor:pointer}.mobile-smooth-toggle[aria-pressed=true]{border-color:#c9b0ff;background:linear-gradient(110deg,#392252ed,#171126ed)}.mobile-smooth-toggle:focus-visible{outline:2px solid #e6d5ff;outline-offset:3px}}`}</style>
     {isNavigating
       ? <ToolsLoading message={navigationLabel}/>
+      : path === '/session/deploy'
+        ? <Suspense fallback={<ToolsLoading message={navigationLabel}/>}><DeployPage theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme}/></Suspense>
       : path === '/session/plugins'
         ? <Suspense fallback={<ToolsLoading message={navigationLabel}/>}><PluginsPage theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme}/></Suspense>
       : path === '/session/deploy/render'
