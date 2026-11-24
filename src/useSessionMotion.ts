@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import './SessionMotion.css'
+import './SessionTypography.css'
 
 export default function useSessionMotion() {
   useEffect(() => {
