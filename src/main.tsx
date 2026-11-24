@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import './responsive.css'
 import './theme-motion.css'
+import './RichTypography.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

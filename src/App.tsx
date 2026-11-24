@@ -203,7 +203,7 @@ function Reveal({children,delay=0}:{children:ReactNode,delay?:number}){
   return <motion.div initial={reduce?false:{opacity:0,y:42,filter:'blur(5px)'}} whileInView={{opacity:1,y:0,filter:'blur(0px)'}} viewport={{once:true,amount:.12}} transition={{duration:.75,delay}}>{children}</motion.div>
 }
 function Heading({index,kicker,title}:{index:string,kicker:string,title:string}){
-  return <Reveal><div className="section-heading"><span className="eyebrow">{index} / {kicker}</span><h2>{title}</h2><div className="rule"/></div></Reveal>
+  return <Reveal><div className="section-heading"><span className="eyebrow"><span className="rich-section-number">{index}</span><span className="rich-section-divider"> / </span>{kicker}</span><h2>{title}</h2><div className="rule"/></div></Reveal>
 }
 function MagneticLink({href,children,primary=false,external=false}:{href:string,children:ReactNode,primary?:boolean,external?:boolean}){
   const ref=useRef<HTMLAnchorElement>(null)
@@ -692,7 +692,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
     </section>
     <section className="section" id="inspiration"><Heading index="05" kicker="MY PICKS" title="A few things I’m into."/><p className="inspiration-intro">Films, shows, music, books and tools I keep coming back to. Pick a card if you want to find out more.</p><div className="inspiration-grid">{inspirations.map((item,i)=><InspirationCard key={item.title} item={item} index={i}/>)}</div></section>
     <section id="contact" className="section contact">
-      <Reveal><span className="eyebrow">06 / LET’S CONNECT</span><h2>Let's create<br/><span className="gradient">something bold.</span></h2>
+      <Reveal><span className="eyebrow"><span className="rich-section-number">06</span><span className="rich-section-divider"> / </span>LET’S CONNECT</span><h2>Let's create<br/><span className="gradient">something bold.</span></h2>
       <p style={{color:'#b4b1c4',fontSize:19,lineHeight:1.8,marginBottom:40}}>Open to conversations about software development, creative editing, collaboration and new opportunities. The fastest way to reach me is WhatsApp.</p>
       <div className="actions contact-actions-v27">
         <MagneticLink href={`https://wa.me/${WHATSAPP_NUMBER}`} primary external><img className="contact-brand-icon" src="https://cdn.simpleicons.org/whatsapp/FFFFFF" alt="" loading="lazy"/> MESSAGE ON WHATSAPP <span aria-hidden="true">↗</span></MagneticLink>
