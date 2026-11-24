@@ -22,7 +22,7 @@ Software projects, cinematic edits, and browser tools — because apparently one
 
 ## The short version
 
-Hey, I’m **Emmanuel Cherian** — a BCA student, aspiring software developer, and self-taught video editor. This is my corner of the internet for building things, learning loudly, and occasionally making a button glow because it looked lonely.
+Hey, I’m **Emmanuel Cherian** — a BCA student, aspiring software developer, and self-taught video editor. This is my corner of the internet for building things, learning loudly, and occasionally making a button glow because it looked lonely..
 
 ## What’s in the lab?
 
