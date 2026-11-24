@@ -203,7 +203,7 @@ function Reveal({children,delay=0}:{children:ReactNode,delay?:number}){
   return <motion.div initial={reduce?false:{opacity:0,y:42,filter:'blur(5px)'}} whileInView={{opacity:1,y:0,filter:'blur(0px)'}} viewport={{once:true,amount:.12}} transition={{duration:.75,delay}}>{children}</motion.div>
 }
 function Heading({index,kicker,title}:{index:string,kicker:string,title:string}){
-  return <Reveal><div className="section-heading"><span className="eyebrow"><span className="rich-section-number">{index}</span><span className="rich-section-divider"> / </span>{kicker}</span><h2>{title}</h2><div className="rule"/></div></Reveal>
+  return <Reveal><div className="section-heading"><span className="eyebrow"><span className="rich-section-number">{index}</span><span className="rich-section-divider"> / </span>{kicker}</span><h2>{title.slice(0, title.lastIndexOf(' ') + 1)}<span className="creative-type-accent">{title.slice(title.lastIndexOf(' ') + 1)}</span></h2><div className="rule"/></div></Reveal>
 }
 function MagneticLink({href,children,primary=false,external=false}:{href:string,children:ReactNode,primary?:boolean,external?:boolean}){
   const ref=useRef<HTMLAnchorElement>(null)
