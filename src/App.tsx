@@ -1,3 +1,4 @@
+import { DoomsdayOnly } from './DoomsdaySeason'
 import DoomsdayCountdown from './DoomsdayCountdown'
 const ToolsHub = lazy(() => import('./ToolsHub'))
 const SessionPage = lazy(() => import('./SessionPage'))
@@ -627,7 +628,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
       </motion.div>
       <motion.div className="scroll-cue" animate={reduce?{}:{y:[0,10,0]}} transition={{duration:2,repeat:Infinity}}>SCROLL TO EXPLORE ↓</motion.div>
     </section>
-    <DoomsdayCountdown/>
+    <DoomsdayOnly><DoomsdayCountdown/></DoomsdayOnly>
     <section className="tools-featured-section" id="featured-tools" aria-labelledby="tools-featured-title">
       <div className="tools-featured-topline"><span><i/> AMSOULNESS / DIGITAL LAB</span><span>FEATURED EXPERIENCE — 001</span></div>
       <div className="tools-featured-layout">
