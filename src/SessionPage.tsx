@@ -6,8 +6,8 @@ import ThemeToggle, { type SiteTheme, type ThemePreference } from './ThemeToggle
 import { getCountries, getCountryCallingCode, parsePhoneNumberFromString, type CountryCode } from 'libphonenumber-js/min'
 import './SessionPage.css'
 import './DeploymentHub.css'
+import './PluginsPage.css'
 import DeploymentHub from './DeploymentHub'
-import PluginCatalog from './PluginCatalog'
 
 const API = 'https://aslns-pairing-production.up.railway.app'
 const countryNames = new Intl.DisplayNames(['en'], { type: 'region' })
@@ -56,6 +56,7 @@ export default function SessionPage({ theme, themePreference, onToggleTheme }: P
     if (id) void fetch(`${API}/api/session`, { method: 'DELETE', headers: { Authorization: `Bearer ${id}` }, keepalive: true }).catch(() => {})
   }, [])
   useEffect(() => {
+    if (window.location.hash === '#plugins') window.location.replace('/session/plugins')
     const oldTitle = document.title
     document.title = 'WhatsApp Session · Amsoulness / ASLNS'
     return () => { document.title = oldTitle; release() }
@@ -127,7 +128,7 @@ export default function SessionPage({ theme, themePreference, onToggleTheme }: P
     <div className="as-session-glow" aria-hidden="true"/>
     <header className="as-session-nav">
       <a href="/" className="as-session-brand"><span className="as-session-monogram">A<span>·</span></span><span>AMSOULNESS<small>ASLNS / TOOL LAB</small></span></a>
-      <nav aria-label="Session navigation"><a href="/">Portfolio</a><a href="#plugins">Plugins</a><a href="#deploy">Deploy</a><a href="https://github.com/amsoulness/amsoulness-md" target="_blank" rel="noreferrer">GitHub</a><ThemeToggle theme={theme} preference={themePreference} onToggle={onToggleTheme}/></nav>
+      <nav aria-label="Session navigation"><a href="/">Portfolio</a><a href="/session/plugins">Plugins</a><a href="#deploy">Deploy</a><a href="https://github.com/amsoulness/amsoulness-md" target="_blank" rel="noreferrer">GitHub</a><ThemeToggle theme={theme} preference={themePreference} onToggle={onToggleTheme}/></nav>
     </header>
     <main className="as-session-main">
       <div className="as-session-heading"><span className="as-session-eyebrow"><Link2 size={15}/> WHATSAPP SESSION</span><h1>Your bot.<br/><span>Your connection.</span></h1><p>Link WhatsApp to Amsoulness in a few simple steps.<br className="as-session-desktop"/> Scan a QR or use your phone number. Then copy your session and deploy your bot.</p></div>
@@ -148,7 +149,7 @@ export default function SessionPage({ theme, themePreference, onToggleTheme }: P
         </section>
         <DeploymentHub session={pair?.session || ''}/>
       </div>
-      <PluginCatalog/>
+      <section className="as-plugin-link-panel"><div><span className="as-session-eyebrow">MAKE IT DO MORE</span><h2>Find your next plugin.</h2><p>Browse 52 entries, search by name, and copy an install command.</p></div><a className="as-session-primary" href="/session/plugins">Browse all plugins →</a></section>
       <section className="as-session-faq"><h2>A couple of things to know.</h2><details><summary>Is this my WhatsApp password?</summary><p>No. It is a linked-device session that grants access to your account. Treat it as a secret. Never share it publicly or put it in GitHub.</p></details><details><summary>Where do I paste the session?</summary><p>Set <code>SESSION=ASLNS~…</code> in your bot’s private config.env or your hosting provider’s environment variables. Use the latest Amsoulness-MD version, which supports this format.</p></details><details><summary>Can I disconnect later?</summary><p>Yes. Open WhatsApp › Settings › Linked devices, select the Amsoulness device and log it out. This uses an unofficial WhatsApp integration; use an account you are comfortable testing with.</p></details></section>
     </main><footer className="as-session-footer"><span>Built by AMSOULNESS / ASLNS</span><a href="/">Back to portfolio</a><span>Independent tool · Not affiliated with WhatsApp</span></footer>
   </div>
