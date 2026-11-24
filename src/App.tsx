@@ -609,6 +609,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
       </div>
       <ThemeToggle theme={theme} preference={themePreference} onToggle={onToggleTheme} className="portfolio-theme-toggle"/>
     </nav>
+    <div className="doom-feature-wrap doom-opening"><DoomsdayCountdown/></div>
     <section id="home" className="hero" aria-label="Main content" tabIndex={-1}>
       <div className="visual-field" aria-hidden="true">
         <motion.div className="visual-ring ring-one" animate={reduce?{}:{rotate:360}} transition={{duration:32,repeat:Infinity,ease:'linear'}}><span className="ring-node"/></motion.div>
@@ -627,7 +628,6 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
       </motion.div>
       <motion.div className="scroll-cue" animate={reduce?{}:{y:[0,10,0]}} transition={{duration:2,repeat:Infinity}}>SCROLL TO EXPLORE ↓</motion.div>
     </section>
-    <div className="doom-feature-wrap"><DoomsdayCountdown/></div>
     <section className="tools-featured-section" id="featured-tools" aria-labelledby="tools-featured-title">
       <div className="tools-featured-topline"><span><i/> AMSOULNESS / DIGITAL LAB</span><span>FEATURED EXPERIENCE — 001</span></div>
       <div className="tools-featured-layout">
