@@ -17,6 +17,7 @@ const navigationLabelFor = (path: string) => {
     '/tools/color': 'Opening Color Lab',
     '/tools/password': 'Opening Password Studio',
     '/tools/status': 'Opening WhatsApp Status Studio',
+    '/tools/instagram': 'Opening Instagram Reel Downloader',
   }
   return labels[path] ?? 'Opening the page'
 }
@@ -614,7 +615,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
         <div className="hero-topline"><motion.p className="eyebrow" initial={reduce?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8}}>✦ DEVELOPER × CREATIVE EDITOR</motion.p><PageViewCounter page="portfolio" className="aslns-view-counter--hero"/></div>
         <h1>{['Emmanuel','Cherian.'].map((word,i)=><div key={word} style={{overflow:'hidden',paddingBottom:9}}><motion.span className={i===1?'gradient':''} style={{display:'inline-block'}} initial={reduce?false:{y:'110%',opacity:0}} animate={{y:'0%',opacity:1}} transition={{duration:1.1,delay:.25+i*.25,ease:[.22,1,.36,1]}}>{word}</motion.span></div>)}</h1>
         <Reveal delay={.4}><p className="hero-description">I’m Emmanuel, a BCA student who builds web projects and edits videos. This is where I share what I’m learning, the things I make, and a few tools I wanted for myself.</p></Reveal>
-        <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE 6 CREATIVE TOOLS <span aria-hidden="true">↗</span></a></div>
+        <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE 7 CREATIVE TOOLS <span aria-hidden="true">↗</span></a></div>
       </motion.div>
       <motion.div className="scroll-cue" animate={reduce?{}:{y:[0,10,0]}} transition={{duration:2,repeat:Infinity}}>SCROLL TO EXPLORE ↓</motion.div>
     </section>
@@ -624,9 +625,9 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
         <div className="tools-featured-copy">
           <p className="tools-featured-eyebrow">✦ A FEW THINGS I BUILT</p>
           <h2 id="tools-featured-title">USEFUL TOOLS.<br/><span>NO EXTRA FUSS.</span></h2>
-          <p className="tools-featured-description">I put six handy tools here: update a WhatsApp photo or status, work with images, make QR codes, try out colors, and generate passwords. Open one and give it a go.</p>
-          <div className="tools-featured-chips"><span>✧ 6 CREATIVE TOOLS</span><span>◇ NO SIGN-UP</span><span>⚡ BUILT FOR CREATORS</span></div>
-          <a href="/tools" className="tools-featured-button"><span>SEE ALL SIX TOOLS</span><span className="tools-featured-button-arrow">↗</span></a>
+          <p className="tools-featured-description">I put seven handy tools here: update a WhatsApp photo or status, save your own Instagram Reels, work with images, make QR codes, try out colors, and generate passwords. Open one and give it a go.</p>
+          <div className="tools-featured-chips"><span>✧ 7 CREATIVE TOOLS</span><span>◇ NO SIGN-UP</span><span>⚡ BUILT FOR CREATORS</span></div>
+          <a href="/tools" className="tools-featured-button"><span>SEE ALL SEVEN TOOLS</span><span className="tools-featured-button-arrow">↗</span></a>
           <p className="tools-featured-footnote">MADE BY EMMANUEL <span>•</span> FREE TO TRY <span>•</span> NO SIGN-UP</p>
         </div>
         <a href="/tools" className="tools-featured-visual" aria-label="Open the AMSOULNESS Tools Hub">

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Eye } from 'lucide-react'
 import './PageViewCounter.css'
 
-export type TrackedPage = 'portfolio' | 'tools' | 'whatsapp' | 'image' | 'qr' | 'color' | 'password' | 'status'
+export type TrackedPage = 'portfolio' | 'tools' | 'whatsapp' | 'image' | 'qr' | 'color' | 'password' | 'status' | 'instagram'
 
 const API_ORIGIN = (import.meta.env.VITE_WHATSAPP_API_URL || 'https://portfolio-production-fe0b1536.up.railway.app').replace(/\/$/, '')
 
