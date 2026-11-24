@@ -30,7 +30,7 @@ export default function RenderDeploy({ theme, themePreference, onToggleTheme }: 
   }
   useEffect(() => {
     mounted.current = true
-    const title = document.title; document.title = 'Deploy on Render · Amsoulness / ASLNS'
+    const title = document.title; document.title = 'ASLNS | WEBSITE'
     void fetch(API + '/api/render/config').then(r => r.json()).then(d => { if (mounted.current) setOauth(Boolean(d.githubOAuthAvailable)) }).catch(() => { if (mounted.current) setOauth(false) })
     const ticket = new URLSearchParams(window.location.hash.slice(1)).get('ticket')
     if (ticket) {

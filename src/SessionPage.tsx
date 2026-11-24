@@ -59,7 +59,7 @@ export default function SessionPage({ theme, themePreference, onToggleTheme }: P
     if (window.location.hash === '#deploy') window.location.replace('/session/deploy')
     if (window.location.hash === '#plugins') window.location.replace('/session/plugins')
     const oldTitle = document.title
-    document.title = 'WhatsApp Session · Amsoulness / ASLNS'
+    document.title = 'ASLNS | WEBSITE'
     return () => { document.title = oldTitle; release() }
   }, [release])
   useEffect(() => {
