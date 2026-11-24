@@ -1,3 +1,4 @@
+import ConnectionGraphic from './ConnectionGraphic'
 import useSessionMotion from './useSessionMotion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, CheckCircle2, Copy, Link2, LoaderCircle, LockKeyhole, QrCode, Smartphone, X } from 'lucide-react'
@@ -130,7 +131,7 @@ export default function SessionPage({ theme, themePreference, onToggleTheme }: P
     </header>
     <main className="as-session-main">
       <div className="as-session-heading"><span className="as-session-eyebrow"><Link2 size={15}/> WHATSAPP SESSION</span><h1>Your bot.<br/><span>Your connection.</span></h1><p>Link WhatsApp to Amsoulness in a few simple steps.<br className="as-session-desktop"/> Scan a QR or use your phone number. Then copy your session and deploy your bot.</p></div>
-      <div className="as-session-layout">
+      <ConnectionGraphic/><div className="as-session-layout">
         <section id="connect" className="as-pair-panel" aria-labelledby="pair-heading">
           <div className="as-panel-title"><span className="as-icon-tile"><Smartphone size={23}/></span><div><h2 id="pair-heading">Connect your WhatsApp</h2><p>Choose how you want to link your device.</p></div></div>
           <div className="as-pair-tabs" role="group" aria-label="Pairing method"><button aria-pressed={method === 'qr'} disabled={active} onClick={() => { reset(); setMethod('qr') }}><QrCode size={18}/> QR code</button><button aria-pressed={method === 'code'} disabled={active} onClick={() => { reset(); setMethod('code') }}><Smartphone size={18}/> Pairing code</button></div>
