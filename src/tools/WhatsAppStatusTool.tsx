@@ -19,7 +19,8 @@ type State = { sessionId: string; status: string; pairingCode: string | null; ex
 type Asset = { file: File; url: string; kind: 'image' | 'video' }
 
 class ApiError extends Error {
-  constructor(message: string, readonly status: number) { super(message) }
+  readonly status: number
+  constructor(message: string, status: number) { super(message); this.status = status }
 }
 
 function readSession(): Session | null {
