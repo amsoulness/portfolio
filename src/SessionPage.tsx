@@ -1,18 +1,37 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, CheckCircle2, Copy, Link2, LoaderCircle, LockKeyhole, QrCode, Smartphone, X } from 'lucide-react'
 import ThemeToggle, { type SiteTheme, type ThemePreference } from './ThemeToggle'
+import { getCountries, getCountryCallingCode, parsePhoneNumberFromString, type CountryCode } from 'libphonenumber-js/min'
 import './SessionPage.css'
 import './DeploymentHub.css'
 import DeploymentHub from './DeploymentHub'
 import PluginCatalog from './PluginCatalog'
 
 const API = 'https://aslns-pairing-production.up.railway.app'
+const countryNames = new Intl.DisplayNames(['en'], { type: 'region' })
+const countries = getCountries().map(code => ({ code, name: countryNames.of(code) || code, dial: getCountryCallingCode(code) })).sort((a, b) => a.name.localeCompare(b.name))
+
 type PairState = { state: 'starting' | 'waiting' | 'finishing' | 'ready' | 'error'; qr?: string; code?: string; session?: string; error?: string; expiresAt?: number }
 type Props = { theme: SiteTheme; themePreference: ThemePreference; onToggleTheme: () => void }
 
 export default function SessionPage({ theme, themePreference, onToggleTheme }: Props) {
   const [method, setMethod] = useState<'qr' | 'code'>('qr')
   const [phone, setPhone] = useState('')
+  const [country, setCountry] = useState<CountryCode>('IN')
+  const dialCode = getCountryCallingCode(country)
+  const fullPhone = parsePhoneNumberFromString(phone, country)?.number.slice(1) || `${dialCode}${phone.replace(/\D/g, '')}`
+  const phoneReady = phone.replace(/\D/g, '').length >= 4 && /^[1-9]\d{6,14}$/.test(fullPhone)
+  function updatePhone(value: string) {
+    if (value.trim().startsWith('+')) {
+      const parsed = parsePhoneNumberFromString(value)
+      if (parsed) {
+        const matchingCountry = parsed.country || countries.find(c => c.dial === parsed.countryCallingCode)?.code
+        if (matchingCountry) setCountry(matchingCountry)
+        setPhone(parsed.nationalNumber); return
+      }
+    }
+    setPhone(value.replace(/[^\d\s()-]/g, ''))
+  }
   const [pair, setPair] = useState<PairState | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -48,8 +67,8 @@ export default function SessionPage({ theme, themePreference, onToggleTheme }: P
 
   async function start() {
     if (!accepted || busy) return
-    if (method === 'code' && !/^[1-9]\d{6,14}$/.test(phone.replace(/[\s()+-]/g, ''))) {
-      setError('Enter your full WhatsApp number with country code.'); return
+    if (method === 'code' && !phoneReady) {
+      setError('Choose your country and enter your WhatsApp number.'); return
     }
     release()
     const run = generation.current
@@ -60,7 +79,7 @@ export default function SessionPage({ theme, themePreference, onToggleTheme }: P
       const response = await fetch(`${API}/api/session`, {
         method: methodName, signal: controller.signal,
         headers: { 'Content-Type': 'application/json', ...(id ? { Authorization: `Bearer ${id}` } : {}) },
-        ...(methodName === 'POST' ? { body: JSON.stringify({ method, ...(method === 'code' ? { phone } : {}) }) } : {}),
+        ...(methodName === 'POST' ? { body: JSON.stringify({ method, ...(method === 'code' ? { phone: fullPhone } : {}) }) } : {}),
       })
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Connection failed. Please try again.')
@@ -114,9 +133,9 @@ export default function SessionPage({ theme, themePreference, onToggleTheme }: P
           <div className="as-panel-title"><span className="as-icon-tile"><Smartphone size={23}/></span><div><h2 id="pair-heading">Connect your WhatsApp</h2><p>Choose how you want to link your device.</p></div></div>
           <div className="as-pair-tabs" role="group" aria-label="Pairing method"><button aria-pressed={method === 'qr'} disabled={active} onClick={() => { reset(); setMethod('qr') }}><QrCode size={18}/> QR code</button><button aria-pressed={method === 'code'} disabled={active} onClick={() => { reset(); setMethod('code') }}><Smartphone size={18}/> Pairing code</button></div>
           {!pair || pair.state === 'error' ? <form onSubmit={e => { e.preventDefault(); void start() }}>
-            {method === 'code' ? <div className="as-phone-field"><label htmlFor="session-phone">WhatsApp phone number</label><input id="session-phone" type="tel" autoComplete="tel" inputMode="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 98765 43210" required/><p>Include your country code. We never ask for your OTP.</p></div> : <div className="as-qr-placeholder"><div className="as-qr-frame"><QrCode size={72} strokeWidth={1}/></div><strong>One scan. You’re connected.</strong><p>Generate a QR, then scan it in WhatsApp<br/>under Settings › Linked devices.</p></div>}
+            {method === 'code' ? <div className="as-phone-field"><h3>Link with your phone number.</h3><div className="as-phone-row"><div><label htmlFor="session-country">Country code</label><select id="session-country" autoComplete="country" value={country} onChange={e => setCountry(e.target.value as CountryCode)}>{countries.map(c => <option key={c.code} value={c.code}>{c.name} (+{c.dial})</option>)}</select></div><div><label htmlFor="session-phone">WhatsApp number, without country code</label><input id="session-phone" type="tel" autoComplete="tel-national" inputMode="tel" value={phone} onChange={e => updatePhone(e.target.value)} placeholder="Phone number" aria-describedby="session-phone-help" required/></div></div><p id="session-phone-help">The WhatsApp number you want to link (+{dialCode}). Tip: paste it with + to pick the country. We never ask for your OTP.</p></div> : <div className="as-qr-placeholder"><div className="as-qr-frame"><QrCode size={72} strokeWidth={1}/></div><strong>One scan. You’re connected.</strong><p>Generate a QR, then scan it in WhatsApp<br/>under Settings › Linked devices.</p></div>}
             <label className="as-session-consent"><input type="checkbox" checked={accepted} onChange={e => setAccepted(e.target.checked)}/><span>I’m linking my own WhatsApp account and understand this creates a bot session.</span></label>
-            <button className="as-session-primary" type="submit" disabled={!accepted || busy}>{method === 'qr' ? <QrCode size={18}/> : <Link2 size={18}/>} {method === 'qr' ? 'Generate QR code' : 'Get pairing code'}</button>
+            <button className="as-session-primary" type="submit" disabled={!accepted || busy || (method === 'code' && !phoneReady)}>{method === 'qr' ? <QrCode size={18}/> : <Link2 size={18}/>} {method === 'qr' ? 'Generate QR code' : 'Get pairing code'}</button>
           </form> : pair.state === 'ready' ? <div className="as-session-result"><CheckCircle2 size={44}/><h3>You’re connected.</h3><p>Copy this private session into your bot’s <code>SESSION</code> setting, then start your bot.</p><label htmlFor="as-session-output">Your Amsoulness session</label><textarea id="as-session-output" readOnly value={pair.session || ''} spellCheck={false}/><button className="as-session-primary" onClick={() => void copySession()}>{copied ? <Check size={18}/> : <Copy size={18}/>} {copied ? 'Session copied' : 'Copy session'}</button><p className="as-session-note">Keep it private. Anyone with this session can access your linked WhatsApp account.</p><button className="as-session-text-button" onClick={reset}>Clear session from this page</button></div> : <div className="as-session-live" aria-live="polite">
             {pair.qr ? <><img src={pair.qr} width="280" height="280" alt="Scan this WhatsApp linking QR code"/><h3>Scan with WhatsApp</h3><p>Settings › Linked devices › Link a device</p></> : pair.code ? <><span className="as-icon-tile"><Smartphone size={28}/></span><h3>Enter this code on your phone</h3><div className="as-pair-code">{pair.code.match(/.{1,4}/g)?.join(' – ')}</div><p>WhatsApp › Linked devices › Link a device<br/>› Link with phone number instead</p></> : <><LoaderCircle size={38} className="as-session-spinner"/><h3>{pair.state === 'finishing' ? 'Finishing your connection…' : 'Preparing your connection…'}</h3><p>{pair.state === 'finishing' ? 'Your private session will appear here shortly.' : 'Keep this page open. This may take a moment.'}</p></>}
             {pair.expiresAt && <span className="as-session-expiry">Connection expires in {Math.floor(remaining / 60)}:{String(remaining % 60).padStart(2, '0')}</span>}<button className="as-session-text-button" onClick={reset}><X size={15}/> Cancel connection</button>
