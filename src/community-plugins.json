@@ -1,0 +1,462 @@
+[
+  {
+    "id": "community-684e532aff7164f8f2321080",
+    "title": "Word Chain Game",
+    "category": "Games",
+    "description": "Community games plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/8a5e2c3bbb06545103c315451ab42a47",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-688f438f3346d190ff580a7d",
+    "title": "Whois",
+    "category": "Utility",
+    "description": "Community utility plugin by xeonrag.",
+    "command": "",
+    "file": "https://gist.github.com/xeonrag/27244bddd5938039be1abb2933a10f3a",
+    "author": "xeonrag",
+    "deprecated": false
+  },
+  {
+    "id": "community-68a794ced8610d3cabad54ae",
+    "title": "Voice Note Converter",
+    "category": "General",
+    "description": "Community general plugin by xeonrag.",
+    "command": "",
+    "file": "https://gist.github.com/xeonrag/c52096a8c2d29ffdf06b892a2c243fe5",
+    "author": "xeonrag",
+    "deprecated": false
+  },
+  {
+    "id": "community-685837fffedbbb033f0cd7ba",
+    "title": "Presence",
+    "category": "Utility",
+    "description": "Community utility plugin by v3shn.",
+    "command": "",
+    "file": "https://gist.github.com/v3shn/7077502e110cd5411ae8d0313b7fb6c1",
+    "author": "v3shn",
+    "deprecated": false
+  },
+  {
+    "id": "community-690dfe283a158cccedfb4326",
+    "title": "APK Downloader",
+    "category": "Downloads",
+    "description": "Community downloads plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/7c580af5e878b5786c690cff99f1deba",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-6891d97a19a09bb89ae856b0",
+    "title": "Song Identifier",
+    "category": "Utility",
+    "description": "Community utility plugin by mksir12.",
+    "command": "",
+    "file": "https://gist.github.com/mksir12/8e75b9a2f53b375e7392a4104d4b4f4e",
+    "author": "mksir12",
+    "deprecated": false
+  },
+  {
+    "id": "community-6921e604068cca44d97c9ba8",
+    "title": "ImageGen",
+    "category": "General",
+    "description": "Community general plugin by mksir12.",
+    "command": "",
+    "file": "https://gist.github.com/mksir12/44f337a95fe0364605570ce4890c4468",
+    "author": "mksir12",
+    "deprecated": false
+  },
+  {
+    "id": "community-685864869b66c85422738fce",
+    "title": "System Info",
+    "category": "Utility",
+    "description": "Community utility plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/d49e93f42416b624e7c865939c17d8f5",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-687fab31019a70c0c5405f83",
+    "title": "Telegram Sticker DL",
+    "category": "Utility",
+    "description": "Community utility plugin by darkdeathoriginal.",
+    "command": "",
+    "file": "https://gist.github.com/darkdeathoriginal/446111495b132594936987975ed1bd30",
+    "author": "darkdeathoriginal",
+    "deprecated": false
+  },
+  {
+    "id": "community-688f676c02f13dd2d8dd00de",
+    "title": "Custom mention",
+    "category": "General",
+    "description": "Community general plugin by xeonrag.",
+    "command": "",
+    "file": "https://gist.github.com/xeonrag/e910796541d4b91bee7f81da5f110fcd",
+    "author": "xeonrag",
+    "deprecated": false
+  },
+  {
+    "id": "community-68696dcbcca38df9dd8523d0",
+    "title": "Anti Status Mention",
+    "category": "Moderation",
+    "description": "Community moderation plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/67e19861ebb9367c278f2de4b4d1e19f",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-686d2409b17f95b12ebed0d9",
+    "title": "Owner",
+    "category": "Utility",
+    "description": "Community utility plugin by xeonrag.",
+    "command": "",
+    "file": "https://gist.github.com/xeonrag/d3fe25d44ca7c03e9f911b70ffec8a1c",
+    "author": "xeonrag",
+    "deprecated": false
+  },
+  {
+    "id": "community-6891e86b38ae7cd216a94ff4",
+    "title": "Image Upscaler",
+    "category": "Utility",
+    "description": "Community utility plugin by mksir12.",
+    "command": "",
+    "file": "https://gist.github.com/mksir12/9efad84953b2c568584f87bffbfed429",
+    "author": "mksir12",
+    "deprecated": false
+  },
+  {
+    "id": "community-68508d04fd1347766e03f159",
+    "title": "Auto status sender",
+    "category": "Utility",
+    "description": "Community utility plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/7ba617d50196c809d0d1afeb96d6a494",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-685527281e5d245ce930bd62",
+    "title": "Ginfo",
+    "category": "General",
+    "description": "Community general plugin by xeonrag.",
+    "command": "",
+    "file": "https://gist.github.com/xeonrag/4f296e0053a331371a71bf7761b655fa",
+    "author": "xeonrag",
+    "deprecated": false
+  },
+  {
+    "id": "community-690dfdd988d8b53253479b1c",
+    "title": "MOD APK",
+    "category": "Downloads",
+    "description": "Community downloads plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/3990b1afdcdc7b1cb3981c1df19597c2",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-685136fb0ff971492970b577",
+    "title": "Message Stealth",
+    "category": "General",
+    "description": "Community general plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/839b95be9f051c11856bc439571183f6",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-687d5117e6ee7c8bb8344453",
+    "title": "ReadMore text",
+    "category": "Utility",
+    "description": "Community utility plugin by xeonrag.",
+    "command": "",
+    "file": "https://gist.github.com/xeonrag/b712bcdb088b0e2e9eea4175dc35d5df",
+    "author": "xeonrag",
+    "deprecated": false
+  },
+  {
+    "id": "community-689d8bbd0e74c1b9722d5d71",
+    "title": "adminlist",
+    "category": "General",
+    "description": "Community general plugin by bryt777.",
+    "command": "",
+    "file": "https://gist.github.com/bryt777/019331f5e1de37ae03e9d6c4b5ffe763",
+    "author": "bryt777",
+    "deprecated": false
+  },
+  {
+    "id": "community-68b7dd9a1fbb141b0a52673d",
+    "title": "Auto-Bio",
+    "category": "General",
+    "description": "Community general plugin by mikaza-akerman.",
+    "command": "",
+    "file": "https://gist.github.com/aktalky/cd2030d58bf37bd9b242fc66b3b2da03",
+    "author": "mikaza-akerman",
+    "deprecated": false
+  },
+  {
+    "id": "community-69f84fb163540fcf0841410a",
+    "title": "Cowsay",
+    "category": "General",
+    "description": "Community general plugin by rayishere0.",
+    "command": "",
+    "file": "https://gist.github.com/rayishere0/fbe530b1932cb646fd106144cdf4d9cd",
+    "author": "rayishere0",
+    "deprecated": false
+  },
+  {
+    "id": "community-685022f8ebe5583c88a4e104",
+    "title": "Speed test",
+    "category": "Utility",
+    "description": "Community utility plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/d032563639f328801099d7fda2cfb1a6",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-6871af7c775c7d92ee0568be",
+    "title": "Math game",
+    "category": "Games",
+    "description": "Community games plugin by Macfrizzie.",
+    "command": "",
+    "file": "https://gist.github.com/Macfrizzie/c82da4a76968e0dab55e1a22a3d65007",
+    "author": "Macfrizzie",
+    "deprecated": false
+  },
+  {
+    "id": "community-687aa27c2036df57a3f53d19",
+    "title": "Dictionary",
+    "category": "General",
+    "description": "Community general plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/7dd6ac34ca76abe2fe60045c246d4c96",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-6860e8f858f0631ee2506508",
+    "title": "Auto forward",
+    "category": "Utility",
+    "description": "Community utility plugin by xeonrag.",
+    "command": "",
+    "file": "https://gist.github.com/xeonrag/760f88a18039747c6f30168c88347fef",
+    "author": "xeonrag",
+    "deprecated": false
+  },
+  {
+    "id": "community-68a32ab3e3e1326a6802500d",
+    "title": "dream",
+    "category": "General",
+    "description": "Community general plugin by MUNAx7.",
+    "command": "",
+    "file": "https://gist.github.com/MUNAx7/8333643e4eedc7a14db5b51dd1ee5b1b",
+    "author": "MUNAx7",
+    "deprecated": false
+  },
+  {
+    "id": "community-6b0304272edc673731b4e809",
+    "title": "TICK TAC TOE",
+    "category": "Games",
+    "description": "Community games plugin by mikaza-eren.",
+    "command": "",
+    "file": "https://gist.github.com/mikaza-eren/cdcd9f792eced1cec88e79d2d250865d",
+    "author": "mikaza-eren",
+    "deprecated": false
+  },
+  {
+    "id": "community-684e5701d88cd73c51dc3318",
+    "title": "Status Saver",
+    "category": "Downloads",
+    "description": "Community downloads plugin by v3shn.",
+    "command": "",
+    "file": "https://gist.github.com/v3shn/43f359f249fe3e972f4620a4559324ef",
+    "author": "v3shn",
+    "deprecated": false
+  },
+  {
+    "id": "community-68bc6601f89ae742fefc7d7b",
+    "title": "Image Editor AI",
+    "category": "Editing",
+    "description": "Community editing plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/77346ad5cf2141a505c7ee88e3079dad",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-68bd858499ba3accf8cab629",
+    "title": "Lyrics",
+    "category": "Downloads",
+    "description": "Community downloads plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/ca91042baeeb60fdeb9d060d0f8e584d",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-68724f834f4f920f2432926b",
+    "title": "Self Mention",
+    "category": "General",
+    "description": "Community general plugin by xeonrag.",
+    "command": "",
+    "file": "https://gist.github.com/xeonrag/9e072120cc8a3a335d96665bb98e7ac3",
+    "author": "xeonrag",
+    "deprecated": false
+  },
+  {
+    "id": "community-6854485342427d96dd64fc74",
+    "title": "Group Snapshot",
+    "category": "Moderation",
+    "description": "Community moderation plugin by souravkl11.",
+    "command": "",
+    "file": "https://gist.github.com/souravkl11/ad422e9b30728a2b101a7d0bcb58c422",
+    "author": "souravkl11",
+    "deprecated": false
+  },
+  {
+    "id": "community-684efabb85def0f59956c1ac",
+    "title": "Malayalam subtitle",
+    "category": "Downloads",
+    "description": "Community downloads plugin by INR-L.",
+    "command": "",
+    "file": "https://gist.github.com/INR-L/9840d741c916d9433e270126571acc34",
+    "author": "INR-L",
+    "deprecated": false
+  },
+  {
+    "id": "community-68d9286c48e0afe9c1b03c45",
+    "title": "Country Code.",
+    "category": "General",
+    "description": "Community general plugin by hostt11.",
+    "command": "",
+    "file": "https://gist.github.com/hostt11/fcb1d4c338386a7f7b69ce8bec84b77e",
+    "author": "hostt11",
+    "deprecated": false
+  },
+  {
+    "id": "community-6aff5ab3afdeecf51a3694e6",
+    "title": "Vnote",
+    "category": "General",
+    "description": "Community general plugin by akshxdhh.",
+    "command": "",
+    "file": "https://gist.github.com/akshxdhh/5137f7be98a1a0f07edf9f1bebaaaccb",
+    "author": "akshxdhh",
+    "deprecated": false
+  },
+  {
+    "id": "community-68617a82a6544ce2a39287e6",
+    "title": "Weather",
+    "category": "Utility",
+    "description": "Community utility plugin by v3shn.",
+    "command": "",
+    "file": "https://gist.github.com/v3shn/0b4ee9819b78b046e0ebf02e043df84e",
+    "author": "v3shn",
+    "deprecated": false
+  },
+  {
+    "id": "community-68583181fedbbb033f0cd7b9",
+    "title": "Wiki",
+    "category": "Utility",
+    "description": "Community utility plugin by v3shn.",
+    "command": "",
+    "file": "https://gist.github.com/v3shn/3274cfecf6e665bb2bcdedc193aa5b4d",
+    "author": "v3shn",
+    "deprecated": false
+  },
+  {
+    "id": "community-6852f3d25620b9d2e2fd5b53",
+    "title": "Calc",
+    "category": "General",
+    "description": "Community general plugin by xeonrag.",
+    "command": "",
+    "file": "https://gist.github.com/xeonrag/1a446f82b60f512763bb27c9ad7f444e",
+    "author": "xeonrag",
+    "deprecated": false
+  },
+  {
+    "id": "community-692d19406dd4425145886bba",
+    "title": "pastpaper",
+    "category": "Downloads",
+    "description": "Community downloads plugin by yehanprimary-bot.",
+    "command": "",
+    "file": "https://gist.github.com/yehanprimary-bot/1adf7faa13cde3d0bce78f204da6d959",
+    "author": "yehanprimary-bot",
+    "deprecated": false
+  },
+  {
+    "id": "community-6a2c8e082e2977b926c7c46d",
+    "title": "Last Fm Whatsapp Intergration",
+    "category": "Utility",
+    "description": "Community utility plugin by Owie6789.",
+    "command": "",
+    "file": "https://gist.github.com/Owie6789/9c15255a3c7811573384eba60b275a37",
+    "author": "Owie6789",
+    "deprecated": false
+  },
+  {
+    "id": "community-6942c277bd2a0cca1179cb6a",
+    "title": "Sticker pack maker",
+    "category": "Utility",
+    "description": "Community utility plugin by darkdeathoriginal.",
+    "command": "",
+    "file": "https://gist.github.com/darkdeathoriginal/9ed535181f91aad05d32dd2dec6b3b9d",
+    "author": "darkdeathoriginal",
+    "deprecated": false
+  },
+  {
+    "id": "community-68a94e51910baf100649ea4b",
+    "title": "Spotify Downloader",
+    "category": "Downloads",
+    "description": "Community downloads plugin by mksir12.",
+    "command": "",
+    "file": "",
+    "author": "mksir12",
+    "deprecated": true
+  },
+  {
+    "id": "community-684e9c1892c4b7d731a6c942",
+    "title": "Tiktok Downloader",
+    "category": "Downloads",
+    "description": "Community downloads plugin by acmodsffv.",
+    "command": "",
+    "file": "",
+    "author": "acmodsffv",
+    "deprecated": true
+  },
+  {
+    "id": "community-68584957a8ecb147f71c7779",
+    "title": "Autoinsta",
+    "category": "Downloads",
+    "description": "Community downloads plugin by xeonrag.",
+    "command": "",
+    "file": "",
+    "author": "xeonrag",
+    "deprecated": true
+  },
+  {
+    "id": "community-686d1e54b17f95b12ebed0d8",
+    "title": "Gemini",
+    "category": "Utility",
+    "description": "Community utility plugin by xeonrag.",
+    "command": "",
+    "file": "",
+    "author": "xeonrag",
+    "deprecated": true
+  },
+  {
+    "id": "community-6864414db0dc67a16e3500c9",
+    "title": "Fd (custom forward)",
+    "category": "Utility",
+    "description": "Community utility plugin by xeonrag.",
+    "command": "",
+    "file": "",
+    "author": "xeonrag",
+    "deprecated": true
+  }
+]
