@@ -17,7 +17,7 @@ const navigationLabelFor = (path: string) => {
     '/tools/color': 'Opening Color Lab',
     '/tools/password': 'Opening Password Studio',
     '/tools/status': 'Opening WhatsApp Status Studio',
-    '/tools/instagram': 'Opening Instagram Downloader Inspector',
+    '/tools/instagram': 'Opening Instagram Reel Downloader',
   }
   return labels[path] ?? 'Opening the page'
 }
