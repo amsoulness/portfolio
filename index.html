@@ -15,22 +15,76 @@
         document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#f7f5fc' : '#090711';
       } catch {}
     </script>
-    <meta name="description" content="The portfolio and creative lab of Emmanuel Cherian: software projects, cinematic edits, and free browser-based tools from AMSOULNESS / ASLNS." />
+    <meta name="description" content="Emmanuel Cherian is a BCA student in Kerala, India, learning software development and creating video edits. Explore his projects, skills and creative work at AMSOULNESS / ASLNS." />
     <meta name="robots" content="index,follow,max-image-preview:large" />
     <link rel="canonical" href="https://aslns.online/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="AMSOULNESS / ASLNS" />
-    <meta property="og:title" content="AMSOULNESS | Emmanuel Cherian" />
-    <meta property="og:description" content="Software projects, cinematic edits, and a creative lab of free browser-based tools." />
+    <meta property="og:title" content="Emmanuel Cherian | BCA Student & Video Editor — AMSOULNESS" />
+    <meta property="og:description" content="Projects, skills and creative work by Emmanuel Cherian, a BCA student learning software development and making video edits." />
     <meta property="og:url" content="https://aslns.online/" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="AMSOULNESS | Emmanuel Cherian" />
-    <meta name="twitter:description" content="Software projects, cinematic edits, and a creative lab of free browser-based tools." />
+    <meta name="twitter:title" content="Emmanuel Cherian | BCA Student & Video Editor — AMSOULNESS" />
+    <meta name="twitter:description" content="Projects, skills and creative work by Emmanuel Cherian, a BCA student learning software development and making video edits." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <title>ASLNS | Emmanuel Cherian</title>
+    <title>Emmanuel Cherian | BCA Student & Video Editor — AMSOULNESS</title>
+    <script type="application/ld+json" id="profile-structured-data">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://aslns.online/#website",
+            "url": "https://aslns.online/",
+            "name": "AMSOULNESS / ASLNS",
+            "publisher": { "@id": "https://aslns.online/#person" },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://aslns.online/#profile",
+            "url": "https://aslns.online/",
+            "name": "Emmanuel Cherian | AMSOULNESS",
+            "isPartOf": { "@id": "https://aslns.online/#website" },
+            "mainEntity": { "@id": "https://aslns.online/#person" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://aslns.online/#person",
+            "name": "Emmanuel Cherian",
+            "alternateName": ["AMSOULNESS", "ASLNS"],
+            "url": "https://aslns.online/",
+            "description": "Emmanuel Cherian is a BCA student at Al Azhar College of Arts and Science in Kerala, India. He is learning software development through projects and creates video edits as a self-taught editor.",
+            "homeLocation": {
+              "@type": "Place",
+              "address": {
+                "@type": "PostalAddress",
+                "addressRegion": "Kerala",
+                "addressCountry": "IN"
+              }
+            },
+            "sameAs": [
+              "https://github.com/amsoulness",
+              "https://linkedin.com/in/aslns/"
+            ],
+            "knowsAbout": [
+              "Software development",
+              "Video editing",
+              "Cybersecurity",
+              "JavaScript",
+              "Python",
+              "Adobe After Effects"
+            ]
+          }
+        ]
+      }
+    </script>
     <script>
+      if (location.pathname.replace(/\/+$/, '').startsWith('/tools')) {
+        document.getElementById('profile-structured-data')?.remove();
+      }
       if (location.pathname.replace(/\/+$/, '') === '/tools') {
         document.title = 'Free Online Tools | AMSOULNESS';
         document.querySelector('meta[name="description"]').content = 'Explore six free browser-based creative tools from AMSOULNESS: WhatsApp profile and status tools, image studio, QR code maker, color lab, and password generator.';
