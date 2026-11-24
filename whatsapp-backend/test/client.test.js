@@ -29,6 +29,7 @@ test('requests WhatsApp-generated code, disables history sync, and exposes link 
       default: config => { events.push(config); queueMicrotask(() => socketEvents.emit('connection.update', { qr: 'test-handshake' })); return socket; },
       Browsers: { macOS: () => ['Chrome'] },
       DisconnectReason: { loggedOut: 401 },
+      proto: { HistorySync: { HistorySyncType: { INITIAL_BOOTSTRAP: 1, RECENT: 2, FULL: 3 } } },
       async fetchLatestWaWebVersion() { return { version: [2, 3000, 1], isLatest: true }; },
       async useMultiFileAuthState(dir) { assert.equal(dir, 'runtime/session/auth'); return { state, saveCreds: async () => { events.push('save'); } }; }
     })
@@ -82,6 +83,7 @@ test('status sync reads only saved-contact app state and excludes the linked acc
       default: config => { events.push(config); return socket; },
       Browsers: { macOS: () => ['Chrome'] },
       DisconnectReason: { loggedOut: 401 },
+      proto: { HistorySync: { HistorySyncType: { INITIAL_BOOTSTRAP: 1, RECENT: 2, FULL: 3 } } },
       async fetchLatestWaWebVersion() { return { version: [2, 3000, 1], isLatest: true }; },
       async useMultiFileAuthState() { return { state, saveCreds: async () => {} }; }
     })
@@ -91,6 +93,52 @@ test('status sync reads only saved-contact app state and excludes the linked acc
   assert.deepEqual(await client.getStatusAudience(), ['15550100124@s.whatsapp.net']);
   assert.deepEqual(events.find(event => Array.isArray(event) && event[0] === 'sync'), ['sync', ['critical_unblock_low'], true]);
   const config = events.find(event => event && typeof event === 'object' && 'syncFullHistory' in event);
-  assert.equal(config.shouldSyncHistoryMessage({ syncType: 'RECENT' }), false);
+  assert.equal(config.shouldSyncHistoryMessage({ syncType: 2 }), true);
+  assert.equal(config.shouldSyncHistoryMessage({ syncType: 3 }), false);
+  await client.destroy();
+});
+
+test('status sync extracts contacts from recent sync without reading message content', async () => {
+  const testPhone = '15550100123';
+  const events = [];
+  const socketEvents = new EventEmitter();
+  const socket = {
+    ev: socketEvents,
+    user: { id: `${testPhone}@s.whatsapp.net` },
+    async waitForSocketOpen() {},
+    async resyncAppState(collections, initial) { events.push(['sync', collections, initial]); },
+    async fetchPrivacySettings() { return { status: 'contacts' }; },
+    async logout() {},
+    end() {}
+  };
+  const state = { creds: { registered: true } };
+  const client = new WhatsAppClient({
+    authDir: 'runtime/session/auth', phoneNumber: testPhone, operation: 'status',
+    loadBaileys: async () => ({
+      default: config => { events.push(config); return socket; },
+      Browsers: { macOS: () => ['Chrome'] },
+      DisconnectReason: { loggedOut: 401 },
+      proto: { HistorySync: { HistorySyncType: { INITIAL_BOOTSTRAP: 1, RECENT: 2, FULL: 3 } } },
+      async fetchLatestWaWebVersion() { return { version: [2, 3000, 1], isLatest: true }; },
+      async useMultiFileAuthState() { return { state, saveCreds: async () => {} }; }
+    })
+  });
+  await client.initialize();
+  socketEvents.emit('connection.update', { connection: 'open' });
+  const audienceTask = client.getStatusAudience();
+  await new Promise(resolve => setImmediate(resolve));
+  socketEvents.emit('messaging-history.set', {
+    syncType: 2,
+    contacts: [
+      { id: '15550100124@s.whatsapp.net', jid: '15550100124@s.whatsapp.net', name: 'Saved Contact' },
+      { id: `${testPhone}@s.whatsapp.net`, jid: `${testPhone}@s.whatsapp.net`, name: 'Own Account' },
+      { id: '15550100125@s.whatsapp.net', jid: '15550100125@s.whatsapp.net', name: '' }
+    ],
+    messages: [{ message: { conversation: 'must not be inspected' } }]
+  });
+  assert.deepEqual(await audienceTask, ['15550100124@s.whatsapp.net']);
+  const config = events.find(event => event && typeof event === 'object' && 'syncFullHistory' in event);
+  assert.equal(config.shouldSyncHistoryMessage({ syncType: 2 }), true);
+  assert.equal(config.shouldSyncHistoryMessage({ syncType: 3 }), false);
   await client.destroy();
 });

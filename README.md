@@ -29,13 +29,14 @@ Hey, I’m **Emmanuel Cherian** — a BCA student, aspiring software developer, 
 | Area | What you’ll find |
 | --- | --- |
 | **Portfolio** | Projects, skills, experience, creative work, and a few personal favorites. |
-| **WhatsApp Profile Updater** | A guided profile-photo update flow with a full-image preview. |
+| **WhatsApp Profile Updater** | Preview the whole photo, then update it through a temporary linked-device session. |
+| **WhatsApp Status Studio** | Post a photo or video status from your own WhatsApp account. |
 | **Image Studio** | Image compression and format conversion in one place. |
 | **QR Code Studio** | Create and export QR codes. |
 | **Color Lab** | Explore colors and palettes. |
 | **Password Studio** | Generate secure passwords. |
 
-The browser tools are designed to do their work in your browser where practical. The WhatsApp updater uses a backend for its temporary linked-device flow; keep its pairing code private, like a password with a tiny expiry timer.
+Image, QR, color and password tools run in your browser. WhatsApp tools use a backend for their temporary linked-device sessions. Keep a pairing code private; it can link a device to your account.
 
 <details>
 <summary><strong>🪄 Peek behind the curtain</strong> (the code is less magical than the animations)</summary>
@@ -64,18 +65,18 @@ Idea → component → styling → “one last tweak” → deploy ✨
 
 ## Run it locally
 
-You’ll need Node.js and pnpm. Then:
+You’ll need Node.js. From the project folder, run:
 
 ```bash
-pnpm install
-pnpm dev
+npm install
+npm run dev
 ```
 
 For a production build:
 
 ```bash
-pnpm build
-pnpm preview
+npm run build
+npm run preview
 ```
 
 ## A tiny peek at the codebase
@@ -90,7 +91,7 @@ src/
 
 ## The human behind the pixels
 
-I’m interested in software development, cybersecurity, AI, and cinematic editing. I’m still learning, still building, and still discovering new ways to center a div.
+I’m learning software development and cybersecurity, and I also spend a lot of time editing videos. I’m still figuring things out—and occasionally spend far too long centering a div.
 
 🌐 [Portfolio](https://aslns.online/) · 🧰 [Tools Lab](https://aslns.online/tools) · 💻 [GitHub](https://github.com/amsoulness)
 
@@ -103,7 +104,7 @@ I’m interested in software development, cybersecurity, AI, and cinematic editi
 
 <div align="center">
 
-<sub>Made with curiosity, caffeine, and an unreasonable number of CSS variables. ✦</sub>
+<sub>Made by Emmanuel, with curiosity, caffeine, and an unreasonable number of CSS variables. ✦</sub>
 
 <br/><br/>
 

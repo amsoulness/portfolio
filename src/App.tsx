@@ -613,7 +613,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       <motion.div className="hero-content" style={{y:heroY}}>
         <div className="hero-topline"><motion.p className="eyebrow" initial={reduce?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8}}>✦ DEVELOPER × CREATIVE EDITOR</motion.p><PageViewCounter page="portfolio" className="aslns-view-counter--hero"/></div>
         <h1>{['Emmanuel','Cherian.'].map((word,i)=><div key={word} style={{overflow:'hidden',paddingBottom:9}}><motion.span className={i===1?'gradient':''} style={{display:'inline-block'}} initial={reduce?false:{y:'110%',opacity:0}} animate={{y:'0%',opacity:1}} transition={{duration:1.1,delay:.25+i*.25,ease:[.22,1,.36,1]}}>{word}</motion.span></div>)}</h1>
-        <Reveal delay={.4}><p className="hero-description">I’m Emmanuel — a BCA student, aspiring software developer, and self-taught video editor. Through AMSOULNESS / ASLNS, I blend code, technology, and cinematic storytelling to turn ideas into experiences.</p></Reveal>
+        <Reveal delay={.4}><p className="hero-description">I’m Emmanuel, a BCA student who builds web projects and edits videos. This is where I share what I’m learning, the things I make, and a few tools I wanted for myself.</p></Reveal>
         <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE 6 CREATIVE TOOLS <span aria-hidden="true">↗</span></a></div>
       </motion.div>
       <motion.div className="scroll-cue" animate={reduce?{}:{y:[0,10,0]}} transition={{duration:2,repeat:Infinity}}>SCROLL TO EXPLORE ↓</motion.div>
@@ -622,12 +622,12 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       <div className="tools-featured-topline"><span><i/> AMSOULNESS / DIGITAL LAB</span><span>FEATURED EXPERIENCE — 001</span></div>
       <div className="tools-featured-layout">
         <div className="tools-featured-copy">
-          <p className="tools-featured-eyebrow">✦ MORE THAN A PORTFOLIO</p>
-          <h2 id="tools-featured-title">YOUR IDEAS.<br/><span>OUR TOOLKIT.</span></h2>
-          <p className="tools-featured-description">Six focused tools in one creative lab. Update a WhatsApp profile photo, compress and convert images, design QR codes, explore color and create secure passwords — all in your browser.</p>
+          <p className="tools-featured-eyebrow">✦ A FEW THINGS I BUILT</p>
+          <h2 id="tools-featured-title">USEFUL TOOLS.<br/><span>NO EXTRA FUSS.</span></h2>
+          <p className="tools-featured-description">I put six handy tools here: update a WhatsApp photo or status, work with images, make QR codes, try out colors, and generate passwords. Open one and give it a go.</p>
           <div className="tools-featured-chips"><span>✧ 6 CREATIVE TOOLS</span><span>◇ NO SIGN-UP</span><span>⚡ BUILT FOR CREATORS</span></div>
-          <a href="/tools" className="tools-featured-button"><span>EXPLORE THE DIGITAL LAB</span><span className="tools-featured-button-arrow">↗</span></a>
-          <p className="tools-featured-footnote">INSTANT ACCESS <span>•</span> BUILT TO CREATE <span>•</span> EXPLORE MORE</p>
+          <a href="/tools" className="tools-featured-button"><span>SEE ALL SIX TOOLS</span><span className="tools-featured-button-arrow">↗</span></a>
+          <p className="tools-featured-footnote">MADE BY EMMANUEL <span>•</span> FREE TO TRY <span>•</span> NO SIGN-UP</p>
         </div>
         <a href="/tools" className="tools-featured-visual" aria-label="Open the AMSOULNESS Tools Hub">
           <div className="tools-featured-visual-grid" aria-hidden="true"/>
@@ -646,8 +646,8 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       <Heading index="01" kicker="THE PERSON" title="Two worlds. One mindset."/>
       <div className="about-layout">
         <div className="about-copy">
-          <Reveal><p>I'm <strong>Emmanuel Cherian</strong>, a Bachelor of Computer Applications student at <strong>Al Azhar College of Arts and Science</strong>, affiliated with Mahatma Gandhi University, Kerala. I'm an aspiring software developer who enjoys turning ideas into functional applications.</p></Reveal>
-          <Reveal delay={.08}><p>I'm also a self-taught video editor working under <strong>AMSOULNESS / ASLNS</strong>, with interests in cinematic edits, anime, web-series, reels and creative storytelling. I enjoy experimenting with technologies and solving real-world problems.</p></Reveal>
+          <Reveal><p>I'm <strong>Emmanuel Cherian</strong>, a BCA student at <strong>Al Azhar College of Arts and Science</strong>, affiliated with Mahatma Gandhi University, Kerala. I’m learning software development by building projects and figuring things out as I go.</p></Reveal>
+          <Reveal delay={.08}><p>Outside college, I edit videos as <strong>AMSOULNESS / ASLNS</strong>. I’m usually drawn to films, anime, web series and short-form edits, and I like trying new ways to tell a story.</p></Reveal>
           <Reveal delay={.14}><p>I developed a <strong>WhatsApp Automation Bot</strong> using Java and Python, with automated replies, status downloading and additional messaging automation features.</p></Reveal>
           <Reveal delay={.2}><p>My learning journey includes a <strong>Cyber Security Internship at Adzink Studio</strong> and an <strong>AI Project Development program at AccelerateX</strong>.</p></Reveal>
         </div>
@@ -670,7 +670,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       <div className="editing-tools"><div className="editing-tools-title"><h3>VIDEO EDITING TOOLS</h3><span>My creative toolkit</span></div><div className="editing-tools-grid">{editingTools.map(tool=><Reveal key={tool.name}><motion.div className="editing-tool" whileHover={reduce?{}:{y:-6}} whileTap={reduce?{}:{scale:.985}}><a className="editing-tool-heading resource-heading" href={resourceLinks[tool.name]} target="_blank" rel="noopener noreferrer" aria-label={`Open official ${tool.name} website`}><TechIcon name={tool.name}/><div className="editing-tool-copy"><strong>{tool.name}</strong><span>{tool.level}</span></div><span className="editing-external" aria-hidden="true">↗</span></a><div className="editing-progress-meta"><span>Experience level</span><strong>{tool.progress}%</strong></div><div className="editing-track"><motion.div className="editing-fill" initial={reduce?false:{width:0}} whileInView={{width:`${tool.progress}%`}} viewport={{once:true}} transition={{duration:1.2}}/></div></motion.div></Reveal>)}</div></div>
     </section>
     <section id="projects" className="section">
-      <Heading index="03" kicker="FEATURED WORK" title="Ideas in motion."/>
+      <Heading index="03" kicker="PROJECTS" title="Things I’ve worked on."/>
       <Reveal><motion.article className={`project ${activeCard==='WhatsApp Automation Bot'?'touch-active':''}`} onTap={()=>setActiveCard(activeCard==='WhatsApp Automation Bot'?null:'WhatsApp Automation Bot')} whileTap={reduce?{}:{scale:.985}} whileHover={reduce?{}:{y:-10,rotateX:2,rotateY:-2,boxShadow:'0 35px 100px #7c3aed33'}} style={{transformPerspective:1000}}>
         <ProjectArtwork kind={0}/><span className="eyebrow">001 / AUTOMATION ENGINEERING</span><h3>WhatsApp Automation Bot</h3>
         <p>Developed and implemented a WhatsApp automation application using Java and Python. The project features automated replies, status downloading and messaging automation functionality.</p>
@@ -682,7 +682,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
       <Heading index="04" kicker="EXPERIENCE & EDUCATION" title="Learning by doing."/>
       <div className="timeline">{experiences.map((item,i)=><Reveal key={item.title} delay={i*.12}><motion.div className="timeline-card" whileHover={reduce?{}:{x:12}}><span className="eyebrow">{item.date}</span><h3>{item.title}</h3><strong style={{color:'#a78bfa'}}>{item.company}</strong><p>{item.description}</p></motion.div></Reveal>)}</div>
     </section>
-    <section className="section" id="inspiration"><Heading index="05" kicker="THE PERSONAL COLLECTION" title="The things I stand by."/><p className="inspiration-intro">A curated collection of my favorites. From unforgettable stories to music, books, and technology—these are the things I personally love, admire, and recommend. Tap any card to explore.</p><div className="inspiration-grid">{inspirations.map((item,i)=><InspirationCard key={item.title} item={item} index={i}/>)}</div></section>
+    <section className="section" id="inspiration"><Heading index="05" kicker="MY PICKS" title="A few things I’m into."/><p className="inspiration-intro">Films, shows, music, books and tools I keep coming back to. Pick a card if you want to find out more.</p><div className="inspiration-grid">{inspirations.map((item,i)=><InspirationCard key={item.title} item={item} index={i}/>)}</div></section>
     <section id="contact" className="section contact">
       <Reveal><span className="eyebrow">06 / LET’S CONNECT</span><h2>Let's create<br/><span className="gradient">something bold.</span></h2>
       <p style={{color:'#b4b1c4',fontSize:19,lineHeight:1.8,marginBottom:40}}>Open to conversations about software development, creative editing, collaboration and new opportunities. The fastest way to reach me is WhatsApp.</p>
