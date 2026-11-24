@@ -23,6 +23,7 @@ const navigationLabelFor = (path: string) => {
 
 const GITHUB = 'https://github.com/amsoulness'
 const LINKEDIN = 'https://linkedin.com/in/aslns/'
+const INSTAGRAM = 'https://www.instagram.com/ft.aslns/'
 const EMAIL = 'mailto:godblessyou20061@gmail.com'
 // WhatsApp number with country code, digits only.
 const WHATSAPP_NUMBER = '918848060663'
@@ -691,6 +692,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme}:{theme:SiteTheme,the
         <MagneticLink href={EMAIL}><svg className="contact-brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m3.5 6 8.5 7 8.5-7"/></svg> SEND AN EMAIL <span aria-hidden="true">↗</span></MagneticLink>
         <MagneticLink href={GITHUB} external><img className="contact-brand-icon" src="https://cdn.simpleicons.org/github/FFFFFF" alt="" loading="lazy"/> GITHUB <span aria-hidden="true">↗</span></MagneticLink>
         <MagneticLink href={LINKEDIN} external><img className="contact-brand-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg" alt="" loading="lazy" onError={e=>{e.currentTarget.style.display="none"}}/> LINKEDIN <span aria-hidden="true">↗</span></MagneticLink>
+        <MagneticLink href={INSTAGRAM} external><img className="contact-brand-icon" src="https://cdn.simpleicons.org/instagram/FFFFFF" alt="" loading="lazy" onError={e=>{e.currentTarget.style.display="none"}}/> INSTAGRAM @FT.ASLNS <span aria-hidden="true">↗</span></MagneticLink>
       </div></Reveal>
     </section>
     <footer className="footer">© 2026 AMSOULNESS / ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
