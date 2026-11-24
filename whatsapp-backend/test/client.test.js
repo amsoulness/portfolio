@@ -26,9 +26,10 @@ test('requests WhatsApp-generated code, disables history sync, and exposes link 
   const client = new WhatsAppClient({
     authDir: 'runtime/session/auth', phoneNumber: testPhone,
     loadBaileys: async () => ({
-      default: config => { events.push(config); return socket; },
+      default: config => { events.push(config); queueMicrotask(() => socketEvents.emit('connection.update', { qr: 'test-handshake' })); return socket; },
       Browsers: { macOS: () => ['Chrome'] },
       DisconnectReason: { loggedOut: 401 },
+      async fetchLatestWaWebVersion() { return { version: [2, 3000, 1], isLatest: true }; },
       async useMultiFileAuthState(dir) { assert.equal(dir, 'runtime/session/auth'); return { state, saveCreds: async () => { events.push('save'); } }; }
     })
   });
@@ -52,4 +53,44 @@ test('requests WhatsApp-generated code, disables history sync, and exposes link 
   await client.destroy();
   assert.equal(events.includes('logout'), true);
   assert.equal(events.includes('end'), true);
+});
+
+test('status sync reads only saved-contact app state and excludes the linked account', async () => {
+  const testPhone = '15550100123';
+  const events = [];
+  const socketEvents = new EventEmitter();
+  const socket = {
+    ev: socketEvents,
+    user: { id: `${testPhone}@s.whatsapp.net` },
+    async waitForSocketOpen() { events.push('open'); },
+    async resyncAppState(collections, initial) {
+      events.push(['sync', collections, initial]);
+      socketEvents.emit('contacts.upsert', [
+        { id: '15550100124@s.whatsapp.net', jid: '15550100124@s.whatsapp.net', name: 'Saved Contact' },
+        { id: `${testPhone}@s.whatsapp.net`, jid: `${testPhone}@s.whatsapp.net`, name: 'Own Account' },
+        { id: '15550100125@s.whatsapp.net', jid: '15550100125@s.whatsapp.net', name: '' }
+      ]);
+    },
+    async fetchPrivacySettings() { return { status: 'contacts' }; },
+    async logout() {},
+    end() {}
+  };
+  const state = { creds: { registered: true } };
+  const client = new WhatsAppClient({
+    authDir: 'runtime/session/auth', phoneNumber: testPhone, operation: 'status',
+    loadBaileys: async () => ({
+      default: config => { events.push(config); return socket; },
+      Browsers: { macOS: () => ['Chrome'] },
+      DisconnectReason: { loggedOut: 401 },
+      async fetchLatestWaWebVersion() { return { version: [2, 3000, 1], isLatest: true }; },
+      async useMultiFileAuthState() { return { state, saveCreds: async () => {} }; }
+    })
+  });
+  await client.initialize();
+  socketEvents.emit('connection.update', { connection: 'open' });
+  assert.deepEqual(await client.getStatusAudience(), ['15550100124@s.whatsapp.net']);
+  assert.deepEqual(events.find(event => Array.isArray(event) && event[0] === 'sync'), ['sync', ['critical_unblock_low'], true]);
+  const config = events.find(event => event && typeof event === 'object' && 'syncFullHistory' in event);
+  assert.equal(config.shouldSyncHistoryMessage({ syncType: 'RECENT' }), false);
+  await client.destroy();
 });

@@ -15,6 +15,7 @@ class WhatsAppClient extends EventEmitter {
     this.restartTask = null;
     this.restartAttempts = 0;
     this.savedContacts = new Set();
+    this.statusSyncTask = null;
     this.statusSyncPromise = operation === 'status' ? new Promise((resolve, reject) => {
       this.resolveStatusSync = resolve;
       this.rejectStatusSync = reject;
@@ -86,13 +87,9 @@ class WhatsAppClient extends EventEmitter {
       browser: this.baileys.Browsers.macOS('Chrome'),
       printQRInTerminal: false,
       syncFullHistory: false,
-      // A recent sync lets Baileys process WhatsApp's saved-contact app-state
-      // actions. Never request full history; message events remain unhandled.
-      shouldSyncHistoryMessage: message => {
-        if (this.operation !== 'status') return false;
-        const types = this.baileys.proto?.HistorySync?.HistorySyncType;
-        return message?.syncType === types?.RECENT || message?.syncType === types?.INITIAL_BOOTSTRAP;
-      },
+      // Status Studio gets contacts from the saved-contact app-state patch
+      // directly after linking. It never requests or processes message history.
+      shouldSyncHistoryMessage: () => false,
       shouldIgnoreJid: () => true,
       markOnlineOnConnect: false,
       fireInitQueries: false,
@@ -112,19 +109,6 @@ class WhatsAppClient extends EventEmitter {
           if (match) this.savedContacts.add(match[1]);
         }
       });
-      socket.ev.on('messaging-history.set', event => {
-        const types = this.baileys.proto?.HistorySync?.HistorySyncType;
-        if (event?.syncType !== types?.RECENT && event?.syncType !== types?.INITIAL_BOOTSTRAP) return;
-        // Baileys flushes contacts.upsert immediately after this event. Defer
-        // resolution one turn so the saved-contact actions are collected.
-        setImmediate(() => {
-          if (this.closing || !this.resolveStatusSync) return;
-          const own = String(this.socket?.user?.id || '').replace(/:\d+(?=@)/, '').match(/^([1-9][0-9]{7,14})@s\.whatsapp\.net$/)?.[1];
-          if (own) this.savedContacts.delete(own);
-          this.resolveStatusSync([...this.savedContacts]);
-          this.clearStatusSync();
-        });
-      });
     }
 
     socket.ev.on('creds.update', () => {
@@ -135,10 +119,11 @@ class WhatsAppClient extends EventEmitter {
         this.connected = true;
         if (this.operation === 'status' && this.authState.creds.registered && this.resolveStatusSync && !this.statusSyncTimer) {
           this.statusSyncTimer = setTimeout(() => {
-            this.rejectStatusSync?.(this.statusError('WhatsApp did not finish syncing saved contacts. Check the connection and try again.'));
+            this.rejectStatusSync?.(this.statusError('WhatsApp did not provide the saved contacts. Check your connection and try again.'));
             this.clearStatusSync();
-          }, 45000);
+          }, 90000);
           this.statusSyncTimer.unref?.();
+          void this.syncSavedContacts(socket);
         }
         if (this.authState.creds.registered) this.restartAttempts = 0;
         this.emit('authenticated');
@@ -239,6 +224,40 @@ class WhatsAppClient extends EventEmitter {
     clearTimeout(this.statusSyncTimer);
     this.resolveStatusSync = null;
     this.rejectStatusSync = null;
+  }
+
+  async syncSavedContacts(socket) {
+    if (this.statusSyncTask || !this.resolveStatusSync || !socket) return;
+    const task = (async () => {
+      if (typeof socket.resyncAppState !== 'function') throw this.statusError('This WhatsApp connection cannot sync saved contacts. Try again later.');
+      // WhatsApp stores address-book contact actions in this app-state
+      // collection. Sync only that collection; no chats or message history.
+      await socket.resyncAppState(['critical_unblock_low'], true);
+      await new Promise(resolve => setImmediate(resolve));
+      if (this.closing || socket !== this.socket || !this.resolveStatusSync) return;
+      const own = String(socket.user?.id || '').replace(/:\d+(?=@)/, '').match(/^([1-9][0-9]{7,14})@s\.whatsapp\.net$/)?.[1];
+      if (own) this.savedContacts.delete(own);
+      const contacts = [...this.savedContacts];
+      if (!contacts.length) throw this.statusError('WhatsApp did not return any saved phone-number contacts. Check your connection and try again.');
+      this.resolveStatusSync(contacts);
+      this.clearStatusSync();
+    })().catch(error => {
+      // A replaced socket gets a fresh sync attempt when it opens.
+      if (this.closing || socket !== this.socket || !this.resolveStatusSync) return;
+      const message = error?.publicMessage || 'WhatsApp could not sync the saved contacts. Check your connection and try again.';
+      this.rejectStatusSync?.(this.statusError(message));
+      this.clearStatusSync();
+    });
+    this.statusSyncTask = task;
+    try { await task; }
+    finally {
+      if (this.statusSyncTask === task) {
+        this.statusSyncTask = null;
+        if (socket !== this.socket && this.connected && this.resolveStatusSync) {
+          void this.syncSavedContacts(this.socket);
+        }
+      }
+    }
   }
 
   cancelStatusAudienceWait() {
