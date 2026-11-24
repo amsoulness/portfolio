@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const { EventEmitter } = require('node:events');
 const { WhatsAppClient } = require('../client');
 
-test('requests WhatsApp-generated code, disables history sync, and exposes link lifecycle events', async () => {
+test('profile pairing avoids history sync and exposes link lifecycle events', async () => {
   // Reserved fictional North American test number; no real account is used.
   const testPhone = '15550100123';
   const events = [];
@@ -27,7 +27,7 @@ test('requests WhatsApp-generated code, disables history sync, and exposes link 
     authDir: 'runtime/session/auth', phoneNumber: testPhone,
     loadBaileys: async () => ({
       default: config => { events.push(config); queueMicrotask(() => socketEvents.emit('connection.update', { qr: 'test-handshake' })); return socket; },
-      Browsers: { macOS: () => ['Chrome'] },
+      Browsers: { macOS: name => [name] },
       DisconnectReason: { loggedOut: 401 },
       proto: { HistorySync: { HistorySyncType: { INITIAL_BOOTSTRAP: 1, RECENT: 2, FULL: 3 } } },
       async fetchLatestWaWebVersion() { return { version: [2, 3000, 1], isLatest: true }; },
@@ -42,6 +42,7 @@ test('requests WhatsApp-generated code, disables history sync, and exposes link 
   assert.deepEqual(events.find(event => Array.isArray(event) && event[0] === 'pair'), ['pair', testPhone]);
   const config = events.find(event => event && typeof event === 'object' && 'syncFullHistory' in event);
   assert.equal(config.syncFullHistory, false);
+  assert.deepEqual(config.browser, ['Chrome']);
   assert.equal(config.shouldSyncHistoryMessage(), false);
   assert.equal(config.shouldIgnoreJid('chat@s.whatsapp.net'), true);
   assert.equal(config.markOnlineOnConnect, false);
@@ -81,7 +82,7 @@ test('status sync reads only saved-contact app state and excludes the linked acc
     authDir: 'runtime/session/auth', phoneNumber: testPhone, operation: 'status',
     loadBaileys: async () => ({
       default: config => { events.push(config); return socket; },
-      Browsers: { macOS: () => ['Chrome'] },
+      Browsers: { macOS: name => [name] },
       DisconnectReason: { loggedOut: 401 },
       proto: { HistorySync: { HistorySyncType: { INITIAL_BOOTSTRAP: 1, RECENT: 2, FULL: 3 } } },
       async fetchLatestWaWebVersion() { return { version: [2, 3000, 1], isLatest: true }; },
@@ -93,6 +94,8 @@ test('status sync reads only saved-contact app state and excludes the linked acc
   assert.deepEqual(await client.getStatusAudience(), ['15550100124@s.whatsapp.net']);
   assert.deepEqual(events.find(event => Array.isArray(event) && event[0] === 'sync'), ['sync', ['critical_unblock_low'], true]);
   const config = events.find(event => event && typeof event === 'object' && 'syncFullHistory' in event);
+  assert.equal(config.syncFullHistory, true);
+  assert.deepEqual(config.browser, ['Desktop']);
   assert.equal(config.shouldSyncHistoryMessage({ syncType: 2 }), true);
   assert.equal(config.shouldSyncHistoryMessage({ syncType: 3 }), false);
   await client.destroy();
@@ -116,7 +119,7 @@ test('status sync extracts contacts from recent sync without reading message con
     authDir: 'runtime/session/auth', phoneNumber: testPhone, operation: 'status',
     loadBaileys: async () => ({
       default: config => { events.push(config); return socket; },
-      Browsers: { macOS: () => ['Chrome'] },
+      Browsers: { macOS: name => [name] },
       DisconnectReason: { loggedOut: 401 },
       proto: { HistorySync: { HistorySyncType: { INITIAL_BOOTSTRAP: 1, RECENT: 2, FULL: 3 } } },
       async fetchLatestWaWebVersion() { return { version: [2, 3000, 1], isLatest: true }; },

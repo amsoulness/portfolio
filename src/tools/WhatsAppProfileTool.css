@@ -5,7 +5,7 @@
 .wa-tool .wa-intro h3{font-size:clamp(29px,4.1vw,48px);font-weight:750;line-height:1.12;letter-spacing:-1.5px;margin:18px 0 15px;color:#faf8ff}
 .wa-intro h3 em{font-style:normal;color:#c4b5fd}
 .wa-intro>p{color:var(--wa-muted);font-size:14px;line-height:1.8;max-width:530px;margin:0}
-.wa-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(240px,1fr);gap:24px;align-items:start}
+.wa-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start}
 .wa-main{display:grid;gap:16px;min-width:0}
 .wa-card{padding:22px;border:1px solid var(--wa-line);border-radius:17px;background:rgba(17,15,29,.8);box-shadow:inset 0 1px rgba(255,255,255,.025)}
 .wa-tool h4{display:flex;align-items:center;flex-wrap:wrap;gap:10px;color:#f1eefb;font-size:13px;font-weight:650;letter-spacing:0;margin:0 0 19px;line-height:1.5}
@@ -41,7 +41,8 @@
 .wa-tool .wa-primary:hover:not(:disabled){background:#d5c7ff}
 .wa-tool .wa-secondary{background:rgba(167,139,250,.1);border-color:var(--wa-line);color:#e3d8ff;min-height:38px;padding:8px 14px;margin-top:16px;font-size:11px}
 .wa-tool .wa-secondary:hover:not(:disabled){background:rgba(167,139,250,.2)}
-.wa-aside{display:grid;gap:22px}
+.wa-aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:start}
+.wa-aside .wa-card{grid-row:span 2}
 .wa-aside-heading{color:#e5dcfa;font-size:10px;font-weight:750;letter-spacing:1.7px;margin-bottom:24px}
 .wa-how{padding:0;margin:0;list-style:none;display:grid;gap:25px}
 .wa-how li{display:flex;align-items:flex-start;gap:13px;color:var(--wa-muted);font-size:12px;line-height:1.8}
@@ -66,7 +67,6 @@
 .wa-spin{animation:wa-spin 1.3s linear infinite}
 @keyframes wa-spin{to{transform:rotate(360deg)}}
 @media(max-width:800px){.wa-layout{grid-template-columns:1fr;gap:25px}.wa-aside .wa-card{padding:21px}.wa-how{gap:17px}.wa-intro{margin-bottom:24px}.wa-card{padding:18px}.wa-tool .wa-has-photo{height:310px}.wa-step-note{font-size:7px;letter-spacing:.7px}.wa-tool .wa-drop{min-height:230px}.wa-code{letter-spacing:4px}.wa-status{padding:17px}}
-@media(max-width:1300px){.wa-layout{grid-template-columns:minmax(0,1fr);gap:24px}.wa-aside{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.wa-aside .wa-card{grid-row:span 2}}
 @media(prefers-reduced-motion:reduce){.wa-spin{animation:none}.wa-tool button{transition:none}}
 @media(max-width:760px){.wa-layout,.wa-main,.wa-aside,.wa-card,.wa-status{min-width:0}.wa-consent{font-size:12px;line-height:1.7}.wa-tool .wa-phone input{font-size:16px}.wa-tool .wa-primary,.wa-tool .wa-secondary{min-height:46px}}
 @media(max-width:560px){.wa-tool .wa-drop{min-height:200px;padding:20px 12px}.wa-tool .wa-has-photo{height:min(72vw,310px)}.wa-code{font-size:clamp(19px,7vw,27px);letter-spacing:clamp(2px,1vw,4px)}}

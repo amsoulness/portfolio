@@ -84,9 +84,13 @@ class WhatsAppClient extends EventEmitter {
       auth: this.authState,
       version: this.version,
       logger: pino({ level: 'silent' }),
-      browser: this.baileys.Browsers.macOS('Chrome'),
+      // WhatsApp sends the contact/history bootstrap to desktop-style linked
+      // devices. Profile updates do not need that sync and keep the lighter UA.
+      browser: this.baileys.Browsers.macOS(this.operation === 'status' ? 'Desktop' : 'Chrome'),
       printQRInTerminal: false,
-      syncFullHistory: false,
+      // The Status flow needs WhatsApp's recent/initial contact bootstrap.
+      // shouldSyncHistoryMessage below still rejects full/on-demand history.
+      syncFullHistory: this.operation === 'status',
       // Only accept WhatsApp's recent/initial sync types for Status Studio.
       // The sync payload may contain messages; listeners below read contacts
       // only and never retain or log the history payload.
