@@ -3,7 +3,7 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
 
-const PAGE_IDS = Object.freeze(['portfolio', 'tools', 'whatsapp', 'image', 'qr', 'color', 'password', 'status', 'instagram']);
+const PAGE_IDS = Object.freeze(['portfolio', 'tools', 'whatsapp', 'image', 'qr', 'color', 'password', 'status']);
 
 class PageViewStore {
   constructor(filePath) {
