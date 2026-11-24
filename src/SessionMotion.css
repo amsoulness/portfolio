@@ -1,0 +1,26 @@
+/* Motion language shared with the portfolio: violet light, orbit lines and soft reveals. */
+.as-session::before,.as-session::after{content:"";position:absolute;pointer-events:none;z-index:0;border-radius:50%;width:680px;height:680px;left:50%;top:230px;border:1px solid var(--s-line);box-shadow:0 0 100px #9570ee08,inset 0 0 90px #9570ee05;transform:translateX(-50%) rotate(-24deg) scaleX(1.6);animation:as-orbit-drift 28s ease-in-out infinite alternate}
+.as-session::after{width:460px;height:460px;top:350px;animation-direction:alternate-reverse;animation-duration:22s;border-style:dashed;opacity:.5}
+.as-session>header,.as-session>main,.as-session>footer{position:relative;z-index:1}
+.as-session-glow{height:1100px;top:-320px;background:radial-gradient(ellipse at 30% 40%,#9459dc30,transparent 50%),radial-gradient(ellipse at 75% 65%,#3e92ae18,transparent 45%);animation:as-light-drift 14s ease-in-out infinite alternate}
+.as-session-glow::before,.as-session-glow::after{content:"";position:absolute;width:3px;height:3px;border-radius:50%;top:52%;left:40%;background:var(--s-accent);box-shadow:110px 85px 0 #bea0ff70,-140px 150px 0 #bea0ff55,220px -90px 0 #83d3dc60,-250px -60px 0 #bea0ff60,90px 270px 0 #bea0ff50,-70px 340px 0 #83d3dc60;animation:as-particles 8s ease-in-out infinite alternate}
+.as-session-glow::after{top:68%;left:57%;animation-delay:-4s;opacity:.5}
+.as-session [data-motion-reveal=true]{opacity:0;transform:translateY(26px);filter:blur(4px);transition:opacity .7s ease var(--reveal-delay,0ms),transform .7s cubic-bezier(.2,.65,.3,1) var(--reveal-delay,0ms),filter .7s ease var(--reveal-delay,0ms)}
+.as-session [data-revealed=true]{opacity:1;transform:translateY(0);filter:blur(0)}
+.as-session [data-motion-reveal=true]:focus-within{opacity:1;transform:none;filter:none}
+.as-plugin-card,.as-pair-panel,.as-deploy-panel,.as-render-card{position:relative;isolation:isolate;box-shadow:0 16px 55px #00000008}
+.as-plugin-card{transition:translate .25s ease,border-color .25s ease,box-shadow .25s ease!important}
+.as-plugin-card[data-motion-reveal=true]{transition:opacity .65s ease var(--reveal-delay,0ms),transform .65s ease var(--reveal-delay,0ms),filter .65s ease var(--reveal-delay,0ms),translate .25s ease,border-color .25s ease,box-shadow .25s ease!important}
+.as-session button,.as-session .as-session-primary,.as-session .as-deploy-secondary{transition:translate .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease}
+.as-session-primary{position:relative;overflow:hidden}.as-session-primary::after{content:"";position:absolute;inset:-80% auto -80% -50%;width:24%;background:linear-gradient(90deg,transparent,#ffffff38,transparent);transform:rotate(25deg);pointer-events:none;animation:as-button-shine 7s ease-in-out infinite}
+.as-session input:focus,.as-session select:focus{box-shadow:0 0 0 4px var(--s-soft);border-color:var(--s-accent)}
+.as-render-card{animation:as-step-enter .55s ease both}.as-render-stages li[aria-current=step]>span{box-shadow:0 0 22px var(--s-soft)}
+.as-session-live,.as-session-result{animation:as-step-enter .5s ease both}
+@media(hover:hover) and (pointer:fine){.as-plugin-card:hover{translate:0 -6px;border-color:var(--s-accent);box-shadow:0 16px 36px #9570ee14}.as-session button:hover:not(:disabled),.as-session .as-session-primary:hover,.as-session .as-deploy-secondary:hover{translate:0 -2px;box-shadow:0 8px 24px #9570ee18}.as-session button:active:not(:disabled){translate:0 0}}
+@keyframes as-orbit-drift{to{transform:translateX(-48%) rotate(16deg) scaleX(1.45)}}
+@keyframes as-light-drift{to{transform:translateX(-46%) translateY(45px) scale(1.12);opacity:.75}}
+@keyframes as-particles{to{transform:translate(20px,-36px);opacity:.35}}
+@keyframes as-button-shine{0%,75%{left:-50%}100%{left:150%}}
+@keyframes as-step-enter{from{opacity:0;translate:0 14px}to{opacity:1;translate:0 0}}
+@media(max-width:760px){.as-session::before{width:360px;height:360px}.as-session::after{width:240px;height:240px}.as-session-glow{width:760px}.as-session [data-motion-reveal=true]{filter:none}}
+@media(prefers-reduced-motion:reduce){.as-session::before,.as-session::after,.as-session-glow::before,.as-session-glow::after,.as-session-primary::after{display:none}.as-session-glow,.as-render-card,.as-session-live,.as-session-result{animation:none}.as-session [data-motion-reveal=true]{opacity:1;transform:none;filter:none;transition:none!important}.as-session .as-plugin-card,.as-session button,.as-session a{transition:none!important;translate:none!important}}

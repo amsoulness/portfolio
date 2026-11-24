@@ -1,3 +1,4 @@
+import useSessionMotion from './useSessionMotion'
 import { useEffect, useRef, useState } from 'react'
 import { Check, CheckCircle2, Code, Database, Eye, EyeOff, LoaderCircle, LockKeyhole, Server } from 'lucide-react'
 import ThemeToggle, { type SiteTheme, type ThemePreference } from './ThemeToggle'
@@ -8,6 +9,7 @@ const API = import.meta.env.VITE_ASLNS_API_URL || 'https://aslns-pairing-product
 type Job = { phase: string; login?: string; error?: string; steps?: { message: string; at: string }[]; repoUrl?: string; dashboardUrl?: string; databaseDashboard?: string; serviceUrl?: string; deploymentStatus?: string }
 type Props = { theme: SiteTheme; themePreference: ThemePreference; onToggleTheme: () => void }
 export default function RenderDeploy({ theme, themePreference, onToggleTheme }: Props) {
+  useSessionMotion()
   const [oauth, setOauth] = useState<boolean | null>(null)
   const [githubToken, setGithubToken] = useState(''), [renderKey, setRenderKey] = useState('')
   const [login, setLogin] = useState(''), [workspaces, setWorkspaces] = useState<{ id: string; name: string }[]>([])
@@ -77,7 +79,7 @@ export default function RenderDeploy({ theme, themePreference, onToggleTheme }: 
   const stages = ['GitHub', 'Configure', 'Deploy', 'Done']
   return <div className="as-session as-render-page" data-theme={theme}><div className="as-session-glow" aria-hidden="true"/><header className="as-session-nav"><a className="as-session-brand" href="/session"><span className="as-session-monogram">A<span>·</span></span><span>AMSOULNESS<small>ASLNS / RENDER DEPLOYER</small></span></a><nav aria-label="Render navigation"><a href="/session#deploy">Other hosts</a><ThemeToggle theme={theme} preference={themePreference} onToggle={onToggleTheme}/></nav></header>
     <main className="as-render-main"><div className="as-render-heading"><span className="as-session-eyebrow"><Server size={16}/> YOUR BOT, ON RENDER</span><h1>Deploy on Render.</h1><p>Connect GitHub. Configure your bot. Watch it go live.</p></div><ol className="as-render-stages" aria-label="Deployment progress">{stages.map((stage, i) => <li key={stage} aria-current={step === i ? 'step' : undefined} className={step > i ? 'complete' : ''}><span>{step > i ? <Check size={16}/> : i + 1}</span><strong>{stage}</strong><small>{step > i ? 'Complete' : step === i ? 'Current step' : 'Upcoming'}</small></li>)}</ol>
-      <section className="as-render-card" aria-label={stages[step]}><span className="as-session-eyebrow">STEP {step + 1} OF 4</span>
+      <section key={step} className="as-render-card" aria-label={stages[step]}><span className="as-session-eyebrow">STEP {step + 1} OF 4</span>
         {step === 0 && <><h2>Connect GitHub</h2><p>We’ll create a small public deployment repository in your account when you approve deployment. It contains a Dockerfile for Amsoulness, never your session or API keys.</p><div className="as-render-assurances"><div><Code size={20}/><strong>Your own repository</strong><span>A new deployment wrapper, with no changes to your existing repos.</span></div><div><LockKeyhole size={20}/><strong>Temporary credentials</strong><span>Tokens stay in server memory, expire automatically, and are cleared when deployment finishes.</span></div></div>
           {oauth && <a className="as-session-primary" href={`${API}/api/render/oauth/start?origin=${encodeURIComponent(window.location.origin)}`}>Continue with GitHub</a>}
           {oauth === false && <p className="as-render-notice">One-click GitHub sign-in is awaiting site configuration. You can use a temporary GitHub token to run the full deployment workflow now.</p>}

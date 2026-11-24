@@ -1,3 +1,4 @@
+import useSessionMotion from './useSessionMotion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, CheckCircle2, Copy, Link2, LoaderCircle, LockKeyhole, QrCode, Smartphone, X } from 'lucide-react'
 import ThemeToggle, { type SiteTheme, type ThemePreference } from './ThemeToggle'
@@ -15,6 +16,7 @@ type PairState = { state: 'starting' | 'waiting' | 'finishing' | 'ready' | 'erro
 type Props = { theme: SiteTheme; themePreference: ThemePreference; onToggleTheme: () => void }
 
 export default function SessionPage({ theme, themePreference, onToggleTheme }: Props) {
+  useSessionMotion()
   const [method, setMethod] = useState<'qr' | 'code'>('qr')
   const [phone, setPhone] = useState('')
   const [country, setCountry] = useState<CountryCode>('IN')
