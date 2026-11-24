@@ -18,15 +18,19 @@ type Session = { sessionId: string; accessToken: string }
 type State = { sessionId: string; status: string; pairingCode: string | null; expiresAt: string; updated: boolean; deviceRemoved: boolean; outcome: string; error: string | null }
 type Asset = { file: File; url: string; kind: 'image' | 'video' }
 
+class ApiError extends Error {
+  constructor(message: string, readonly status: number) { super(message) }
+}
+
 function readSession(): Session | null {
   try { const value = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (value?.api === API && /^[a-f0-9-]{36}$/.test(value.sessionId) && /^[a-f0-9]{64}$/.test(value.accessToken)) return { sessionId: value.sessionId, accessToken: value.accessToken } } catch { /* storage unavailable */ }
   return null
 }
 async function api(path: string, options: RequestInit = {}) {
   const response = await fetch(`${API}/api/whatsapp${path}`, { ...options, signal: options.signal || AbortSignal.timeout(30000), cache: 'no-store', credentials: 'omit' })
-  if (!response.headers.get('content-type')?.includes('application/json')) throw new Error('The WhatsApp service is unavailable. Try again later.')
+  if (!response.headers.get('content-type')?.includes('application/json')) throw new ApiError('The WhatsApp service is unavailable. Try again later.', response.status)
   const data = await response.json()
-  if (!response.ok) throw new Error(data.error || 'The request could not be completed.')
+  if (!response.ok) throw new ApiError(data.error || 'The request could not be completed.', response.status)
   return data
 }
 function validateState(data: State): State { if (!data || !allowed.has(data.status) || typeof data.sessionId !== 'string' || !Number.isFinite(Date.parse(data.expiresAt))) throw new Error('Unexpected response from the WhatsApp service.'); return data }
@@ -45,7 +49,19 @@ export default function WhatsAppStatusTool() {
     const controller = new AbortController()
     const poll = async () => {
       try { const value = validateState(await api(`/sessions/${session.sessionId}`, { headers: { 'X-Session-Token': session.accessToken }, signal: AbortSignal.any([controller.signal, AbortSignal.timeout(15000)]) })); if (stopped) return; setState(value); setPollError(''); if (terminal.has(value.status)) return }
-      catch (cause) { if (stopped) return; setPollError(cause instanceof Error ? cause.message : 'Connection interrupted. Checking again…') }
+      catch (cause) {
+        if (stopped) return
+        if (cause instanceof ApiError && cause.status === 404) {
+          try { sessionStorage.removeItem(KEY) } catch { /* Storage may be unavailable. */ }
+          setSession(null)
+          setState(null)
+          setMissing(false)
+          setPollError('')
+          setError('Your previous status session expired. Choose the media and account again to start a fresh session. Check Linked devices in WhatsApp and remove this tool if it is still listed.')
+          return
+        }
+        setPollError(cause instanceof Error ? cause.message : 'Connection interrupted. Checking again…')
+      }
       if (!stopped) timer = setTimeout(poll, 2000)
     }
     void poll(); return () => { stopped = true; clearTimeout(timer); controller.abort() }
