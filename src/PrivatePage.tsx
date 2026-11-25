@@ -26,12 +26,8 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
   }, [])
 
   useEffect(() => {
-    let active = true
-    fetch('/api/private-page-content', { cache: 'no-store', credentials: 'same-origin' })
-      .then(async response => response.ok ? await response.json() as { content: PrivateContent } : null)
-      .then(result => { if (active && result?.content) { setContent(result.content); setUnlocked(true) } })
-      .catch(() => {})
-    return () => { active = false }
+    // Start every page load behind the gate and invalidate any previous browser session.
+    fetch('/api/private-page-lock', { method: 'POST', cache: 'no-store', credentials: 'same-origin' }).catch(() => {})
   }, [])
 
   useEffect(() => {
@@ -61,12 +57,6 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Couldn’t reach the lock just now. Check your connection and try again.')
     } finally { setBusy(false) }
-  }
-
-  async function lockPage() {
-    audioRef.current?.pause()
-    try { await fetch('/api/private-page-lock', { method: 'POST', cache: 'no-store', credentials: 'same-origin' }) }
-    finally { setMusicPlaying(false); setContent(null); setUnlocked(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }
   }
 
   async function toggleMusic() {
@@ -156,7 +146,6 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
 
       <section className="private-finale" aria-label="The end of our little space">
         <div className="private-finale-glow" aria-hidden="true">♥</div><p className="private-eyebrow">ALWAYS, IN EVERY LITTLE UNIVERSE</p><h2>One more<br/><em>hug?</em></h2>
-        <button className="private-lock-button" type="button" onClick={lockPage}><LockKeyhole size={15}/> LOCK THIS PAGE</button>
       </section>
     </div>}
     <footer className="private-footer">MADE WITH A LITTLE MAGIC <span>♥</span> AMSOULNESS</footer>
