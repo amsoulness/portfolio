@@ -198,8 +198,8 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
           <section className="private-garden" aria-label="A rose and a daisy blooming for us">
         <p className="private-garden-title"><Sparkles size={13}/> TWO LITTLE BLOOMS <Sparkles size={13}/></p>
         <div className="private-garden-flowers">
-          <figure className="private-garden-flower private-garden-rose"><span className="private-garden-stem"/><PrivateAsciiMotif motif="rose" label="An original animated ASCII rose"/><figcaption>A rose for me</figcaption></figure>
-          <figure className="private-garden-flower private-garden-daisy"><span className="private-garden-stem"/><PrivateAsciiMotif motif="daisy" label="An original animated ASCII daisy"/><figcaption>A daisy for you</figcaption></figure>
+          <figure className="private-garden-flower private-garden-rose"><img src="/keepsake/rose.svg" alt="A red rose"/><figcaption>A rose for me</figcaption></figure>
+          <figure className="private-garden-flower private-garden-daisy"><img src="/keepsake/daisy.svg" alt="A yellow daisy"/><figcaption>A daisy for you</figcaption></figure>
         </div>
         <span className="private-garden-dew private-garden-dew-one" aria-hidden="true"/><span className="private-garden-dew private-garden-dew-two" aria-hidden="true"/>
         <a className="private-garden-credit" href="https://github.com/JIN2-ASCII/-JIN2-ASCII" target="_blank" rel="noreferrer">A little bloom inspiration from JIN2’s ASCII flower studies ↗</a>
