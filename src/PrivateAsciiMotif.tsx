@@ -260,5 +260,12 @@ export default function PrivateAsciiMotif({ motif, label }: { motif: Motif; labe
     return () => { cancelAnimationFrame(animation); observer.disconnect(); visibility.disconnect(); document.removeEventListener('visibilitychange', onVisibility) }
   }, [motif])
 
+  if (motif === 'heart') return <div className="private-i-love-you-art" role="img" aria-label={label}>
+    <picture>
+      <source media="(prefers-reduced-motion: reduce)" srcSet="/keepsake/i-love-you-front.png"/>
+      <img src="/keepsake/i-love-you-preview.gif" alt="" loading="lazy" decoding="async"/>
+    </picture>
+    <span aria-hidden="true">ASLNS · @ft.aslns<br/>114 LANGUAGES</span>
+  </div>
   return <canvas ref={canvasRef} className={`private-ascii-motif private-ascii-${motif}`} role="img" aria-label={label}/>
 }

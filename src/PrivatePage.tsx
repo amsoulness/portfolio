@@ -219,10 +219,10 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
           <p className="private-motif-copy">A knight on whiskers, assigned to protect every rose, daisy, and stolen hug.</p>
         </section>
         <section data-scene-scroll className={`private-scene ${sceneIndex === 4 ? 'is-current' : sceneIndex < 4 ? 'is-ahead' : 'is-away'}`} aria-label="I LOVE YOU">
-          <p className="private-motif-kicker">SOME THINGS DESERVE THEIR OWN LITTLE UNIVERSE</p>
-          <div className="private-motif-art motif-heart-art"><PrivateAsciiMotif motif="heart" label="An original animated ASCII heart"/></div>
+          <p className="private-motif-kicker">I LOVE YOU · IN 114 LANGUAGES</p>
+          <div className="private-motif-art motif-heart-art"><PrivateAsciiMotif motif="heart" label="A rotating ASCII heart formed from I love you in 114 languages"/></div>
           <h2 className="private-motif-title">I LOVE<br/><em>YOU.</em></h2>
-          <p className="private-motif-copy">Across every orbit, every quiet moment, and every version of tomorrow.</p>
+          <p className="private-motif-copy">One little heart, saying the same thing in 114 languages.</p>
         </section>
         <section data-scene-scroll className={`private-scene ${sceneIndex === 5 ? 'is-current' : sceneIndex < 5 ? 'is-ahead' : 'is-away'}`} aria-label="BUTTERFLY">
           <p className="private-motif-kicker">A LITTLE WINGBEAT, FINDING ITS WAY HOME</p>
