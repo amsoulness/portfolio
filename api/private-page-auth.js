@@ -15,7 +15,9 @@ export default function handler(req, res) {
 
   const requestOrigin = req.headers.origin
   const requestHost = req.headers.host
-  if (!requestOrigin || !requestHost || new URL(requestOrigin).host !== requestHost) {
+  let parsedOrigin
+  try { parsedOrigin = new URL(requestOrigin) } catch { parsedOrigin = null }
+  if (!parsedOrigin || !requestHost || parsedOrigin.host !== requestHost || (process.env.VERCEL && parsedOrigin.protocol !== 'https:')) {
     return res.status(403).json({ error: 'Open this page directly to continue.' })
   }
   if (!String(req.headers['content-type'] || '').toLowerCase().startsWith('application/json')) {
@@ -26,9 +28,14 @@ export default function handler(req, res) {
   const sessionSecret = process.env.PRIVATE_PAGE_SESSION_SECRET
   if (!expected || !sessionSecret) return res.status(503).json({ error: 'The private-page lock is not configured yet.' })
 
-  const forwarded = req.headers['x-forwarded-for']
-  const clientKey = (typeof forwarded === 'string' ? forwarded.split(',')[0] : 'unknown').trim()
+  const forwarded = req.headers['x-vercel-forwarded-for'] || req.headers['x-forwarded-for'] || req.headers['x-real-ip']
+  const clientKey = (typeof forwarded === 'string' ? forwarded.split(',')[0] : 'unknown').trim().slice(0, 100)
   const now = Date.now()
+  for (const [key, attempt] of attempts) if (attempt.expiresAt <= now) attempts.delete(key)
+  if (!attempts.has(clientKey) && attempts.size >= 5000) {
+    const oldest = attempts.keys().next().value
+    if (oldest) attempts.delete(oldest)
+  }
   const record = attempts.get(clientKey)
   if (record && record.expiresAt > now && record.count >= MAX_ATTEMPTS) {
     return res.status(429).json({ error: 'Too many tries. Please wait a few minutes and try again.' })

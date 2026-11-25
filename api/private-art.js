@@ -3,12 +3,12 @@ import { join } from 'node:path'
 import { hasPrivateSession } from './_private-session.js'
 
 const artworks = {
-  ring: 'diamond_ring.gif',
-  rose: 'rose.gif',
-  daisy: 'daisy.gif',
-  cat: 'cat_knight.gif',
-  heart: 'i_love_you.gif',
-  butterfly: 'butterfly.gif',
+  ring: 'diamond_ring.webp',
+  rose: 'rose.webp',
+  daisy: 'daisy.webp',
+  cat: 'cat_knight.webp',
+  heart: 'i_love_you.webp',
+  butterfly: 'butterfly.webp',
 }
 
 export default async function handler(req, res) {
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   if (!filename) return res.status(404).end()
   try {
     const data = await readFile(join(process.cwd(), 'api', 'private-art-assets', filename))
-    res.setHeader('Content-Type', 'image/gif')
+    res.setHeader('Content-Type', 'image/webp')
     res.setHeader('Content-Length', String(data.length))
     return res.status(200).end(data)
   } catch {

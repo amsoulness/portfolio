@@ -796,7 +796,7 @@ export default function App(){
   const isNavigating = initialLoading || isPending || navigationPulse
 
   return <div className="site-navigation-shell" onClick={handleNavigation}>
-    <style>{`.mobile-smooth-toggle{display:none}@media(max-width:650px){.mobile-smooth-toggle{position:fixed;z-index:999;display:inline-flex;align-items:center;justify-content:center;gap:9px;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);min-height:44px;padding:0 17px;border:1px solid #b99affaa;border-radius:999px;background:#171126ed;color:#f7efff;box-shadow:0 7px 24px #0009,0 0 20px #8b5cf633;backdrop-filter:blur(14px);font:750 10px/1 Inter,system-ui,sans-serif;letter-spacing:1.15px;white-space:nowrap;cursor:pointer}.mobile-smooth-toggle[aria-pressed=true]{border-color:#c9b0ff;background:linear-gradient(110deg,#392252ed,#171126ed)}.mobile-smooth-toggle:focus-visible{outline:2px solid #e6d5ff;outline-offset:3px}}`}</style>
+    <style>{`.mobile-smooth-toggle{display:none}@media(max-width:650px){.mobile-smooth-toggle{position:fixed;z-index:999;display:inline-flex;align-items:center;justify-content:center;left:calc(16px + env(safe-area-inset-left));bottom:calc(18px + env(safe-area-inset-bottom));width:48px;height:48px;padding:0;border:1px solid #b99affaa;border-radius:50%;background:#171126ed;color:#f7efff;box-shadow:0 7px 24px #0009,0 0 20px #8b5cf633;backdrop-filter:blur(14px);font:700 20px/1 Inter,system-ui,sans-serif;cursor:pointer;transition:transform .2s ease,border-color .2s ease,background .2s ease}.mobile-smooth-toggle:active{transform:scale(.94)}.mobile-smooth-toggle[aria-pressed=true]{border-color:#c9b0ff;background:linear-gradient(145deg,#52306a,#171126ed)}.mobile-smooth-toggle:focus-visible{outline:2px solid #e6d5ff;outline-offset:3px}}@media(prefers-reduced-motion:reduce){.mobile-smooth-toggle{transition:none}}`}</style>
     {isNavigating
       ? <ToolsLoading message={navigationLabel}/>
       : path === '/session/deploy'
@@ -812,6 +812,6 @@ export default function App(){
         : path === '/our-space'
           ? <Suspense fallback={<ToolsLoading message={navigationLabel}/> }><PrivatePage theme={theme} smoothMode={effectsOn}/></Suspense>
         : <PortfolioApp theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme} effectsOn={effectsOn}/>}
-    {!path.startsWith("/session") && <button type="button" className="mobile-smooth-toggle" onClick={()=>setEffectsOn(v=>!v)} aria-pressed={effectsOn} aria-label={`Smooth mode ${effectsOn?'on':'off'}`} title="Change smooth mode for the whole website"><span aria-hidden="true">{effectsOn?'✦':'◌'}</span>SMOOTH MODE {effectsOn?'ON':'OFF'}</button>}
+    {!path.startsWith("/session") && <button type="button" className="mobile-smooth-toggle" onClick={()=>setEffectsOn(v=>!v)} aria-pressed={effectsOn} aria-label={`Smooth mode ${effectsOn?'on':'off'}`} title={`Smooth mode ${effectsOn?'on':'off'}`}><span aria-hidden="true">{effectsOn?'✦':'◌'}</span></button>}
   </div>
 }

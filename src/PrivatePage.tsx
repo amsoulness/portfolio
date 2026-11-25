@@ -5,6 +5,11 @@ import PrivateAsciiMotif from './PrivateAsciiMotif'
 import './PrivatePage.css'
 
 type PrivateContent = { firstDate: string; callDate: string; videoDate: string; secondDate: string; thirdDate: string; openingMemory: string; callMemory: string; videoMemory: string; firstMemory: string; secondMemory: string; note: string; ending: string }
+type PrivateDetails = {
+  her: { name: string; caption: string; alt: string; eyebrow: string; intro: string; hobbies: string[] }
+  me: { name: string; caption: string; alt: string; eyebrow: string; intro: string; hobbies: string[] }
+  moments: { eyebrow: string; title: string; body: string }[]
+}
 
 export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; smoothMode: boolean }) {
   const [password, setPassword] = useState('')
@@ -12,7 +17,10 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [gateMood, setGateMood] = useState<'idle' | 'opening' | 'rejected'>('idle')
+  const [entrySequence, setEntrySequence] = useState(false)
   const [content, setContent] = useState<PrivateContent | null>(null)
+  const [details, setDetails] = useState<PrivateDetails | null>(null)
+  const contentRootRef = useRef<HTMLDivElement>(null)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [musicBlocked, setMusicBlocked] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -24,6 +32,22 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       document.title = 'AMSOULNESS | Emmanuel Cherian'
       document.querySelector('meta[name="description"]')?.setAttribute('content', 'The portfolio and creative lab of Emmanuel Cherian: software projects, cinematic edits, and free browser-based tools from AMSOULNESS / ASLNS.')
     }
+  }, [unlocked])
+
+  useEffect(() => {
+    if (!unlocked || !contentRootRef.current) return
+    const targets = contentRootRef.current.querySelectorAll<HTMLElement>('.private-hero, .private-section, .private-finale')
+    if (!('IntersectionObserver' in window)) return
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('private-reveal-visible')
+          observer.unobserve(entry.target)
+        }
+      }
+    }, { threshold: 0.08, rootMargin: '0px 0px -7% 0px' })
+    targets.forEach(target => { target.classList.add('private-reveal-ready'); observer.observe(target) })
+    return () => observer.disconnect()
   }, [unlocked])
 
   useEffect(() => {
@@ -51,10 +75,14 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       if (response.ok && result.authenticated) {
         const pageResponse = await fetch('/api/private-page-content', { cache: 'no-store', credentials: 'same-origin' })
         if (!pageResponse.ok) throw new Error('Your letter couldn’t be opened. Please try again.')
-        const page = await pageResponse.json() as { content: PrivateContent }
+        const page = await pageResponse.json() as { content: PrivateContent; details: PrivateDetails }
+        await new Promise(resolve => window.setTimeout(resolve, 850))
         setContent(page.content)
+        setDetails(page.details)
+        setEntrySequence(true)
         setUnlocked(true)
         setPassword('')
+        window.setTimeout(() => setEntrySequence(false), 1500)
       } else {
         setGateMood('rejected')
         setError(response.status === 401 ? 'The key didn’t turn. Take a breath and try again.' : result.error || 'The door stayed closed this time. Please try again.')
@@ -93,7 +121,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       </form>
       <p className="private-error" role="alert" aria-live="polite">{error && <><span aria-hidden="true">✧</span>{error}</>}</p>
       <p className="private-footnote"><span/>NO CLUES. NO PREVIEW. JUST THE KEY.</p>
-    </section> : <div className="private-content">
+    </section> : <div className={`private-content ${entrySequence ? 'private-content-entering' : ''}`} ref={contentRootRef}>
       <section className="private-hero" aria-labelledby="letter-title">
         <p className="private-eyebrow"><Sparkles size={14}/> A LITTLE UNIVERSE OF OUR OWN</p>
         <p className="private-hero-index">EST. 13 · 09 · 2026 <span>✦</span> STILL MY FAVORITE STORY</p>
@@ -107,8 +135,8 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         <div className="private-section-heading"><span>01 / THE TWO OF US</span><i/></div>
         <h2>A favorite view.<br/><em>My favorite people.</em></h2>
         <div className="private-portraits">
-          <figure><div className="private-portrait-frame"><img src="/api/private-photo?photo=her" alt="Vaishu, smiling in a mirror selfie" loading="lazy" decoding="async"/></div><figcaption><span>VAISHU</span><small>my favorite smile</small></figcaption></figure>
-          <figure><div className="private-portrait-frame"><img src="/api/private-photo?photo=me" alt="Emmu, in a portrait" loading="lazy" decoding="async"/></div><figcaption><span>EMMU</span><small>the one who found you</small></figcaption></figure>
+          <figure><div className="private-portrait-frame"><img src="/api/private-photo?photo=her" alt={details?.her.alt ?? 'A favorite portrait'} loading="lazy" decoding="async"/></div><figcaption><span>{details?.her.name}</span><small>{details?.her.caption}</small></figcaption></figure>
+          <figure><div className="private-portrait-frame"><img src="/api/private-photo?photo=me" alt={details?.me.alt ?? 'A favorite portrait'} loading="lazy" decoding="async"/></div><figcaption><span>{details?.me.name}</span><small>{details?.me.caption}</small></figcaption></figure>
         </div>
       </section>
 
@@ -117,12 +145,12 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         <h2>Two different worlds.<br/><em>A few things in common.</em></h2>
         <div className="private-hobbies-grid">
           <article className="private-hobby-card private-hobby-vaishu">
-            <span className="private-card-index">HER LITTLE WORLD</span><h3>Vaishu</h3><p>Her kind of lovely.</p>
-            <ul>{['Reading', 'Dancing', 'Listening to music', 'Painting', 'Sketching', 'Taking her own photos'].map(hobby => <li key={hobby}>{hobby}</li>)}</ul>
+            <span className="private-card-index">{details?.her.eyebrow}</span><h3>{details?.her.name}</h3><p>{details?.her.intro}</p>
+            <ul>{details?.her.hobbies.map(hobby => <li key={hobby}>{hobby}</li>)}</ul>
           </article>
           <article className="private-hobby-card private-hobby-emmu">
-            <span className="private-card-index">MY LITTLE WORLD</span><h3>Emmu</h3><p>A mind that’s always exploring.</p>
-            <ul>{['Reading', 'Coding', 'Gaming', 'Listening to music', 'Movies & web series', 'Anime & K-dramas'].map(hobby => <li key={hobby}>{hobby}</li>)}</ul>
+            <span className="private-card-index">{details?.me.eyebrow}</span><h3>{details?.me.name}</h3><p>{details?.me.intro}</p>
+            <ul>{details?.me.hobbies.map(hobby => <li key={hobby}>{hobby}</li>)}</ul>
           </article>
         </div>
       </section>
@@ -133,21 +161,21 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         <div className="private-moments-grid">
           <article className="private-moment-card">
             <span className="private-moment-mark" aria-hidden="true">01</span>
-            <span className="private-moment-overline">HER, JUST BEING HER</span>
-            <h3>That smile.</h3>
-            <p>Her smile is enough to make my day. Hearing her voice when we call makes me smile, too.</p>
+            <span className="private-moment-overline">{details?.moments[0]?.eyebrow}</span>
+            <h3>{details?.moments[0]?.title}</h3>
+            <p>{details?.moments[0]?.body}</p>
           </article>
           <article className="private-moment-card">
             <span className="private-moment-mark" aria-hidden="true">02</span>
-            <span className="private-moment-overline">EMMU’S LITTLE QUIRKS</span>
-            <h3>Sticker king<br/><em>and lip biter.</em></h3>
-            <p>A WhatsApp sticker collection, random lip-biting that gets an eye-roll, and little surprise kisses just because.</p>
+            <span className="private-moment-overline">{details?.moments[1]?.eyebrow}</span>
+            <h3>{details?.moments[1]?.title}</h3>
+            <p>{details?.moments[1]?.body}</p>
           </article>
           <article className="private-moment-card">
             <span className="private-moment-mark" aria-hidden="true">03</span>
-            <span className="private-moment-overline">WHEN WE FOUND OUR WAY</span>
-            <h3>Here for<br/><em>each other.</em></h3>
-            <p>The moment I realized she was the one I had been hoping to find—and the tender times we helped each other through tears and back to smiles.</p>
+            <span className="private-moment-overline">{details?.moments[2]?.eyebrow}</span>
+            <h3>{details?.moments[2]?.title}</h3>
+            <p>{details?.moments[2]?.body}</p>
           </article>
         </div>
       </section>
