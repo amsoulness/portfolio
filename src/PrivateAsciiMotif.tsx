@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import PrivateButterflyScene from './PrivateButterflyScene'
 
 type Motif = 'ring' | 'rose' | 'daisy' | 'cat' | 'heart' | 'butterfly'
 
@@ -139,6 +140,11 @@ function makeDiamondRing(): Point[] {
 }
 
 export default function PrivateAsciiMotif({ motif, label }: { motif: Motif; label: string }) {
+  if (motif === 'butterfly') return <PrivateButterflyScene label={label}/>
+  return <PrivateAsciiCanvas motif={motif} label={label}/>
+}
+
+function PrivateAsciiCanvas({ motif, label }: { motif: Motif; label: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   if (privateArtwork[motif]) return <img className={`private-artwork private-artwork-${motif}`} src={privateArtwork[motif]} alt={label} loading="lazy" decoding="async"/>

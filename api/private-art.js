@@ -8,7 +8,6 @@ const artworks = {
   daisy: 'daisy.webp',
   cat: 'cat_knight.webp',
   heart: 'i_love_you.webp',
-  butterfly: 'butterfly.webp',
 }
 
 export default async function handler(req, res) {
