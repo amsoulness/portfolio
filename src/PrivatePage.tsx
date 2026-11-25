@@ -41,9 +41,16 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
     touchStartY.current = null
     if (start === null) return
     const target = event.target as HTMLElement
-    if (target.closest('[data-scene-scroll]')) return
     const delta = start - event.changedTouches[0].clientY
-    if (Math.abs(delta) > 42) moveScene(delta > 0 ? 1 : -1)
+    if (Math.abs(delta) <= 42) return
+    const scrollable = target.closest<HTMLElement>('[data-scene-scroll]')
+    if (scrollable) {
+      const canScroll = delta > 0
+        ? scrollable.scrollTop + scrollable.clientHeight < scrollable.scrollHeight - 2
+        : scrollable.scrollTop > 2
+      if (canScroll) return
+    }
+    moveScene(delta > 0 ? 1 : -1)
   }
 
   useEffect(() => {
@@ -180,7 +187,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       <div className="private-scene-viewport" onWheel={handleSceneWheel} onTouchStart={event => { touchStartY.current = event.touches[0].clientY }} onTouchEnd={handleSceneTouchEnd} onKeyDown={event => { if (event.key === 'ArrowDown' || event.key === 'PageDown') { event.preventDefault(); moveScene(1) } else if (event.key === 'ArrowUp' || event.key === 'PageUp') { event.preventDefault(); moveScene(-1) } }} tabIndex={0} aria-label="Scroll or swipe to explore each keepsake scene">
         <div className="private-wormhole" aria-hidden="true"><div className="private-wormhole-core"/><span className="wormhole-ring ring-one"/><span className="wormhole-ring ring-two"/><span className="wormhole-ring ring-three"/><span className="wormhole-ring ring-four"/><i className="wormhole-streak streak-one"/><i className="wormhole-streak streak-two"/><i className="wormhole-streak streak-three"/><i className="wormhole-streak streak-four"/><i className="wormhole-streak streak-five"/><i className="wormhole-streak streak-six"/></div>
         <div className="private-depth-blooms" aria-hidden="true"><span><img src="/keepsake/rose.svg" alt=""/></span><span>♡</span><span><img src="/keepsake/daisy.svg" alt=""/></span><span>✦</span><span><img src="/keepsake/rose.svg" alt=""/></span><span>♥</span><span><img src="/keepsake/daisy.svg" alt=""/></span><span>✧</span></div>
-        <section className={`private-scene ${sceneIndex === 0 ? 'is-current' : sceneIndex < 0 ? 'is-ahead' : 'is-away'}`} aria-label="Our portraits">
+        <section data-scene-scroll className={`private-scene ${sceneIndex === 0 ? 'is-current' : sceneIndex < 0 ? 'is-ahead' : 'is-away'}`} aria-label="Our portraits">
           <p className="private-eyebrow"><Sparkles size={14}/> YOU MADE IT</p>
           <h1 id="letter-title">For my<br/><em>favorite person.</em></h1>
           <div className="private-portraits" aria-label="A couple of our favorite portraits">
@@ -188,13 +195,13 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
             <figure><div className="private-portrait-frame"><img src="/api/private-photo?photo=me" alt="Me, in a portrait" loading="lazy" decoding="async"/></div><figcaption><span>ME</span><small>the one who found you</small></figcaption></figure>
           </div>
         </section>
-        <section className={`private-scene ${sceneIndex === 1 ? 'is-current' : sceneIndex < 1 ? 'is-ahead' : 'is-away'}`} aria-label="WILL YOU diamond ring">
+        <section data-scene-scroll className={`private-scene ${sceneIndex === 1 ? 'is-current' : sceneIndex < 1 ? 'is-ahead' : 'is-away'}`} aria-label="WILL YOU diamond ring">
           <p className="private-motif-kicker">A LITTLE PROMISE IN LIGHT</p>
           <div className="private-motif-art motif-ring-art"><PrivateAsciiMotif motif="ring" label="An original animated, three-dimensional ASCII ring"/></div>
           <h2 className="private-motif-title">WILL YOU<br/><em>stay close?</em></h2>
           <p className="private-motif-copy">A little ring of light, for all the tiny tomorrows I hope we get to share.</p>
         </section>
-        <section className={`private-scene ${sceneIndex === 2 ? 'is-current' : sceneIndex < 2 ? 'is-ahead' : 'is-away'}`} aria-label="IN BLOOM rose and daisy">
+        <section data-scene-scroll className={`private-scene ${sceneIndex === 2 ? 'is-current' : sceneIndex < 2 ? 'is-ahead' : 'is-away'}`} aria-label="IN BLOOM rose and daisy">
           <section className="private-garden" aria-label="A rose and a daisy blooming for us">
         <p className="private-garden-title"><Sparkles size={13}/> TWO LITTLE BLOOMS <Sparkles size={13}/></p>
         <div className="private-garden-flowers">
@@ -205,25 +212,25 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         <a className="private-garden-credit" href="https://github.com/JIN2-ASCII/-JIN2-ASCII" target="_blank" rel="noreferrer">A little bloom inspiration from JIN2’s ASCII flower studies ↗</a>
       </section>
         </section>
-        <section className={`private-scene ${sceneIndex === 3 ? 'is-current' : sceneIndex < 3 ? 'is-ahead' : 'is-away'}`} aria-label="CAT KNIGHT">
+        <section data-scene-scroll className={`private-scene ${sceneIndex === 3 ? 'is-current' : sceneIndex < 3 ? 'is-ahead' : 'is-away'}`} aria-label="CAT KNIGHT">
           <p className="private-motif-kicker">THE BRAVEST LITTLE GUARD</p>
           <div className="private-motif-art motif-cat-art"><PrivateAsciiMotif motif="cat" label="An original animated ASCII cat knight"/></div>
           <h2 className="private-motif-title">YOUR TINY<br/><em>brave guard.</em></h2>
           <p className="private-motif-copy">A knight on whiskers, assigned to protect every rose, daisy, and stolen hug.</p>
         </section>
-        <section className={`private-scene ${sceneIndex === 4 ? 'is-current' : sceneIndex < 4 ? 'is-ahead' : 'is-away'}`} aria-label="I LOVE YOU">
+        <section data-scene-scroll className={`private-scene ${sceneIndex === 4 ? 'is-current' : sceneIndex < 4 ? 'is-ahead' : 'is-away'}`} aria-label="I LOVE YOU">
           <p className="private-motif-kicker">SOME THINGS DESERVE THEIR OWN LITTLE UNIVERSE</p>
           <div className="private-motif-art motif-heart-art"><PrivateAsciiMotif motif="heart" label="An original animated ASCII heart"/></div>
           <h2 className="private-motif-title">I LOVE<br/><em>YOU.</em></h2>
           <p className="private-motif-copy">Across every orbit, every quiet moment, and every version of tomorrow.</p>
         </section>
-        <section className={`private-scene ${sceneIndex === 5 ? 'is-current' : sceneIndex < 5 ? 'is-ahead' : 'is-away'}`} aria-label="BUTTERFLY">
+        <section data-scene-scroll className={`private-scene ${sceneIndex === 5 ? 'is-current' : sceneIndex < 5 ? 'is-ahead' : 'is-away'}`} aria-label="BUTTERFLY">
           <p className="private-motif-kicker">A LITTLE WINGBEAT, FINDING ITS WAY HOME</p>
           <div className="private-motif-art motif-butterfly-art"><PrivateAsciiMotif motif="butterfly" label="An original animated ASCII butterfly"/></div>
           <h2 className="private-motif-title">FOLLOW<br/><em>the flutter.</em></h2>
           <p className="private-motif-copy">Somehow, through all that space, the sweetest little things find their way to us.</p>
         </section>
-        <section className={`private-scene ${sceneIndex === 6 ? 'is-current' : sceneIndex < 6 ? 'is-ahead' : 'is-away'}`} aria-label="Our soundtrack scene">
+        <section data-scene-scroll className={`private-scene ${sceneIndex === 6 ? 'is-current' : sceneIndex < 6 ? 'is-ahead' : 'is-away'}`} aria-label="Our soundtrack scene">
       <section className={`private-soundtrack ${musicOpen ? 'private-soundtrack-open' : ''} ${musicPlaying ? 'private-soundtrack-playing' : ''}`} aria-label="Our soundtrack">
         <audio ref={audioRef} src="/api/private-audio" loop preload="none" onPlay={() => setMusicPlaying(true)} onPause={() => setMusicPlaying(false)}/>
         <div className="private-soundtrack-copy"><span className="private-memory-date">A LITTLE SOUNDTRACK</span><strong>{musicBlocked ? 'One tap, then our song.' : 'A little music, all around us.'}</strong><small>{musicPlaying ? 'Playing softly in the background.' : 'The song you sent, tucked into our little space.'}</small><div className="private-viz" aria-hidden="true">{Array.from({ length: 7 }, (_, i) => <i key={i}/>)}</div></div>
@@ -231,7 +238,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         {musicBlocked && !musicPlaying && <p className="private-music-hint">Your browser paused autoplay. Tap “Play our song” and it will continue while you explore.</p>}
       </section>
         </section>
-        <section className={`private-scene ${sceneIndex === 7 ? 'is-current' : sceneIndex < 7 ? 'is-ahead' : 'is-away'}`} aria-label="Our story">
+        <section data-scene-scroll className={`private-scene ${sceneIndex === 7 ? 'is-current' : sceneIndex < 7 ? 'is-ahead' : 'is-away'}`} aria-label="Our story">
       <article className="private-note" data-scene-scroll>
         <div className="private-note-top"><span>A LITTLE KEEPSAKE OF US</span><Heart size={18} fill="currentColor"/></div>
         <p>Hey, my favorite person,</p>
@@ -247,7 +254,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         <p className="private-signoff">A hug, a kiss, and all my love <Heart size={15} fill="currentColor"/></p>
       </article>
         </section>
-        <section className={`private-scene private-finale ${sceneIndex === 8 ? 'is-current' : sceneIndex < 8 ? 'is-ahead' : 'is-away'}`} aria-label="The end of our little space">
+        <section data-scene-scroll className={`private-scene private-finale ${sceneIndex === 8 ? 'is-current' : sceneIndex < 8 ? 'is-ahead' : 'is-away'}`} aria-label="The end of our little space">
           <p className="private-eyebrow"><Heart size={14} fill="currentColor"/> ALWAYS, IN EVERY LITTLE UNIVERSE</p>
           <h2>One more<br/><em>hug?</em></h2>
           <div className="private-finale-heart" aria-hidden="true">♥</div>

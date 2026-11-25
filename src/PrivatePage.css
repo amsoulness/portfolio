@@ -439,3 +439,46 @@
 @keyframes pp-bloom-glow{from{transform:translateY(4px) scale(.97);filter:drop-shadow(0 8px 18px #ef526755)}to{transform:translateY(-5px) scale(1.025);filter:drop-shadow(0 14px 30px #f5d36f88)}}
 @media(max-width:600px){.private-page{padding-inline:14px}.private-nav{min-height:60px}.private-page:not(.private-page-unlocked) .private-gate{width:min(440px,100%);padding:36px 20px 30px;border-radius:26px}.private-page:not(.private-page-unlocked) .private-intro{margin-bottom:20px;font-size:13px}.private-page:not(.private-page-unlocked) .private-form{padding-top:10px}.private-page-unlocked .private-letter{padding:5px 0 8px}.private-scene{padding:10px 4px}.private-motif-art{width:min(70vw,40vh,360px)}.private-scene[aria-label="IN BLOOM rose and daisy"] .private-garden{padding:4px 0}.private-scene[aria-label="IN BLOOM rose and daisy"] .private-garden-flowers{height:min(42vh,calc(100% - 62px));min-height:150px;gap:clamp(12px,6vw,34px)}.private-garden-flower{width:clamp(128px,40vw,190px)}.private-garden-flower img{height:min(36vh,280px)}.private-garden-flower figcaption{margin-top:3px;font-size:13px}.private-garden-credit{margin-top:4px;font-size:8px}.private-scene[aria-label="Our portraits"] .private-portraits figure{padding:6px;border-radius:17px}.private-scene[aria-label="Our portraits"] .private-portrait-frame{aspect-ratio:4/5.2}.private-scene[aria-label="Our story"] .private-note{padding:20px;border-radius:21px}}
 @media(prefers-reduced-motion:reduce){.private-page:before,.private-page:not(.private-page-unlocked) .private-lock-icon,.private-page:not(.private-page-unlocked) .private-form button:after{animation:none!important}.private-scene.is-current,.private-scene.is-ahead,.private-scene.is-away{transition-duration:.01ms!important}}
+
+/* Quiet, camera-ready scene framing: readable content first, soft atmosphere behind it. */
+.private-page-unlocked:after{opacity:.11}
+.private-page-unlocked .private-lock-fx,.private-page-unlocked .private-rising-fx{display:none}
+.private-page-unlocked .private-flower-rain{opacity:.28;filter:drop-shadow(0 0 8px #f5d36f22)}
+.private-page-unlocked .private-flower-rain span:nth-child(even){display:none}
+.private-page-unlocked .private-depth-blooms{opacity:.28}
+.private-page-unlocked .private-depth-blooms span:nth-child(n+5){display:none}
+.private-page-unlocked .private-scene-hint{min-height:34px;margin:0 auto 5px;padding:0 14px;border:1px solid #f5d36f25;border-radius:999px;background:#09070d88;backdrop-filter:blur(14px)}
+.private-page-unlocked .private-scene-hint span{color:#dacbd6}
+.private-page-unlocked .private-scene-viewport{width:min(1160px,100%);border:1px solid #d7c5e21a;border-radius:28px;background:radial-gradient(ellipse at 50% 54%,#ef52670b,transparent 54%),linear-gradient(145deg,#0a080d55,#100b1455);box-shadow:0 24px 90px #0003,inset 0 1px #ffffff0a}
+.private-page-unlocked .private-wormhole{opacity:.52;background:radial-gradient(ellipse at 50% 55%,#070609 0 7%,#210b1b35 9%,#63122b22 16%,transparent 44%)}
+.private-page-unlocked .private-wormhole:before{opacity:.48;animation-duration:8s}
+.private-page-unlocked .private-wormhole:after{opacity:.1}
+.private-page-unlocked .private-wormhole-core{width:clamp(86px,14vw,160px);opacity:.5}
+.private-page-unlocked .private-wormhole-core:after{font-size:clamp(32px,5vw,58px);opacity:.65}
+.private-page-unlocked .wormhole-ring{opacity:.45}
+.private-page-unlocked .wormhole-ring.ring-four{opacity:.22}
+.private-page-unlocked .wormhole-streak{opacity:.35;animation-duration:3.4s}
+.private-page-unlocked .private-scene{padding:clamp(10px,2.2vw,28px);overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;scroll-padding-block:16px;gap:clamp(4px,1vh,10px)}
+.private-page-unlocked .private-scene::-webkit-scrollbar{display:none}
+.private-page-unlocked .private-scene[aria-label="Our portraits"] h1{margin:0;font-size:clamp(38px,5.2vw,60px);line-height:.96}
+.private-page-unlocked .private-scene[aria-label="Our portraits"] .private-portraits{width:min(640px,100%);margin:clamp(5px,1vh,12px) auto 0;gap:clamp(10px,2vw,22px)}
+.private-page-unlocked .private-scene[aria-label="Our portraits"] .private-portraits figure{max-width:300px;padding:8px}
+.private-page-unlocked .private-scene[aria-label="Our portraits"] .private-portrait-frame{aspect-ratio:4/4.35}
+.private-page-unlocked .private-scene[aria-label="Our portraits"] .private-portraits figcaption{padding:8px 3px 2px}
+.private-page-unlocked .private-motif-art{width:min(38vw,35vh,360px);margin:0 auto 2px}
+.private-page-unlocked .private-motif-title{font-size:clamp(32px,5.2vw,54px);line-height:.96}
+.private-page-unlocked .private-motif-copy{max-width:390px;margin:2px auto 0;font-size:clamp(12px,1.3vw,14px);line-height:1.55}
+.private-page-unlocked .private-scene[aria-label="IN BLOOM rose and daisy"] .private-garden{padding:8px 0}
+.private-page-unlocked .private-garden-flowers{height:min(47vh,390px);gap:clamp(24px,8vw,100px)}
+.private-page-unlocked .private-garden-flower{width:clamp(138px,21vw,225px)}
+.private-page-unlocked .private-garden-flower img{height:min(41vh,340px)}
+.private-page-unlocked .private-garden-credit{font-size:9px}
+.private-page-unlocked .private-scene[aria-label="Our story"]{justify-content:center;padding:8px 0}
+.private-page-unlocked .private-scene[aria-label="Our story"] .private-note{width:min(760px,calc(100% - 20px));max-height:100%;padding:clamp(18px,3vw,32px);border-radius:24px}
+.private-page-unlocked .private-note>p{font-size:14px;line-height:1.72}
+.private-page-unlocked .private-note>p:first-of-type{font-size:clamp(16px,2vw,19px)}
+.private-page-unlocked .private-memory{padding-block:12px}
+.private-page-unlocked .private-finale h2{font-size:clamp(42px,7vw,68px)}
+@media(max-height:760px) and (min-width:601px){.private-page-unlocked .private-motif-art{width:min(34vw,30vh,280px)}.private-page-unlocked .private-garden-flowers{height:min(41vh,310px)}.private-page-unlocked .private-garden-flower img{height:min(35vh,270px)}.private-page-unlocked .private-finale-heart{width:clamp(72px,13vh,112px);margin:4px auto}}
+@media(max-width:600px){.private-page-unlocked .private-scene-viewport{border-radius:20px}.private-page-unlocked .private-scene-hint{min-height:30px;padding-inline:9px;gap:6px;letter-spacing:.8px}.private-page-unlocked .private-scene-hint span{font-size:8px}.private-page-unlocked .private-scene{padding:12px 10px}.private-page-unlocked .private-scene[aria-label="Our portraits"] h1{font-size:clamp(34px,9vw,46px)}.private-page-unlocked .private-scene[aria-label="Our portraits"] .private-portraits{width:min(460px,100%);gap:8px}.private-page-unlocked .private-scene[aria-label="Our portraits"] .private-portraits figure{padding:6px}.private-page-unlocked .private-scene[aria-label="Our portraits"] .private-portrait-frame{aspect-ratio:4/4.2}.private-page-unlocked .private-motif-art{width:min(34vh,62vw,250px)}.private-page-unlocked .private-motif-title{font-size:clamp(30px,8vw,42px)}.private-page-unlocked .private-motif-copy{max-width:320px;font-size:12px}.private-page-unlocked .private-garden-flowers{height:min(40vh,calc(100% - 62px));min-height:140px;gap:clamp(8px,4vw,24px)}.private-page-unlocked .private-garden-flower{width:clamp(120px,39vw,178px)}.private-page-unlocked .private-garden-flower img{height:min(34vh,240px)}.private-page-unlocked .private-scene[aria-label="Our story"] .private-note{width:100%;padding:18px;border-radius:19px}.private-page-unlocked .private-note>p{font-size:13px;line-height:1.65}.private-page-unlocked .private-memory{padding-block:9px}.private-page-unlocked .private-finale h2{font-size:clamp(40px,11vw,56px)}.private-page-unlocked .private-finale-heart{width:clamp(70px,18vh,112px);margin:4px auto}}
+@media(prefers-reduced-motion:reduce){.private-page-unlocked .private-wormhole,.private-page-unlocked .private-flower-rain,.private-page-unlocked .private-depth-blooms{opacity:.2}}
