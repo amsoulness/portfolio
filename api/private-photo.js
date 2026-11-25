@@ -14,8 +14,8 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'GET')
     return res.status(405).end()
   }
-  const secret = process.env.PRIVATE_PAGE_PASSWORD
-  if (!secret || !hasPrivateSession(req, secret)) return res.status(401).end()
+  const sessionSecret = process.env.PRIVATE_PAGE_SESSION_SECRET
+  if (!sessionSecret || !hasPrivateSession(req, sessionSecret)) return res.status(401).end()
   const pathname = photos[req.query?.photo]
   if (!pathname) return res.status(404).end()
 

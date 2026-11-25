@@ -7,8 +7,8 @@ export default function handler(req, res) {
     res.setHeader('Allow', 'GET')
     return res.status(405).json({ error: 'Method not allowed.' })
   }
-  const secret = process.env.PRIVATE_PAGE_PASSWORD
-  if (!secret || !hasPrivateSession(req, secret)) return res.status(401).json({ error: 'Enter the password to open this keepsake.' })
+  const sessionSecret = process.env.PRIVATE_PAGE_SESSION_SECRET
+  if (!sessionSecret || !hasPrivateSession(req, sessionSecret)) return res.status(401).json({ error: 'Enter the password to open this keepsake.' })
   let content
   try {
     content = JSON.parse(process.env.PRIVATE_PAGE_CONTENT || '')

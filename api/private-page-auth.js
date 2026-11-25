@@ -23,7 +23,8 @@ export default function handler(req, res) {
   }
 
   const expected = process.env.PRIVATE_PAGE_PASSWORD
-  if (!expected) return res.status(503).json({ error: 'The private-page lock is not configured yet.' })
+  const sessionSecret = process.env.PRIVATE_PAGE_SESSION_SECRET
+  if (!expected || !sessionSecret) return res.status(503).json({ error: 'The private-page lock is not configured yet.' })
 
   const forwarded = req.headers['x-forwarded-for']
   const clientKey = (typeof forwarded === 'string' ? forwarded.split(',')[0] : 'unknown').trim()
@@ -47,6 +48,6 @@ export default function handler(req, res) {
   }
 
   attempts.delete(clientKey)
-  issuePrivateSession(res, expected)
+  issuePrivateSession(res, sessionSecret)
   return res.status(200).json({ authenticated: true })
 }
