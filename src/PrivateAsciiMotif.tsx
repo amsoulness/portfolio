@@ -5,6 +5,7 @@ type Motif = 'ring' | 'rose' | 'daisy' | 'cat' | 'heart' | 'butterfly'
 const privateArtwork: Partial<Record<Motif, string>> = {
   ring: '/api/private-art?art=ring',
   rose: '/api/private-art?art=rose',
+  daisy: '/api/private-art?art=daisy',
   cat: '/api/private-art?art=cat',
   heart: '/api/private-art?art=heart',
 }

@@ -5,6 +5,7 @@ import { hasPrivateSession } from './_private-session.js'
 const artworks = {
   ring: 'diamond_ring.gif',
   rose: 'rose.gif',
+  daisy: 'daisy.gif',
   cat: 'cat_knight.gif',
   heart: 'i_love_you.gif',
 }
