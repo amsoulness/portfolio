@@ -163,6 +163,34 @@
 .private-music-hint{grid-column:1/-1;margin:0;color:var(--pp-soft);font-size:11px;line-height:1.55}
 .private-music-button.is-playing{background-size:180% 100%;background-position:100% 50%}
 .private-page-still .private-form,.private-page-still .private-form button:after,.private-page-still .private-lock-fx span,.private-page-still .private-flower-rain span,.private-page-still .private-rising-fx span,.private-page-still .private-music-button.is-playing{animation:none!important}
+/* Extra romance lives only after the private page has been unlocked. */
+.private-page-unlocked .private-letter:after{content:"";position:absolute;inset:-4vh -12vw;z-index:0;pointer-events:none;opacity:.65;background:radial-gradient(ellipse at 16% 23%,#f14c6b18,transparent 24%),radial-gradient(ellipse at 84% 49%,#f4d06515,transparent 24%),radial-gradient(ellipse at 51% 82%,#bba2ff1b,transparent 30%);animation:pp-cinema-bloom 14s ease-in-out infinite alternate}
+.private-flower-rain span img,.private-rising-fx span img{display:block;width:1em;height:1em;object-fit:contain}
+.private-flower-rain span{width:var(--flower-size,20px);height:var(--flower-size,20px);font-size:var(--flower-size,20px);will-change:transform,opacity}
+.private-rising-fx span:has(img){width:var(--flower-size,19px);height:var(--flower-size,19px)}
+.private-page-unlocked .private-portraits figure{transform:translateZ(0);transition:transform .55s cubic-bezier(.2,.8,.2,1),filter .55s;animation:pp-portrait-breathe 6s ease-in-out infinite}
+.private-page-unlocked .private-portraits figure:nth-child(2){animation-delay:-3s}
+.private-page-unlocked .private-portraits figure:hover{transform:translateY(-7px) rotate(-1deg) scale(1.025);filter:drop-shadow(0 14px 25px #d4456035)}
+.private-page-unlocked .private-portrait-frame{box-shadow:0 0 0 1px #f7d66c34,0 12px 36px #07040885;transition:box-shadow .5s,transform .5s}
+.private-page-unlocked .private-portraits figure:hover .private-portrait-frame{box-shadow:0 0 0 1px #ffe18d9c,0 0 32px #eb53634c,0 15px 42px #080408aa}
+.private-page-unlocked .private-note{position:relative;overflow:hidden}
+.private-page-unlocked .private-note:before{content:"";position:absolute;inset:0 auto 0 -35%;width:20%;pointer-events:none;background:linear-gradient(90deg,transparent,#fff2,#ffd67713,transparent);transform:skewX(-16deg);animation:pp-note-sheen 11s ease-in-out infinite}
+.private-page-unlocked .private-memory{transition:transform .35s ease,filter .35s}
+.private-page-unlocked .private-memory:hover{transform:translateX(5px);filter:drop-shadow(0 0 13px #f4d06b2c)}
+.private-page-unlocked .private-letter>.private-eyebrow svg{animation:pp-twinkle 2.8s ease-in-out infinite}
+.private-page-unlocked .private-lock-button{transition:transform .25s,box-shadow .25s}
+.private-page-unlocked .private-lock-button:hover{transform:translateY(-2px);box-shadow:0 8px 28px #dfb74438}
+.private-page-unlocked .private-flower-rain span:nth-child(3n){animation-name:pp-flower-fall-soft}
+.private-page-unlocked .private-rising-fx span:nth-child(2n){animation-name:pp-heart-rise}
+.private-page-still .private-page-unlocked .private-letter:after,.private-page-still .private-page-unlocked .private-portraits figure,.private-page-still .private-page-unlocked .private-note:before,.private-page-still .private-page-unlocked .private-letter>.private-eyebrow svg{animation:none!important}
+@keyframes pp-cinema-bloom{0%{transform:translate3d(-1.5%,0,0) scale(.98);opacity:.42}100%{transform:translate3d(1.5%,-.5%,0) scale(1.02);opacity:.8}}
+@keyframes pp-portrait-breathe{0%,100%{translate:0 0}50%{translate:0 -4px}}
+@keyframes pp-note-sheen{0%,72%{left:-35%;opacity:0}78%{opacity:.7}100%{left:125%;opacity:0}}
+@keyframes pp-twinkle{0%,100%{transform:rotate(0) scale(.85);filter:drop-shadow(0 0 2px #ffe08a55)}50%{transform:rotate(18deg) scale(1.2);filter:drop-shadow(0 0 9px #ffe08aaa)}}
+@keyframes pp-flower-fall-soft{0%{transform:translate3d(0,-8vh,0) rotate(-18deg) scale(.8);opacity:0}14%{opacity:.88}100%{transform:translate3d(-42px,116vh,0) rotate(-300deg) scale(1.1);opacity:0}}
+@keyframes pp-heart-rise{0%{transform:translate3d(0,0,0) rotate(-15deg) scale(.72);opacity:0}16%{opacity:.7}100%{transform:translate3d(24px,-116vh,0) rotate(18deg) scale(1.14);opacity:0}}
+@media(max-width:700px){.private-page-unlocked .private-letter:after{inset:-2vh -8vw;opacity:.5}.private-page-unlocked .private-portraits figure{animation-duration:9s}.private-page-unlocked .private-memory:hover{transform:none}.private-flower-rain span:nth-child(2n){display:none}}
+@media(prefers-reduced-motion:reduce){.private-page-unlocked .private-letter:after,.private-page-unlocked .private-portraits figure,.private-page-unlocked .private-note:before,.private-page-unlocked .private-letter>.private-eyebrow svg{animation:none!important}}
 @keyframes pp-lock-drift{0%,100%{transform:translate3d(0,0,0) rotate(-8deg) scale(.9);opacity:.42}50%{transform:translate3d(10px,-18px,0) rotate(10deg) scale(1.12);opacity:.94}}
 @keyframes pp-form-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 @keyframes pp-form-shimmer{0%,100%{box-shadow:0 20px 80px #0005,0 0 50px #b5234a20,0 0 0 1px #ffd7661d}50%{box-shadow:0 22px 88px #0007,0 0 64px #b5234a3c,0 0 0 1px #d5bbff44}}

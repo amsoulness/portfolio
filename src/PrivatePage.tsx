@@ -3,7 +3,7 @@ import { ArrowLeft, Heart, LockKeyhole, Music2, Play, Sparkles } from 'lucide-re
 import type { SiteTheme } from './ThemeToggle'
 import './PrivatePage.css'
 
-type PrivateContent = { firstDate: string; secondDate: string; thirdDate: string; openingMemory: string; firstMemory: string; secondMemory: string; note: string; ending: string }
+type PrivateContent = { firstDate: string; callDate: string; videoDate: string; secondDate: string; thirdDate: string; openingMemory: string; callMemory: string; videoMemory: string; firstMemory: string; secondMemory: string; note: string; ending: string }
 
 export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; smoothMode: boolean }) {
   const [password, setPassword] = useState('')
@@ -131,9 +131,9 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       <p className="private-error" role="alert" aria-live="polite">{error}</p>
       <p className="private-footnote">A tiny page made with a lot of affection <Heart size={12} fill="currentColor"/></p>
     </section> : <section className="private-letter" aria-labelledby="letter-title">
-      <div className="private-flower-rain private-flower-rain-her" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <span key={`daisy-${i}`}>🌼</span>)}</div>
-      <div className="private-flower-rain private-flower-rain-me" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <span key={`rose-${i}`}>🌹</span>)}</div>
-      <div className="private-rising-fx" aria-hidden="true"><span>🌼</span><span>♡</span><span>🌹</span><span>✦</span><span>♥</span><span>🌼</span><span>🌹</span></div>
+      <div className="private-flower-rain private-flower-rain-her" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <span key={`daisy-${i}`}><img src="/keepsake/daisy.svg" alt=""/></span>)}</div>
+      <div className="private-flower-rain private-flower-rain-me" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <span key={`rose-${i}`}><img src="/keepsake/rose.svg" alt=""/></span>)}</div>
+      <div className="private-rising-fx" aria-hidden="true"><span><img src="/keepsake/daisy.svg" alt=""/></span><span>♡</span><span><img src="/keepsake/rose.svg" alt=""/></span><span>✦</span><span>♥</span><span><img src="/keepsake/daisy.svg" alt=""/></span><span><img src="/keepsake/rose.svg" alt=""/></span></div>
       <p className="private-eyebrow"><Sparkles size={14}/> YOU MADE IT</p>
       <h1 id="letter-title">For my<br/><em>favorite person.</em></h1>
       <div className="private-portraits" aria-label="A couple of our favorite portraits">
@@ -152,6 +152,8 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         <p>{content?.note}</p>
         <div className="private-timeline" aria-label="Our story so far">
           <div className="private-memory"><span className="private-memory-date">{content?.firstDate}</span><h2>The first hello</h2><p>{content?.openingMemory}</p></div>
+          <div className="private-memory"><span className="private-memory-date">{content?.callDate}</span><h2>Our first calls</h2><p>{content?.callMemory}</p></div>
+          <div className="private-memory"><span className="private-memory-date">{content?.videoDate}</span><h2>Face to face, from afar</h2><p>{content?.videoMemory}</p></div>
           <div className="private-memory"><span className="private-memory-date">{content?.secondDate}</span><h2>We chose us</h2><p>{content?.firstMemory}</p></div>
           <div className="private-memory"><span className="private-memory-date">{content?.thirdDate}</span><h2>Our first virtual coffee date</h2><p>{content?.secondMemory}</p></div>
         </div>
