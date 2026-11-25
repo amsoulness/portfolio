@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent, type TouchEvent, type WheelEvent } from 'react'
 import { ArrowLeft, Heart, LockKeyhole, Music2, Play, Sparkles } from 'lucide-react'
 import type { SiteTheme } from './ThemeToggle'
+import PrivateAsciiMotif from './PrivateAsciiMotif'
 import './PrivatePage.css'
 
 type PrivateContent = { firstDate: string; callDate: string; videoDate: string; secondDate: string; thirdDate: string; openingMemory: string; callMemory: string; videoMemory: string; firstMemory: string; secondMemory: string; note: string; ending: string }
@@ -189,7 +190,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         </section>
         <section className={`private-scene ${sceneIndex === 1 ? 'is-current' : sceneIndex < 1 ? 'is-ahead' : 'is-away'}`} aria-label="WILL YOU diamond ring">
           <p className="private-motif-kicker">A LITTLE PROMISE IN LIGHT</p>
-          <div className="private-motif-art motif-ring-art" aria-hidden="true"><svg viewBox="0 0 180 180"><ellipse cx="90" cy="118" rx="48" ry="35"/><path d="M48 111c9 31 75 31 84 0"/><path d="M90 22 117 55 90 92 63 55Z"/><path d="m63 55 27 11 27-11M90 22v44"/><path d="M128 36h15m-7.5-7.5v15M48 54h10m-5-5v10"/></svg></div>
+          <div className="private-motif-art motif-ring-art"><PrivateAsciiMotif motif="ring" label="An original animated, three-dimensional ASCII ring"/></div>
           <h2 className="private-motif-title">WILL YOU<br/><em>stay close?</em></h2>
           <p className="private-motif-copy">A little ring of light, for all the tiny tomorrows I hope we get to share.</p>
         </section>
@@ -197,8 +198,8 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
           <section className="private-garden" aria-label="A rose and a daisy blooming for us">
         <p className="private-garden-title"><Sparkles size={13}/> TWO LITTLE BLOOMS <Sparkles size={13}/></p>
         <div className="private-garden-flowers">
-          <figure className="private-garden-flower private-garden-rose"><span className="private-garden-stem"/><img src="/keepsake/rose.svg" alt="A red rose slowly blooming"/><figcaption>A rose for me</figcaption></figure>
-          <figure className="private-garden-flower private-garden-daisy"><span className="private-garden-stem"/><img src="/keepsake/daisy.svg" alt="A soft white daisy slowly blooming"/><figcaption>A daisy for you</figcaption></figure>
+          <figure className="private-garden-flower private-garden-rose"><span className="private-garden-stem"/><PrivateAsciiMotif motif="rose" label="An original animated ASCII rose"/><figcaption>A rose for me</figcaption></figure>
+          <figure className="private-garden-flower private-garden-daisy"><span className="private-garden-stem"/><PrivateAsciiMotif motif="daisy" label="An original animated ASCII daisy"/><figcaption>A daisy for you</figcaption></figure>
         </div>
         <span className="private-garden-dew private-garden-dew-one" aria-hidden="true"/><span className="private-garden-dew private-garden-dew-two" aria-hidden="true"/>
         <a className="private-garden-credit" href="https://github.com/JIN2-ASCII/-JIN2-ASCII" target="_blank" rel="noreferrer">A little bloom inspiration from JIN2’s ASCII flower studies ↗</a>
@@ -206,19 +207,19 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         </section>
         <section className={`private-scene ${sceneIndex === 3 ? 'is-current' : sceneIndex < 3 ? 'is-ahead' : 'is-away'}`} aria-label="CAT KNIGHT">
           <p className="private-motif-kicker">THE BRAVEST LITTLE GUARD</p>
-          <div className="private-motif-art motif-cat-art" aria-hidden="true"><svg viewBox="0 0 180 180"><path d="m35 70 8-43 39 25q8-3 16 0l39-25 8 43q12 17 7 39-10 39-63 39T26 109q-5-22 9-39Z"/><path d="M62 94h2m52 0h2m-39 18q13 12 26 0m-53-8-23-5m27 24-22 8m89-27 23-5m-27 24 22 8"/><path d="m128 107 28 9v30l-28 14-28-14v-30Z"/><path d="m117 133 10 10 17-21"/><path d="m41 69 8-26 25 15m57 11-8-26-25 15"/></svg></div>
+          <div className="private-motif-art motif-cat-art"><PrivateAsciiMotif motif="cat" label="An original animated ASCII cat knight"/></div>
           <h2 className="private-motif-title">YOUR TINY<br/><em>brave guard.</em></h2>
           <p className="private-motif-copy">A knight on whiskers, assigned to protect every rose, daisy, and stolen hug.</p>
         </section>
         <section className={`private-scene ${sceneIndex === 4 ? 'is-current' : sceneIndex < 4 ? 'is-ahead' : 'is-away'}`} aria-label="I LOVE YOU">
           <p className="private-motif-kicker">SOME THINGS DESERVE THEIR OWN LITTLE UNIVERSE</p>
-          <div className="private-motif-art motif-heart-art" aria-hidden="true"><Heart fill="currentColor"/></div>
+          <div className="private-motif-art motif-heart-art"><PrivateAsciiMotif motif="heart" label="An original animated ASCII heart"/></div>
           <h2 className="private-motif-title">I LOVE<br/><em>YOU.</em></h2>
           <p className="private-motif-copy">Across every orbit, every quiet moment, and every version of tomorrow.</p>
         </section>
         <section className={`private-scene ${sceneIndex === 5 ? 'is-current' : sceneIndex < 5 ? 'is-ahead' : 'is-away'}`} aria-label="BUTTERFLY">
           <p className="private-motif-kicker">A LITTLE WINGBEAT, FINDING ITS WAY HOME</p>
-          <div className="private-motif-art motif-butterfly-art" aria-hidden="true"><svg viewBox="0 0 180 180"><path d="M88 86C62 31 19 27 31 68c7 23 31 32 58 27-43 9-48 51-20 49 21-2 28-28 29-52m-2-6c26-55 69-59 57-18-7 23-31 32-58 27 43 9 48 51 20 49-21-2-28-28-29-52m3-4v50m-7-54-12-20m20 20 12-20"/></svg></div>
+          <div className="private-motif-art motif-butterfly-art"><PrivateAsciiMotif motif="butterfly" label="An original animated ASCII butterfly"/></div>
           <h2 className="private-motif-title">FOLLOW<br/><em>the flutter.</em></h2>
           <p className="private-motif-copy">Somehow, through all that space, the sweetest little things find their way to us.</p>
         </section>
