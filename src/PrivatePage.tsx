@@ -17,6 +17,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [gateMood, setGateMood] = useState<'idle' | 'opening' | 'rejected'>('idle')
+  const [hugs, setHugs] = useState(0)
   const [entrySequence, setEntrySequence] = useState(false)
   const [content, setContent] = useState<PrivateContent | null>(null)
   const [details, setDetails] = useState<PrivateDetails | null>(null)
@@ -220,6 +221,14 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
 
       <section className="private-finale" aria-label="The end of our little space">
         <div className="private-finale-glow" aria-hidden="true">♥</div><p className="private-eyebrow">ALWAYS, IN EVERY LITTLE UNIVERSE</p><h2>One more<br/><em>hug?</em></h2>
+        <button className="private-hug" type="button" onClick={() => setHugs(count => count + 1)}>
+          {hugs ? 'One more hug' : 'Open your hug'}
+        </button>
+        <p className="private-hug-note" role="status">{hugs > 0 && (hugs % 2 ? 'Until I can hug you in person, this one is yours.' : 'Stay a little longer. I like it here with you.')}</p>
+        {hugs > 0 && <div key={hugs} className="private-petal-arc" aria-hidden="true">
+          {['🌹','🌼','♡','🌼','🌹','♡','🌼','🌹'].map((flower, index) =>
+            <span key={index} style={{ left: (9 + index * 11) + '%', animationDelay: (index % 3) * 90 + 'ms' }}>{flower}</span>)}
+        </div>}
       </section>
     </div>}
     <footer className="private-footer">MADE WITH A LITTLE MAGIC <span>♥</span> AMSOULNESS</footer>

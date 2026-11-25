@@ -144,3 +144,36 @@
 @media(max-width:760px){.private-keepsake-card.private-butterfly-card{grid-column:1/-1;min-height:260px}.private-keepsake-card.private-butterfly-card .private-motif-art{height:150px;max-width:min(100%,330px)}}
 @media(max-width:820px){.private-moments-grid{grid-template-columns:1fr}.private-moment-card{min-height:0;padding:26px}.private-moment-card p{max-width:540px}}
 @media(prefers-reduced-motion:reduce){.private-moment-card,.private-moment-card:after{transition:none!important}}
+
+.private-hug {
+  position: relative;
+  z-index: 2;
+  min-height: 44px;
+  padding: 10px 24px;
+  border: 1px solid #d7b87999;
+  border-radius: 99px;
+  background: #281920;
+  color: #fff1db;
+  font: inherit;
+  cursor: pointer;
+}
+.private-hug:hover { background: #42242e; }
+.private-hug-note {
+  position: relative;
+  z-index: 1;
+  min-height: 3em;
+  max-width: 32ch;
+  margin: 16px auto 0;
+  color: var(--ink);
+  font: italic 18px/1.5 Georgia, serif;
+}
+.private-petal-arc { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.private-petal-arc span { position: absolute; top: 70%; opacity: 0; color: var(--lav); font-size: clamp(16px, 3vw, 26px); }
+@media (prefers-reduced-motion: no-preference) {
+  .private-page:not(.private-page-still) .private-petal-arc span { animation: private-hug-petal 1.8s ease-out both; }
+}
+@keyframes private-hug-petal {
+  0% { opacity: 0; transform: translateY(0) rotate(-10deg); }
+  22% { opacity: .9; }
+  100% { opacity: 0; transform: translateY(-145px) rotate(20deg); }
+}
