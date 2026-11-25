@@ -11,19 +11,20 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
   const [unlocked, setUnlocked] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [gateMood, setGateMood] = useState<'idle' | 'opening' | 'rejected'>('idle')
   const [content, setContent] = useState<PrivateContent | null>(null)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [musicBlocked, setMusicBlocked] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {
-    document.title = 'A Little Space for You | AMSOULNESS'
-    document.querySelector('meta[name="description"]')?.setAttribute('content', 'A private little corner made with love.')
+    document.title = unlocked ? 'A Little Space for You | AMSOULNESS' : 'Sealed | AMSOULNESS'
+    document.querySelector('meta[name="description"]')?.setAttribute('content', 'A secured page.')
     return () => {
       document.title = 'AMSOULNESS | Emmanuel Cherian'
       document.querySelector('meta[name="description"]')?.setAttribute('content', 'The portfolio and creative lab of Emmanuel Cherian: software projects, cinematic edits, and free browser-based tools from AMSOULNESS / ASLNS.')
     }
-  }, [])
+  }, [unlocked])
 
   useEffect(() => {
     // Start every page load behind the gate and invalidate any previous browser session.
@@ -42,6 +43,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
     event.preventDefault()
     if (!password || busy) return
     setBusy(true)
+    setGateMood('opening')
     setError('')
     try {
       const response = await fetch('/api/private-page-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, cache: 'no-store', body: JSON.stringify({ password }) })
@@ -53,10 +55,14 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         setContent(page.content)
         setUnlocked(true)
         setPassword('')
-      } else setError(result.error || 'That password didn’t open this little space. Try again.')
+      } else {
+        setGateMood('rejected')
+        setError(response.status === 401 ? 'The key didn’t turn. Take a breath and try again.' : result.error || 'The door stayed closed this time. Please try again.')
+      }
     } catch (cause) {
+      setGateMood('rejected')
       setError(cause instanceof Error ? cause.message : 'Couldn’t reach the lock just now. Check your connection and try again.')
-    } finally { setBusy(false) }
+    } finally { setBusy(false); setGateMood(current => current === 'opening' ? 'idle' : current) }
   }
 
   async function toggleMusic() {
@@ -75,18 +81,18 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       <a className="private-back" href="/"><ArrowLeft size={16}/> BACK TO PORTFOLIO</a>
     </header>
 
-    {!unlocked ? <section className="private-gate" aria-labelledby="private-title">
-      <div className="private-lock-icon"><LockKeyhole size={23}/></div>
-      <p className="private-eyebrow"><Sparkles size={14}/> A PRIVATE KEEPSAKE</p>
-      <h1 id="private-title">A little space,<br/><em>just for us.</em></h1>
-      <p className="private-intro">A quiet corner of the internet for our photos, our little milestones, and the moments I want to keep close.</p>
+    {!unlocked ? <section className={`private-gate gate-${gateMood}`} aria-labelledby="private-title" aria-busy={busy}>
+      <div className="private-seal" aria-hidden="true"><i/><i/><b><LockKeyhole size={19}/></b><span>ONLY THE RIGHT KEY</span></div>
+      <p className="private-eyebrow"><Sparkles size={14}/> A PRIVATE INVITATION</p>
+      <h1 id="private-title">You’re invited<br/><em>to step inside.</em></h1>
+      <p className="private-intro">A quiet little place is waiting to be discovered. Enter your key whenever you’re ready.</p>
       <form className="private-form" onSubmit={unlock}>
-        <label htmlFor="private-password">Password</label>
-        <input id="private-password" type="password" autoComplete="current-password" value={password} onChange={event => setPassword(event.target.value)} placeholder="Enter the password" required disabled={busy}/>
-        <button type="submit" disabled={busy || !password}><Heart size={16} fill="currentColor"/>{busy ? 'OPENING…' : 'OPEN OUR SPACE'}</button>
+        <label htmlFor="private-password">YOUR KEY</label>
+        <input id="private-password" type="password" autoComplete="current-password" value={password} onChange={event => { setPassword(event.target.value); setError(''); setGateMood('idle') }} placeholder="Enter the secret key" required disabled={busy}/>
+        <button type="submit" disabled={busy || !password}><span className="private-open-spark" aria-hidden="true"/><LockKeyhole size={15}/>{busy ? 'OPENING YOUR INVITATION…' : 'ACCEPT INVITATION'}</button>
       </form>
-      <p className="private-error" role="alert" aria-live="polite">{error}</p>
-      <p className="private-footnote">Made with love, kept just for us <Heart size={12} fill="currentColor"/></p>
+      <p className="private-error" role="alert" aria-live="polite">{error && <><span aria-hidden="true">✧</span>{error}</>}</p>
+      <p className="private-footnote"><span/>NO CLUES. NO PREVIEW. JUST THE KEY.</p>
     </section> : <div className="private-content">
       <section className="private-hero" aria-labelledby="letter-title">
         <p className="private-eyebrow"><Sparkles size={14}/> A LITTLE UNIVERSE OF OUR OWN</p>
