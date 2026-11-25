@@ -190,6 +190,12 @@
 .private-page-light:before{background:radial-gradient(ellipse at 50% -15%,#efd6d0,transparent 54%),radial-gradient(ellipse at 0% 78%,#e6e1ef,transparent 42%),radial-gradient(ellipse at 18% 43%,#c83c4d13,transparent 31%),radial-gradient(ellipse at 84% 57%,#b9add622,transparent 30%),radial-gradient(ellipse at 52% 100%,#d7b87913,transparent 35%),#f5f0eb}
 .private-butterfly-card .private-motif-art{width:100%;height:clamp(130px,20vw,190px);margin:18px auto 10px;overflow:hidden}
 .private-butterfly-card .private-butterfly-canvas{display:block;width:100%;height:100%;min-height:0;overflow:hidden}
+.private-butterfly-video{display:block;width:min(100%,420px);height:100%;min-height:0;aspect-ratio:16/9;object-fit:contain;border:1px solid #ffffff1b;border-radius:12px;background:#050507;box-shadow:0 14px 40px #0008,0 0 38px #c83c4d16}
+.private-privacy-mark{position:fixed;inset:0;z-index:5;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));align-items:center;justify-items:center;overflow:hidden;pointer-events:none;user-select:none;opacity:.075}
+.private-privacy-mark span{width:max-content;color:var(--ink);font:600 9px/1 'DM Mono',monospace;letter-spacing:1.2px;text-shadow:0 1px 4px #000;transform:rotate(-24deg);white-space:nowrap}
+@media print{.private-page-unlocked .private-content,.private-page-unlocked .private-privacy-mark{display:none!important}}
+@media(max-width:760px){.private-privacy-mark{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr))}.private-privacy-mark span{font-size:8px;letter-spacing:.8px}.private-butterfly-card .private-motif-art{height:clamp(150px,42vw,230px);max-width:min(100%,480px)}}
+@media(max-width:380px){.private-privacy-mark span{font-size:7px;letter-spacing:.4px}.private-back{font-size:8px;gap:6px;padding-inline:9px}.private-brand{font-size:17px}}
 @media(max-width:760px){.private-garden-flower .private-artwork-rose{height:125px}}
 @media(max-width:760px){.private-garden-flower .private-artwork-daisy{height:125px}}
 @media(max-width:430px){.private-garden-flower .private-artwork-rose{height:112px}}
@@ -229,4 +235,19 @@
   0% { opacity: 0; transform: translateY(0) rotate(-10deg); }
   22% { opacity: .9; }
   100% { opacity: 0; transform: translateY(-145px) rotate(20deg); }
+}
+
+@media(max-width:760px){
+  .private-privacy-mark{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr))}
+  .private-privacy-mark span{font-size:8px;letter-spacing:.8px}
+  .private-butterfly-card .private-motif-art{height:clamp(150px,42vw,230px);max-width:min(100%,480px)}
+}
+@media(max-width:420px){
+  .private-page{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+  .private-keepsake-grid{grid-template-columns:minmax(0,1fr)}
+  .private-keepsake-card,.private-keepsake-card:last-child{grid-column:1}
+  .private-nav{gap:10px}
+  .private-brand{font-size:17px}
+  .private-back{font-size:8px;gap:6px;padding-inline:9px}
+  .private-privacy-mark span{font-size:7px;letter-spacing:.4px}
 }
