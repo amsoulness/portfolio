@@ -107,8 +107,8 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         <div className="private-section-heading"><span>01 / THE TWO OF US</span><i/></div>
         <h2>A favorite view.<br/><em>My favorite people.</em></h2>
         <div className="private-portraits">
-          <figure><div className="private-portrait-frame"><img src="/api/private-photo?photo=her" alt="Her, smiling in a mirror selfie" loading="lazy" decoding="async"/></div><figcaption><span>HER</span><small>my favorite smile</small></figcaption></figure>
-          <figure><div className="private-portrait-frame"><img src="/api/private-photo?photo=me" alt="Me, in a portrait" loading="lazy" decoding="async"/></div><figcaption><span>ME</span><small>the one who found you</small></figcaption></figure>
+          <figure><div className="private-portrait-frame"><img src="/api/private-photo?photo=her" alt="Vaishu, smiling in a mirror selfie" loading="lazy" decoding="async"/></div><figcaption><span>VAISHU</span><small>my favorite smile</small></figcaption></figure>
+          <figure><div className="private-portrait-frame"><img src="/api/private-photo?photo=me" alt="Emmu, in a portrait" loading="lazy" decoding="async"/></div><figcaption><span>EMMU</span><small>the one who found you</small></figcaption></figure>
         </div>
       </section>
 
@@ -140,7 +140,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
           <div className="private-note-top"><span>A LITTLE KEEPSAKE OF US</span><Heart size={17} fill="currentColor"/></div>
           <p className="private-note-greeting">Hey, my favorite person,</p><p>{content?.note}</p>
           <div className="private-timeline" aria-label="Our story so far">
-            <div className="private-memory"><span className="private-memory-date">{content?.firstDate}</span><h3>The first hello</h3><p>{content?.openingMemory}</p></div>
+            <div className="private-memory"><span className="private-memory-date">{content?.firstDate}</span><h3>The first hello</h3><p>We first connected on <a href="https://umingle.com/video/" target="_blank" rel="noreferrer">Umingle video chat</a> that day. That night, our first chat began on Snapchat.</p></div>
             <div className="private-memory"><span className="private-memory-date">{content?.callDate}</span><h3>Our first calls</h3><p>{content?.callMemory}</p></div>
             <div className="private-memory"><span className="private-memory-date">{content?.videoDate}</span><h3>Face to face, from afar</h3><p>{content?.videoMemory}</p></div>
             <div className="private-memory"><span className="private-memory-date">{content?.secondDate}</span><h3>We chose us</h3><p>{content?.firstMemory}</p></div>
