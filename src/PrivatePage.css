@@ -344,3 +344,107 @@
 @keyframes pp-meter{from{height:3px;transform:scaleY(.5)}to{height:15px;transform:scaleY(1)}}
 @media(max-width:700px){.private-flower-rain{width:21%;opacity:.72}.private-flower-rain-her{left:-5%}.private-flower-rain-me{right:-5%}.private-rising-fx span:nth-child(n+5){display:none}.private-lock-fx span:nth-child(3),.private-lock-fx span:nth-child(6){font-size:24px}}
 @media(prefers-reduced-motion:reduce){.private-lock-fx span,.private-flower-rain span,.private-rising-fx span,.private-form,.private-form button:after,.private-music-button.is-playing,.private-viz i{animation:none!important}.private-flower-rain,.private-rising-fx{display:none}}
+
+/* A new cinematic direction for the private space: open, center-led scenes rather than stacked cards. */
+.private-page{--pp-ink:#fff8f1;--pp-soft:#e3d8df;--pp-muted:#b3a1b0;--pp-panel:#100b13d9;--pp-border:#eccf8245;background:#050407;color:var(--pp-ink)}
+.private-page:before{content:"";position:fixed;z-index:-1;inset:-15%;pointer-events:none;background:radial-gradient(ellipse at 50% 52%,#09070c 0 12%,#140911 22%,#330b19 39%,#100910 66%,#030305 100%);animation:pp-new-cinema-breathe 13s ease-in-out infinite alternate}
+.private-page:after{content:"";position:fixed;z-index:0;inset:0;pointer-events:none;opacity:.3;background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff08 4px,transparent 5px),radial-gradient(ellipse at 50% 50%,transparent 35%,#0009 100%);mix-blend-mode:screen}
+.private-nav{min-height:70px;border-color:#f5d58822}
+.private-brand{font-size:clamp(18px,2vw,23px);letter-spacing:-1.4px}.private-brand span{color:#f2c96d}
+.private-back{border-color:#f2d78738;background:#100b13a8;color:#f0e3e5;backdrop-filter:blur(12px)}
+.private-page-unlocked .private-nav{border-bottom-color:#f2d7871b}
+.private-page-unlocked .private-letter{width:min(1320px,100%);padding:8px 12px 14px;perspective:1900px}
+.private-page-unlocked .private-scene-viewport{width:min(1200px,100%);perspective:1800px}
+.private-scene{inset:0;width:100%;height:100%;max-height:none;padding:clamp(14px,3vw,40px);overflow:hidden;border:0;border-radius:0;background:transparent;box-shadow:none;filter:none;transition:transform 900ms cubic-bezier(.18,.78,.2,1),opacity 700ms ease,visibility 0s linear 900ms}
+.private-scene:before,.private-scene:after{display:none}
+.private-scene.is-current{transform:translate3d(0,0,170px) rotateX(0) scale(1);filter:none}
+.private-scene.is-ahead{transform:translate3d(0,0,-1500px) rotateX(10deg) scale(.06);filter:blur(2px)}
+.private-scene.is-away{transform:translate3d(0,0,-1180px) rotateX(-8deg) scale(.12);filter:blur(1px)}
+.private-scene[aria-label="Our portraits"]{gap:12px}
+.private-scene[aria-label="Our portraits"] .private-portraits{width:min(780px,100%);max-height:none;margin:clamp(12px,3vh,30px) auto 0;gap:clamp(12px,3vw,32px)}
+.private-scene[aria-label="Our portraits"] .private-portraits figure{flex:1 1 0;max-width:350px;padding:10px;border:1px solid #efce7955;border-radius:24px;background:linear-gradient(145deg,#1e1018c7,#100b14c7);box-shadow:0 30px 90px #0009,0 0 36px #ef3e5a18;backdrop-filter:blur(12px)}
+.private-scene[aria-label="Our portraits"] .private-portrait-frame{aspect-ratio:4/4.8;border-radius:17px;background:#0a080c}
+.private-scene[aria-label="Our portraits"] .private-portraits figcaption{padding:11px 5px 4px}
+.private-scene[aria-label="Our portraits"] .private-portraits figcaption span{color:#f3d47f}
+.private-motif-kicker{margin:0;color:#f4d783;text-shadow:0 0 22px #edc45b88;letter-spacing:2.5px}
+.private-motif-art{width:min(56vw,49vh,510px);height:auto;aspect-ratio:1;margin:clamp(4px,1vh,14px) auto;filter:drop-shadow(0 0 42px #f14d6933)}
+.private-motif-art:before{inset:1%;border-color:#f4d38261;border-style:dashed;box-shadow:0 0 50px #f0c85d27,inset 0 0 48px #b875ff19;animation:pp-motif-orbit 34s linear infinite}
+.private-motif-art:after{inset:6%;background:radial-gradient(circle,#f22e5a2a 0 12%,#ffd56820 36%,#a78aff16 56%,transparent 72%);filter:blur(22px)}
+.private-motif-art canvas{width:100%;height:100%;filter:drop-shadow(0 0 15px currentColor)}
+.private-motif-title{margin:2px 0;color:#fff7ef;font-family:Georgia,'Times New Roman',serif;font-weight:500;font-size:clamp(34px,6.5vw,64px);line-height:.98;letter-spacing:-.045em;text-shadow:0 10px 35px #000c}
+.private-motif-title em{background:linear-gradient(105deg,#fb5265 2%,#f7d478 48%,#c5afff 96%);background-clip:text;-webkit-background-clip:text;color:transparent;font-style:italic}
+.private-motif-copy{max-width:440px;color:#e8dce3;font-size:clamp(12px,1.5vw,15px);line-height:1.75;text-shadow:0 2px 12px #000c}
+.private-scene[aria-label="A rose and daisy"] .private-garden{display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;height:100%;max-width:none;margin:0;padding:0;overflow:visible;border:0;border-radius:0;background:none;box-shadow:none}
+.private-garden-title{color:#f2d782;font-size:clamp(9px,1vw,12px);letter-spacing:3px;text-shadow:0 0 18px #f6d47780}
+.private-garden-flowers{width:min(820px,100%);height:min(56vh,520px);gap:clamp(38px,10vw,150px);align-items:center;padding:0}
+.private-garden-flower{width:clamp(120px,20vw,205px);height:100%;align-content:center;justify-items:center;animation:pp-garden-sway 7s ease-in-out infinite;filter:drop-shadow(0 0 24px #edb84018)}
+.private-garden-flower:nth-child(2){animation-delay:-2s}
+.private-garden-flower img,.private-garden-flower canvas{width:100%;height:72%;max-height:330px;object-fit:contain;filter:drop-shadow(0 0 22px #ff5b6b4d)}
+.private-garden-daisy img,.private-garden-daisy canvas{filter:drop-shadow(0 0 24px #ffe28a70)}
+.private-garden-stem{bottom:18%;height:22%;width:4px;background:linear-gradient(#b6d47a,#527a56);filter:drop-shadow(0 0 10px #8bb56a66)}
+.private-garden-flower:after{bottom:14%;width:72%;height:14px;background:radial-gradient(ellipse,#eec96c51,transparent 72%)}
+.private-garden-flower figcaption{margin-top:8px;color:#fff0d2;font:italic 16px/1.4 Georgia,serif;text-shadow:0 2px 12px #000}
+.private-garden-credit{margin-top:clamp(8px,2vh,20px);color:#d1bfce;font-size:9px;opacity:.72}
+.private-scene[aria-label="Our soundtrack scene"] .private-soundtrack{width:min(600px,100%);margin:0 auto;border-color:#f1d27c48;background:linear-gradient(145deg,#1a1118d9,#100c16dd);box-shadow:0 24px 80px #0008,0 0 60px #c5a6ff18}
+.private-scene[aria-label="Our story"]{align-items:center;justify-content:center;overflow:hidden}
+.private-scene[aria-label="Our story"] .private-note{width:min(740px,100%);max-height:calc(100% - 20px);margin:0;padding:clamp(22px,4vw,44px);overflow-y:auto;border-color:#f0ce784b;border-radius:28px;background:linear-gradient(145deg,#1b1119e8,#100b14ee);box-shadow:0 30px 110px #000a,0 0 60px #f05b6520;backdrop-filter:blur(16px)}
+.private-note-top{color:#f0d182;border-color:#eed6862c}.private-note-top svg{color:#ff6177}.private-note>p{color:#f0e5e8}.private-memory-date{color:#eecf7e}
+.private-finale h2{font-family:Georgia,'Times New Roman',serif;font-weight:500}.private-finale .private-eyebrow{color:#f1d17d}
+.private-page-unlocked .private-footer{border-color:#efce7825;color:#c0afbd}
+.private-page:not(.private-page-unlocked){background:#050407;color:#fff7ef}
+.private-page:not(.private-page-unlocked):before{background:radial-gradient(ellipse at 50% 42%,#35101b 0 4%,#1b0c15 24%,#0a080d 58%,#030304 100%);animation:pp-lock-nebula 16s ease-in-out infinite alternate}
+.private-page:not(.private-page-unlocked):after{opacity:.55;background:radial-gradient(ellipse at 50% 49%,transparent 20%,#0009 100%),repeating-linear-gradient(0deg,transparent 0 4px,#fff1 5px,transparent 6px)}
+.private-page:not(.private-page-unlocked) .private-nav{border-color:#f2d58125}
+.private-page:not(.private-page-unlocked) .private-brand span{color:#e7c874}
+.private-page:not(.private-page-unlocked) .private-gate{isolation:isolate;width:min(520px,100%);padding:clamp(34px,7vh,72px) clamp(18px,5vw,54px);border:1px solid #e8c96852;border-radius:32px;background:linear-gradient(155deg,#170d14c9,#08070ceb 64%,#100b16e8);box-shadow:0 35px 130px #000a,0 0 70px #e33e5d1a,inset 0 1px #fff2;backdrop-filter:blur(20px)}
+.private-page:not(.private-page-unlocked) .private-gate:before{content:"";position:absolute;z-index:-1;inset:7%;border:1px solid #e8c96822;border-radius:50%;transform:scaleX(1.25) rotateX(66deg);box-shadow:0 0 38px #df485024,inset 0 0 38px #c1a3ff16;pointer-events:none}
+.private-page:not(.private-page-unlocked) .private-lock-icon{width:74px;height:74px;margin-bottom:20px;border:1px solid #efcf775e;border-radius:50%;background:radial-gradient(circle at 35% 28%,#41191e,#130c14 70%);color:#ffe39a;box-shadow:0 0 0 9px #f4d17a0a,0 0 48px #ff4a6338;animation:pp-lock-orbit 8s ease-in-out infinite}
+.private-page:not(.private-page-unlocked) .private-lock-icon:after{content:"";position:absolute;width:94px;height:94px;border:1px solid #bca8ff55;border-radius:50%;transform:rotateX(68deg);box-shadow:0 0 20px #bca8ff1c}
+.private-page:not(.private-page-unlocked) .private-eyebrow{color:#f2d37d;letter-spacing:3px}
+.private-page:not(.private-page-unlocked) .private-gate h1{font-family:Georgia,'Times New Roman',serif;font-weight:500;font-size:clamp(46px,8vw,74px);letter-spacing:-.055em}
+.private-page:not(.private-page-unlocked) .private-gate h1 em{background:linear-gradient(100deg,#f05c67 0%,#f1cf7c 48%,#c5b0ff 100%);background-clip:text;-webkit-background-clip:text;font-style:italic}
+.private-page:not(.private-page-unlocked) .private-intro{max-width:370px;color:#d9cbd5;font-size:14px}
+.private-page:not(.private-page-unlocked) .private-form{width:100%;padding:18px 0 0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none}
+.private-page:not(.private-page-unlocked) .private-form label{color:#f0d689;font:800 10px/1.5 ui-monospace,monospace;letter-spacing:1.5px;text-transform:uppercase}
+.private-page:not(.private-page-unlocked) .private-form input{height:54px;border-color:#f2d27d50;border-radius:15px;background:#060509;color:#fff8f2;box-shadow:inset 0 1px #fff1,0 10px 30px #0005}
+.private-page:not(.private-page-unlocked) .private-form input:focus{border-color:#d2baff;box-shadow:0 0 0 3px #b79bff28,0 0 28px #e4526420}
+.private-page:not(.private-page-unlocked) .private-form button{position:relative;overflow:hidden;min-height:54px;margin-top:15px;border:1px solid #fff3;border-radius:15px;background:linear-gradient(105deg,#ab1f36,#df5264 48%,#a98bea);box-shadow:0 12px 34px #a629433d;color:#fff8ef;font-size:11px;letter-spacing:1.5px}
+.private-page:not(.private-page-unlocked) .private-form button:after{content:"";position:absolute;top:-40%;bottom:-40%;left:-40%;width:28%;transform:skewX(-20deg);background:linear-gradient(90deg,transparent,#fff8,transparent);animation:pp-button-sheen 4.2s ease-in-out infinite}
+.private-page:not(.private-page-unlocked) .private-footnote{color:#bfafbd}
+.private-page:not(.private-page-unlocked) .private-footnote svg{color:#ef6873}
+.private-page:not(.private-page-unlocked) .private-footer{border-color:#eacb7020;color:#9e8e9c}
+/* Unified keepsake palette: ink black, rose red, warm yellow, and soft lavender. */
+.private-page{--pp-red:#ef5267;--pp-yellow:#f5d36f;--pp-lavender:#c2adff;--pp-black:#07060a}
+.private-page:before{background:radial-gradient(ellipse at 50% 56%,#09070c 0 11%,#270c16 24%,#53121e 39%,#15101c 57%,#09070d 78%,#030305 100%),radial-gradient(ellipse at 18% 15%,#f4d36f20,transparent 30%),radial-gradient(ellipse at 83% 82%,#c2adff20,transparent 34%)}
+.private-page:after{background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff08 4px,transparent 5px),radial-gradient(ellipse at 50% 50%,transparent 25%,#0009 100%),linear-gradient(135deg,#f4d36f08,#ef52670a 47%,#c2adff0c);opacity:.38}
+.private-sky{background-image:linear-gradient(#c2adff0d 1px,transparent 1px),linear-gradient(90deg,#f5d36f0a 1px,transparent 1px),radial-gradient(ellipse at 50% 50%,#ef52670a,transparent 68%);background-size:84px 84px,84px 84px,100% 100%}
+.private-sky span{background:#f5d36f;box-shadow:0 0 8px 2px #f5d36f66,0 0 22px #ef526766}
+.private-sky span:nth-child(2n){background:#c2adff;box-shadow:0 0 8px 2px #c2adff77,0 0 22px #c2adff55}
+.private-sky span:nth-child(3n){background:#ef5267;box-shadow:0 0 8px 2px #ef526777,0 0 22px #ef526755}
+.private-sky i{border-color:#c2adff32;box-shadow:0 0 55px #ef52671b,inset 0 0 30px #f5d36f0a}
+.private-page-unlocked .private-scene-hint{border-color:#f5d36f48;background:#09070dcc;color:#f5d36f;box-shadow:0 0 30px #ef52671a,0 0 42px #c2adff12}
+.private-wormhole:before,.private-wormhole:after{border-color:#c2adff55;box-shadow:0 0 34px #ef526733,inset 0 0 48px #f5d36f1c}
+.private-wormhole-core{background:radial-gradient(circle,#030305 0 22%,#ef526755 36%,#f5d36f33 48%,#c2adff22 63%,transparent 72%);box-shadow:0 0 80px #ef526733,0 0 120px #c2adff22}
+.wormhole-ring{border-color:#f5d36f55;box-shadow:0 0 34px #ef52672b,inset 0 0 32px #c2adff19}
+.wormhole-ring:nth-of-type(even){border-color:#c2adff70}
+.wormhole-streak{background:linear-gradient(transparent,#f5d36f,#ef5267,#c2adff,transparent);box-shadow:0 0 18px #c2adff55}
+.private-depth-blooms span{filter:drop-shadow(0 0 13px #f5d36f66) drop-shadow(0 0 25px #ef526744)}
+.private-depth-blooms span:nth-child(2n){filter:drop-shadow(0 0 14px #c2adff88)}
+.private-flower-rain,.private-rising-fx{filter:drop-shadow(0 0 12px #f5d36f55) drop-shadow(0 0 22px #c2adff38)}
+.private-page-unlocked .private-garden-title,.private-page-unlocked .private-motif-kicker,.private-page-unlocked .private-memory-date{color:#f5d36f;text-shadow:0 0 18px #f5d36f66}
+.private-page-unlocked .private-motif-title em{background:linear-gradient(105deg,#ef5267 0%,#f5d36f 48%,#c2adff 100%);background-clip:text;-webkit-background-clip:text}
+.private-page-unlocked .private-note,.private-page-unlocked .private-soundtrack{border-color:#f5d36f44;box-shadow:0 28px 100px #0009,0 0 54px #ef52671c,0 0 70px #c2adff12}
+.private-page:not(.private-page-unlocked):before{background:radial-gradient(ellipse at 50% 43%,#5b101e 0 4%,#2a0c17 23%,#120d18 46%,#08070c 70%,#030304 100%),radial-gradient(ellipse at 15% 18%,#f5d36f1c,transparent 31%),radial-gradient(ellipse at 88% 80%,#c2adff24,transparent 35%)}
+.private-page:not(.private-page-unlocked) .private-gate{border-color:#f5d36f70;background:linear-gradient(145deg,#250d17e8,#09070cef 58%,#171023ed);box-shadow:0 35px 130px #000b,0 0 70px #ef526728,0 0 90px #c2adff19,inset 0 1px #fff2}
+.private-page:not(.private-page-unlocked) .private-gate:before{border-color:#c2adff4d;box-shadow:0 0 42px #ef526733,inset 0 0 40px #f5d36f25}
+.private-page:not(.private-page-unlocked) .private-form button{background:linear-gradient(105deg,#a91532 0%,#ef5267 38%,#e5bd58 69%,#9c7ce9 100%);box-shadow:0 12px 36px #ef526740,0 0 32px #c2adff20}
+.private-page:not(.private-page-unlocked) .private-form input{border-color:#f5d36f62;box-shadow:inset 0 1px #fff1,0 10px 30px #0005,0 0 20px #c2adff12}
+.private-page:not(.private-page-unlocked) .private-lock-icon{color:#f5d36f;box-shadow:0 0 0 9px #f5d36f12,0 0 48px #ef526755,0 0 72px #c2adff25}
+.private-page:not(.private-page-unlocked) .private-eyebrow,.private-page:not(.private-page-unlocked) .private-form label{color:#f5d36f}
+.private-page:not(.private-page-unlocked) .private-gate h1 em{background:linear-gradient(100deg,#ef5267 0%,#f5d36f 48%,#c2adff 100%);background-clip:text;-webkit-background-clip:text}
+@media(prefers-reduced-motion:reduce){.private-sky span{animation:none!important}}
+@keyframes pp-new-cinema-breathe{from{transform:scale(1) rotate(0);filter:hue-rotate(-6deg)}to{transform:scale(1.06) rotate(2deg);filter:hue-rotate(8deg)}}
+@keyframes pp-lock-nebula{from{transform:scale(.96);filter:hue-rotate(-10deg) brightness(.82)}to{transform:scale(1.08);filter:hue-rotate(9deg) brightness(1.15)}}
+@keyframes pp-lock-orbit{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-7px) rotate(4deg)}}
+@media(max-width:600px){.private-page{padding-inline:14px}.private-nav{min-height:60px}.private-page:not(.private-page-unlocked) .private-gate{width:min(440px,100%);padding:36px 20px 30px;border-radius:26px}.private-page:not(.private-page-unlocked) .private-intro{margin-bottom:20px;font-size:13px}.private-page:not(.private-page-unlocked) .private-form{padding-top:10px}.private-page-unlocked .private-letter{padding:5px 0 8px}.private-scene{padding:10px 4px}.private-motif-art{width:min(70vw,40vh,360px)}.private-scene[aria-label="A rose and daisy"] .private-garden-flowers{height:min(48vh,370px);gap:8vw}.private-garden-flower{width:clamp(104px,31vw,154px)}.private-garden-flower figcaption{font-size:13px}.private-scene[aria-label="Our portraits"] .private-portraits figure{padding:6px;border-radius:17px}.private-scene[aria-label="Our portraits"] .private-portrait-frame{aspect-ratio:4/5.2}.private-scene[aria-label="Our story"] .private-note{padding:20px;border-radius:21px}}
+@media(prefers-reduced-motion:reduce){.private-page:before,.private-page:not(.private-page-unlocked) .private-lock-icon,.private-page:not(.private-page-unlocked) .private-form button:after{animation:none!important}.private-scene.is-current,.private-scene.is-ahead,.private-scene.is-away{transition-duration:.01ms!important}}
