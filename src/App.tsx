@@ -5,6 +5,7 @@ const SessionPage = lazy(() => import('./SessionPage'))
 const DeployPage = lazy(() => import('./DeployPage'))
 const PluginsPage = lazy(() => import('./PluginsPage'))
 const RenderDeploy = lazy(() => import('./RenderDeploy'))
+const PrivatePage = lazy(() => import('./PrivatePage'))
 import ToolsLoading from './ToolsLoading'
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import type { ReactNode, CSSProperties, MouseEvent as ReactMouseEvent } from 'react'
@@ -27,6 +28,7 @@ const navigationLabelFor = (path: string) => {
     '/tools/color': 'Opening Color Lab',
     '/tools/password': 'Opening Password Studio',
     '/tools/status': 'Opening WhatsApp Status Studio',
+    '/our-space': 'Opening Your Private Space',
   }
   return labels[path] ?? 'Opening the page'
 }
@@ -606,6 +608,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
         <a href="#inspiration" onClick={()=>setMenuOpen(false)}>MY PICKS</a>
         <a href="/tools" className="tools-nav-spotlight" onClick={()=>setMenuOpen(false)}><span className="tools-nav-spark">✦</span> TOOLS <span className="tools-nav-new">EXPLORE ↗</span></a>
         <a href="/session" onClick={()=>setMenuOpen(false)}>SESSION</a>
+        <a href="/our-space" onClick={()=>setMenuOpen(false)}>OUR LITTLE SPACE ♥</a>
         <a href="#experience" onClick={()=>setMenuOpen(false)}>EXPERIENCE</a><a href="#contact" onClick={()=>setMenuOpen(false)}>CONTACT ↗</a>
       </div>
       <ThemeToggle theme={theme} preference={themePreference} onToggle={onToggleTheme} className="portfolio-theme-toggle"/>
@@ -781,7 +784,7 @@ export default function App(){
       return
     }
 
-    if (!['/', '/tools', '/session', '/session/deploy', '/session/plugins', '/session/deploy/render'].includes(nextPath) && !/^\/tools\/(whatsapp|image|qr|color|password|status)$/.test(nextPath)) return
+    if (!['/', '/tools', '/our-space', '/session', '/session/deploy', '/session/plugins', '/session/deploy/render'].includes(nextPath) && !/^\/tools\/(whatsapp|image|qr|color|password|status)$/.test(nextPath)) return
     if (nextPath === path) return
     event.preventDefault()
     window.history.pushState({}, '', `${destination.pathname}${destination.search}`)
@@ -806,6 +809,8 @@ export default function App(){
         ? <Suspense fallback={<ToolsLoading message={navigationLabel}/>}><SessionPage theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme}/></Suspense>
       : path === '/tools' || path.startsWith('/tools/')
         ? <Suspense fallback={<ToolsLoading message={navigationLabel}/> }><ToolsHub pathname={path} theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme} smoothMode={effectsOn}/></Suspense>
+        : path === '/our-space'
+          ? <Suspense fallback={<ToolsLoading message={navigationLabel}/> }><PrivatePage theme={theme} smoothMode={effectsOn}/></Suspense>
         : <PortfolioApp theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme} effectsOn={effectsOn}/>}
     {!path.startsWith("/session") && <button type="button" className="mobile-smooth-toggle" onClick={()=>setEffectsOn(v=>!v)} aria-pressed={effectsOn} aria-label={`Smooth mode ${effectsOn?'on':'off'}`} title="Change smooth mode for the whole website"><span aria-hidden="true">{effectsOn?'✦':'◌'}</span>SMOOTH MODE {effectsOn?'ON':'OFF'}</button>}
   </div>

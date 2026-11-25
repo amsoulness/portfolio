@@ -11,6 +11,7 @@
     "test:whatsapp-ui": "playwright test"
   },
   "dependencies": {
+    "@vercel/blob": "^2.9.0",
     "diff": "^9.0.0",
     "dompurify": "^3.4.17",
     "figlet": "^1.12.0",
