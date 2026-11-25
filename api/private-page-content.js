@@ -15,7 +15,7 @@ export default function handler(req, res) {
   } catch {
     return res.status(503).json({ error: 'The keepsake is unavailable right now.' })
   }
-  if (!content || typeof content !== 'object' || !['firstDate', 'secondDate', 'thirdDate', 'firstMemory', 'secondMemory', 'note', 'ending'].every(key => typeof content[key] === 'string')) {
+  if (!content || typeof content !== 'object' || !['firstDate', 'secondDate', 'thirdDate', 'openingMemory', 'firstMemory', 'secondMemory', 'note', 'ending'].every(key => typeof content[key] === 'string')) {
     return res.status(503).json({ error: 'The keepsake is unavailable right now.' })
   }
   return res.status(200).json({ content })

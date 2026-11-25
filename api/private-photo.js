@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     const result = await get(pathname, { access: 'private' })
     if (!result || result.statusCode !== 200 || !result.stream) return res.status(404).end()
     res.setHeader('Content-Type', result.blob.contentType || 'image/jpeg')
-    res.setHeader('Content-Length', String(result.blob.contentLength))
+    if (Number.isSafeInteger(result.blob.size)) res.setHeader('Content-Length', String(result.blob.size))
     res.status(200)
     return Readable.fromWeb(result.stream).pipe(res)
   } catch {
