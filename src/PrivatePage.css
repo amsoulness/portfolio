@@ -413,36 +413,27 @@
 .private-page:not(.private-page-unlocked) .private-footnote{color:#bfafbd}
 .private-page:not(.private-page-unlocked) .private-footnote svg{color:#ef6873}
 .private-page:not(.private-page-unlocked) .private-footer{border-color:#eacb7020;color:#9e8e9c}
-/* Unified keepsake palette: ink black, rose red, warm yellow, and soft lavender. */
-.private-page{--pp-red:#ef5267;--pp-yellow:#f5d36f;--pp-lavender:#c2adff;--pp-black:#07060a}
-.private-page:before{background:radial-gradient(ellipse at 50% 56%,#09070c 0 11%,#270c16 24%,#53121e 39%,#15101c 57%,#09070d 78%,#030305 100%),radial-gradient(ellipse at 18% 15%,#f4d36f20,transparent 30%),radial-gradient(ellipse at 83% 82%,#c2adff20,transparent 34%)}
-.private-page:after{background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff08 4px,transparent 5px),radial-gradient(ellipse at 50% 50%,transparent 25%,#0009 100%),linear-gradient(135deg,#f4d36f08,#ef52670a 47%,#c2adff0c);opacity:.38}
-.private-sky{background-image:linear-gradient(#c2adff0d 1px,transparent 1px),linear-gradient(90deg,#f5d36f0a 1px,transparent 1px),radial-gradient(ellipse at 50% 50%,#ef52670a,transparent 68%);background-size:84px 84px,84px 84px,100% 100%}
-.private-sky span{background:#f5d36f;box-shadow:0 0 8px 2px #f5d36f66,0 0 22px #ef526766}
-.private-sky span:nth-child(2n){background:#c2adff;box-shadow:0 0 8px 2px #c2adff77,0 0 22px #c2adff55}
-.private-sky span:nth-child(3n){background:#ef5267;box-shadow:0 0 8px 2px #ef526777,0 0 22px #ef526755}
-.private-sky i{border-color:#c2adff32;box-shadow:0 0 55px #ef52671b,inset 0 0 30px #f5d36f0a}
+/* Keep the gate's existing styling; apply the requested palette only after unlock. */
+.private-page-unlocked{--pp-red:#ef5267;--pp-yellow:#f5d36f;--pp-lavender:#c2adff;--pp-black:#07060a}
+.private-page-unlocked:before{background:radial-gradient(ellipse at 50% 56%,#09070c 0 11%,#270c16 24%,#53121e 39%,#15101c 57%,#09070d 78%,#030305 100%),radial-gradient(ellipse at 18% 15%,#f4d36f20,transparent 30%),radial-gradient(ellipse at 83% 82%,#c2adff20,transparent 34%)}
+.private-page-unlocked:after{background:repeating-linear-gradient(0deg,transparent 0 3px,#ffffff08 4px,transparent 5px),radial-gradient(ellipse at 50% 50%,transparent 25%,#0009 100%),linear-gradient(135deg,#f4d36f08,#ef52670a 47%,#c2adff0c);opacity:.38}
+.private-page-unlocked .private-sky{background-image:linear-gradient(#c2adff0d 1px,transparent 1px),linear-gradient(90deg,#f5d36f0a 1px,transparent 1px),radial-gradient(ellipse at 50% 50%,#ef52670a,transparent 68%);background-size:84px 84px,84px 84px,100% 100%}
+.private-page-unlocked .private-sky span{background:#f5d36f;box-shadow:0 0 8px 2px #f5d36f66,0 0 22px #ef526766}
+.private-page-unlocked .private-sky span:nth-child(2n){background:#c2adff;box-shadow:0 0 8px 2px #c2adff77,0 0 22px #c2adff55}
+.private-page-unlocked .private-sky span:nth-child(3n){background:#ef5267;box-shadow:0 0 8px 2px #ef526777,0 0 22px #ef526755}
+.private-page-unlocked .private-sky i{border-color:#c2adff32;box-shadow:0 0 55px #ef52671b,inset 0 0 30px #f5d36f0a}
 .private-page-unlocked .private-scene-hint{border-color:#f5d36f48;background:#09070dcc;color:#f5d36f;box-shadow:0 0 30px #ef52671a,0 0 42px #c2adff12}
-.private-wormhole:before,.private-wormhole:after{border-color:#c2adff55;box-shadow:0 0 34px #ef526733,inset 0 0 48px #f5d36f1c}
-.private-wormhole-core{background:radial-gradient(circle,#030305 0 22%,#ef526755 36%,#f5d36f33 48%,#c2adff22 63%,transparent 72%);box-shadow:0 0 80px #ef526733,0 0 120px #c2adff22}
-.wormhole-ring{border-color:#f5d36f55;box-shadow:0 0 34px #ef52672b,inset 0 0 32px #c2adff19}
-.wormhole-ring:nth-of-type(even){border-color:#c2adff70}
-.wormhole-streak{background:linear-gradient(transparent,#f5d36f,#ef5267,#c2adff,transparent);box-shadow:0 0 18px #c2adff55}
-.private-depth-blooms span{filter:drop-shadow(0 0 13px #f5d36f66) drop-shadow(0 0 25px #ef526744)}
-.private-depth-blooms span:nth-child(2n){filter:drop-shadow(0 0 14px #c2adff88)}
-.private-flower-rain,.private-rising-fx{filter:drop-shadow(0 0 12px #f5d36f55) drop-shadow(0 0 22px #c2adff38)}
+.private-page-unlocked .private-wormhole:before,.private-page-unlocked .private-wormhole:after{border-color:#c2adff55;box-shadow:0 0 34px #ef526733,inset 0 0 48px #f5d36f1c}
+.private-page-unlocked .private-wormhole-core{background:radial-gradient(circle,#030305 0 22%,#ef526755 36%,#f5d36f33 48%,#c2adff22 63%,transparent 72%);box-shadow:0 0 80px #ef526733,0 0 120px #c2adff22}
+.private-page-unlocked .wormhole-ring{border-color:#f5d36f55;box-shadow:0 0 34px #ef52672b,inset 0 0 32px #c2adff19}
+.private-page-unlocked .wormhole-ring:nth-of-type(even){border-color:#c2adff70}
+.private-page-unlocked .wormhole-streak{background:linear-gradient(transparent,#f5d36f,#ef5267,#c2adff,transparent);box-shadow:0 0 18px #c2adff55}
+.private-page-unlocked .private-depth-blooms span{filter:drop-shadow(0 0 13px #f5d36f66) drop-shadow(0 0 25px #ef526744)}
+.private-page-unlocked .private-depth-blooms span:nth-child(2n){filter:drop-shadow(0 0 14px #c2adff88)}
+.private-page-unlocked .private-flower-rain,.private-page-unlocked .private-rising-fx{filter:drop-shadow(0 0 12px #f5d36f55) drop-shadow(0 0 22px #c2adff38)}
 .private-page-unlocked .private-garden-title,.private-page-unlocked .private-motif-kicker,.private-page-unlocked .private-memory-date{color:#f5d36f;text-shadow:0 0 18px #f5d36f66}
 .private-page-unlocked .private-motif-title em{background:linear-gradient(105deg,#ef5267 0%,#f5d36f 48%,#c2adff 100%);background-clip:text;-webkit-background-clip:text}
 .private-page-unlocked .private-note,.private-page-unlocked .private-soundtrack{border-color:#f5d36f44;box-shadow:0 28px 100px #0009,0 0 54px #ef52671c,0 0 70px #c2adff12}
-.private-page:not(.private-page-unlocked):before{background:radial-gradient(ellipse at 50% 43%,#5b101e 0 4%,#2a0c17 23%,#120d18 46%,#08070c 70%,#030304 100%),radial-gradient(ellipse at 15% 18%,#f5d36f1c,transparent 31%),radial-gradient(ellipse at 88% 80%,#c2adff24,transparent 35%)}
-.private-page:not(.private-page-unlocked) .private-gate{border-color:#f5d36f70;background:linear-gradient(145deg,#250d17e8,#09070cef 58%,#171023ed);box-shadow:0 35px 130px #000b,0 0 70px #ef526728,0 0 90px #c2adff19,inset 0 1px #fff2}
-.private-page:not(.private-page-unlocked) .private-gate:before{border-color:#c2adff4d;box-shadow:0 0 42px #ef526733,inset 0 0 40px #f5d36f25}
-.private-page:not(.private-page-unlocked) .private-form button{background:linear-gradient(105deg,#a91532 0%,#ef5267 38%,#e5bd58 69%,#9c7ce9 100%);box-shadow:0 12px 36px #ef526740,0 0 32px #c2adff20}
-.private-page:not(.private-page-unlocked) .private-form input{border-color:#f5d36f62;box-shadow:inset 0 1px #fff1,0 10px 30px #0005,0 0 20px #c2adff12}
-.private-page:not(.private-page-unlocked) .private-lock-icon{color:#f5d36f;box-shadow:0 0 0 9px #f5d36f12,0 0 48px #ef526755,0 0 72px #c2adff25}
-.private-page:not(.private-page-unlocked) .private-eyebrow,.private-page:not(.private-page-unlocked) .private-form label{color:#f5d36f}
-.private-page:not(.private-page-unlocked) .private-gate h1 em{background:linear-gradient(100deg,#ef5267 0%,#f5d36f 48%,#c2adff 100%);background-clip:text;-webkit-background-clip:text}
-@media(prefers-reduced-motion:reduce){.private-sky span{animation:none!important}}
 @keyframes pp-new-cinema-breathe{from{transform:scale(1) rotate(0);filter:hue-rotate(-6deg)}to{transform:scale(1.06) rotate(2deg);filter:hue-rotate(8deg)}}
 @keyframes pp-lock-nebula{from{transform:scale(.96);filter:hue-rotate(-10deg) brightness(.82)}to{transform:scale(1.08);filter:hue-rotate(9deg) brightness(1.15)}}
 @keyframes pp-lock-orbit{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-7px) rotate(4deg)}}
