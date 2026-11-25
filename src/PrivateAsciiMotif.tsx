@@ -2,6 +2,13 @@ import { useEffect, useRef } from 'react'
 
 type Motif = 'ring' | 'rose' | 'daisy' | 'cat' | 'heart' | 'butterfly'
 
+const privateArtwork: Partial<Record<Motif, string>> = {
+  ring: '/api/private-art?art=ring',
+  rose: '/api/private-art?art=rose',
+  cat: '/api/private-art?art=cat',
+  heart: '/api/private-art?art=heart',
+}
+
 type Point = { x: number; y: number; z: number; char: string; order?: number; part?: 'band' | 'prong' | 'gem' }
 
 const GLYPHS = ' .,:;+=*xX#@'
@@ -133,6 +140,8 @@ function makeDiamondRing(): Point[] {
 export default function PrivateAsciiMotif({ motif, label }: { motif: Motif; label: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
+  if (privateArtwork[motif]) return <img className={`private-artwork private-artwork-${motif}`} src={privateArtwork[motif]} alt={label} loading="lazy" decoding="async"/>
+
   useEffect(() => {
     const canvas = canvasRef.current
     const context = canvas?.getContext('2d')
@@ -260,12 +269,5 @@ export default function PrivateAsciiMotif({ motif, label }: { motif: Motif; labe
     return () => { cancelAnimationFrame(animation); observer.disconnect(); visibility.disconnect(); document.removeEventListener('visibilitychange', onVisibility) }
   }, [motif])
 
-  if (motif === 'heart') return <div className="private-i-love-you-art" role="img" aria-label={label}>
-    <picture>
-      <source media="(prefers-reduced-motion: reduce)" srcSet="/keepsake/i-love-you-front.png"/>
-      <img src="/keepsake/i-love-you-preview.gif" alt="" loading="lazy" decoding="async"/>
-    </picture>
-    <span aria-hidden="true">ASLNS · @ft.aslns<br/>114 LANGUAGES</span>
-  </div>
   return <canvas ref={canvasRef} className={`private-ascii-motif private-ascii-${motif}`} role="img" aria-label={label}/>
 }
