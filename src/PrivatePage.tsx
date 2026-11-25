@@ -127,8 +127,33 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         </div>
       </section>
 
+      <section className="private-section private-little-moments" aria-label="Little things that make us smile">
+        <div className="private-section-heading"><span>03 / THE LITTLE THINGS WE KEEP</span><i/></div>
+        <h2>Small moments.<br/><em>Big feelings.</em></h2>
+        <div className="private-moments-grid">
+          <article className="private-moment-card">
+            <span className="private-moment-mark" aria-hidden="true">01</span>
+            <span className="private-moment-overline">HER, JUST BEING HER</span>
+            <h3>That smile.</h3>
+            <p>Her smile is enough to make my day. Hearing her voice when we call makes me smile, too.</p>
+          </article>
+          <article className="private-moment-card">
+            <span className="private-moment-mark" aria-hidden="true">02</span>
+            <span className="private-moment-overline">EMMU’S LITTLE QUIRKS</span>
+            <h3>Sticker king<br/><em>and lip biter.</em></h3>
+            <p>A WhatsApp sticker collection, random lip-biting that gets an eye-roll, and little surprise kisses just because.</p>
+          </article>
+          <article className="private-moment-card">
+            <span className="private-moment-mark" aria-hidden="true">03</span>
+            <span className="private-moment-overline">WHEN WE FOUND OUR WAY</span>
+            <h3>Here for<br/><em>each other.</em></h3>
+            <p>The moment I realized she was the one I had been hoping to find—and the tender times we helped each other through tears and back to smiles.</p>
+          </article>
+        </div>
+      </section>
+
       <section className="private-section private-keepsake-section" aria-label="Little keepsakes">
-        <div className="private-section-heading"><span>03 / LITTLE THINGS, BIG FEELINGS</span><i/></div>
+        <div className="private-section-heading"><span>04 / LITTLE THINGS, BIG FEELINGS</span><i/></div>
         <div className="private-keepsake-grid">
           <article className="private-keepsake-card private-ring-card"><span className="private-card-index">A PROMISE IN LIGHT</span><div className="private-motif-art motif-ring-art"><PrivateAsciiMotif motif="ring" label="An original animated ASCII diamond ring"/></div><h3>WILL YOU <em>stay close?</em></h3><p>For all the tiny tomorrows we still get to share.</p></article>
           <article className="private-keepsake-card private-bloom-card"><span className="private-card-index">TWO LITTLE BLOOMS</span><div className="private-garden-flowers"><figure className="private-garden-flower private-garden-rose"><img src="/keepsake/rose.svg" alt="A red rose"/><figcaption>A rose for me</figcaption></figure><figure className="private-garden-flower private-garden-daisy"><img src="/keepsake/daisy.svg" alt="A yellow daisy"/><figcaption>A daisy for you</figcaption></figure></div><h3>Growing <em>side by side.</em></h3></article>
@@ -139,7 +164,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       </section>
 
       <section className="private-section private-soundtrack-section" aria-label="Our soundtrack">
-        <div className="private-section-heading"><span>04 / PRESS PLAY, STAY A LITTLE</span><i/></div>
+        <div className="private-section-heading"><span>05 / PRESS PLAY, STAY A LITTLE</span><i/></div>
         <div className={`private-soundtrack ${musicPlaying ? 'private-soundtrack-playing' : ''}`}>
           <audio ref={audioRef} src="/api/private-audio" loop preload="none" onPlay={() => setMusicPlaying(true)} onPause={() => setMusicPlaying(false)}/>
           <div className="private-record" aria-hidden="true"><span>♥</span></div>
@@ -150,7 +175,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       </section>
 
       <section className="private-section private-story-section" id="our-story" aria-label="Our story">
-        <div className="private-section-heading"><span>05 / HOW OUR LITTLE STORY BEGAN</span><i/></div>
+        <div className="private-section-heading"><span>06 / HOW OUR LITTLE STORY BEGAN</span><i/></div>
         <article className="private-note">
           <div className="private-note-top"><span>A LITTLE KEEPSAKE OF US</span><Heart size={17} fill="currentColor"/></div>
           <p className="private-note-greeting">Hey, my favorite person,</p><p>{content?.note}</p>
