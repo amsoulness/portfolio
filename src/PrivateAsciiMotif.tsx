@@ -8,6 +8,7 @@ const privateArtwork: Partial<Record<Motif, string>> = {
   daisy: '/api/private-art?art=daisy',
   cat: '/api/private-art?art=cat',
   heart: '/api/private-art?art=heart',
+  butterfly: '/api/private-art?art=butterfly',
 }
 
 type Point = { x: number; y: number; z: number; char: string; order?: number; part?: 'band' | 'prong' | 'gem' }

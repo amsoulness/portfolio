@@ -8,6 +8,7 @@ const artworks = {
   daisy: 'daisy.gif',
   cat: 'cat_knight.gif',
   heart: 'i_love_you.gif',
+  butterfly: 'butterfly.gif',
 }
 
 export default async function handler(req, res) {
