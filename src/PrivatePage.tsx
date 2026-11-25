@@ -4,6 +4,7 @@ import type { SiteTheme } from './ThemeToggle'
 import './PrivatePage.css'
 
 type PrivateContent = { firstDate: string; callDate: string; videoDate: string; secondDate: string; thirdDate: string; openingMemory: string; callMemory: string; videoMemory: string; firstMemory: string; secondMemory: string; note: string; ending: string }
+const SCENE_LABELS = ['OUR PORTRAITS', 'WILL YOU', 'IN BLOOM', 'CAT KNIGHT', 'I LOVE YOU', 'BUTTERFLY', 'OUR SONG', 'OUR STORY', 'ALWAYS']
 
 export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; smoothMode: boolean }) {
   const [password, setPassword] = useState('')
@@ -14,7 +15,6 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
   const [musicOpen, setMusicOpen] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [musicBlocked, setMusicBlocked] = useState(false)
-  const [activeMoment, setActiveMoment] = useState('')
   const [sceneIndex, setSceneIndex] = useState(0)
   const audioRef = useRef<HTMLAudioElement>(null)
   const touchStartY = useRef<number | null>(null)
@@ -24,7 +24,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
     const now = Date.now()
     if (now - sceneChangeAt.current < 680) return
     sceneChangeAt.current = now
-    setSceneIndex(index => Math.max(0, Math.min(5, index + direction)))
+    setSceneIndex(index => Math.max(0, Math.min(SCENE_LABELS.length - 1, index + direction)))
   }
 
   function handleSceneWheel(event: WheelEvent<HTMLDivElement>) {
@@ -175,7 +175,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       <div className="private-flower-rain private-flower-rain-her" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <span key={`daisy-${i}`}><img src="/keepsake/daisy.svg" alt=""/></span>)}</div>
       <div className="private-flower-rain private-flower-rain-me" aria-hidden="true">{Array.from({ length: 8 }, (_, i) => <span key={`rose-${i}`}><img src="/keepsake/rose.svg" alt=""/></span>)}</div>
       <div className="private-rising-fx" aria-hidden="true"><span><img src="/keepsake/daisy.svg" alt=""/></span><span>♡</span><span><img src="/keepsake/rose.svg" alt=""/></span><span>✦</span><span>♥</span><span><img src="/keepsake/daisy.svg" alt=""/></span><span><img src="/keepsake/rose.svg" alt=""/></span></div>
-      <div className="private-scene-hint" aria-live="polite">SCENE {sceneIndex + 1} / 6 <span>Scroll or swipe to move through our little world</span></div>
+      <div className="private-scene-hint" aria-live="polite">{SCENE_LABELS[sceneIndex]} · {sceneIndex + 1} / {SCENE_LABELS.length} <span>Scroll or swipe. I’ll come a little closer.</span></div>
       <div className="private-scene-viewport" onWheel={handleSceneWheel} onTouchStart={event => { touchStartY.current = event.touches[0].clientY }} onTouchEnd={handleSceneTouchEnd} onKeyDown={event => { if (event.key === 'ArrowDown' || event.key === 'PageDown') { event.preventDefault(); moveScene(1) } else if (event.key === 'ArrowUp' || event.key === 'PageUp') { event.preventDefault(); moveScene(-1) } }} tabIndex={0} aria-label="Scroll or swipe to explore each keepsake scene">
         <div className="private-wormhole" aria-hidden="true"><div className="private-wormhole-core"/><span className="wormhole-ring ring-one"/><span className="wormhole-ring ring-two"/><span className="wormhole-ring ring-three"/><span className="wormhole-ring ring-four"/><i className="wormhole-streak streak-one"/><i className="wormhole-streak streak-two"/><i className="wormhole-streak streak-three"/><i className="wormhole-streak streak-four"/><i className="wormhole-streak streak-five"/><i className="wormhole-streak streak-six"/></div>
         <div className="private-depth-blooms" aria-hidden="true"><span><img src="/keepsake/rose.svg" alt=""/></span><span>♡</span><span><img src="/keepsake/daisy.svg" alt=""/></span><span>✦</span><span><img src="/keepsake/rose.svg" alt=""/></span><span>♥</span><span><img src="/keepsake/daisy.svg" alt=""/></span><span>✧</span></div>
@@ -187,7 +187,13 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
             <figure><div className="private-portrait-frame"><img src="/api/private-photo?photo=me" alt="Me, in a portrait" loading="lazy" decoding="async"/></div><figcaption><span>ME</span><small>the one who found you</small></figcaption></figure>
           </div>
         </section>
-        <section className={`private-scene ${sceneIndex === 1 ? 'is-current' : sceneIndex < 1 ? 'is-ahead' : 'is-away'}`} aria-label="A rose and daisy">
+        <section className={`private-scene ${sceneIndex === 1 ? 'is-current' : sceneIndex < 1 ? 'is-ahead' : 'is-away'}`} aria-label="WILL YOU diamond ring">
+          <p className="private-motif-kicker">A LITTLE PROMISE IN LIGHT</p>
+          <div className="private-motif-art motif-ring-art" aria-hidden="true"><svg viewBox="0 0 180 180"><ellipse cx="90" cy="118" rx="48" ry="35"/><path d="M48 111c9 31 75 31 84 0"/><path d="M90 22 117 55 90 92 63 55Z"/><path d="m63 55 27 11 27-11M90 22v44"/><path d="M128 36h15m-7.5-7.5v15M48 54h10m-5-5v10"/></svg></div>
+          <h2 className="private-motif-title">WILL YOU<br/><em>stay close?</em></h2>
+          <p className="private-motif-copy">A little ring of light, for all the tiny tomorrows I hope we get to share.</p>
+        </section>
+        <section className={`private-scene ${sceneIndex === 2 ? 'is-current' : sceneIndex < 2 ? 'is-ahead' : 'is-away'}`} aria-label="IN BLOOM rose and daisy">
           <section className="private-garden" aria-label="A rose and a daisy blooming for us">
         <p className="private-garden-title"><Sparkles size={13}/> TWO LITTLE BLOOMS <Sparkles size={13}/></p>
         <div className="private-garden-flowers">
@@ -198,27 +204,25 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         <a className="private-garden-credit" href="https://github.com/JIN2-ASCII/-JIN2-ASCII" target="_blank" rel="noreferrer">A little bloom inspiration from JIN2’s ASCII flower studies ↗</a>
       </section>
         </section>
-        <section className={`private-scene ${sceneIndex === 2 ? 'is-current' : sceneIndex < 2 ? 'is-ahead' : 'is-away'}`} aria-label="Interactive keepsakes">
-        <section className="private-moments" aria-label="Little animated keepsakes">
-        <p className="private-garden-title"><Sparkles size={13}/> LITTLE THINGS, BIG FEELINGS <Sparkles size={13}/></p>
-        <div className="private-moments-grid">
-          <button type="button" className={`private-moment-card moment-ring ${activeMoment === 'ring' ? 'is-active' : ''}`} aria-pressed={activeMoment === 'ring'} onClick={() => setActiveMoment(activeMoment === 'ring' ? '' : 'ring')}>
-            <svg viewBox="0 0 80 80" aria-hidden="true"><ellipse cx="40" cy="49" rx="18" ry="14"/><path d="M26 47c4 13 24 13 28 0"/><path d="M40 11 50 23 40 37 30 23Z"/><path d="m30 23 10 4 10-4M40 11v16"/><path d="M56 17h5m-2.5-2.5v5"/></svg><span>A little sparkle</span>
-          </button>
-          <button type="button" className={`private-moment-card moment-heart ${activeMoment === 'heart' ? 'is-active' : ''}`} aria-pressed={activeMoment === 'heart'} onClick={() => setActiveMoment(activeMoment === 'heart' ? '' : 'heart')}>
-            <Heart aria-hidden="true" fill="currentColor"/><span>I love you</span>
-          </button>
-          <button type="button" className={`private-moment-card moment-butterfly ${activeMoment === 'butterfly' ? 'is-active' : ''}`} aria-pressed={activeMoment === 'butterfly'} onClick={() => setActiveMoment(activeMoment === 'butterfly' ? '' : 'butterfly')}>
-            <svg viewBox="0 0 80 80" aria-hidden="true"><path d="M39 39C28 15 9 13 14 31c3 10 14 14 25 12-18 4-20 22-9 21 9-1 12-12 12-22m-1-3c11-24 30-26 25-8-3 10-14 14-25 12 18 4 20 22 9 21-9-1-12-12-12-22m1-2v20m-3-22-5-8m8 8 5-8"/></svg><span>Our little flutter</span>
-          </button>
-          <button type="button" className={`private-moment-card moment-cat ${activeMoment === 'cat' ? 'is-active' : ''}`} aria-pressed={activeMoment === 'cat'} onClick={() => setActiveMoment(activeMoment === 'cat' ? '' : 'cat')}>
-            <svg viewBox="0 0 80 80" aria-hidden="true"><path d="m17 31 3-18 16 12q4-1 8 0l16-12 3 18q5 8 2 19-4 15-25 15T15 50q-3-11 2-19Z"/><path d="M28 43h1m22 0h1m-17 9q5 5 10 0m-20-3-9-2m11 8-9 2m35-8 9-2m-11 8 9 2"/><path d="m60 50 12 4v13l-12 6-12-6V54Z"/><path d="m55 61 4 4 7-8"/></svg><span>Our tiny brave guard</span>
-          </button>
-        </div>
-        <p className="private-moments-hint" aria-live="polite">{activeMoment ? 'A little keepsake, made to make you smile.' : 'Tap a little keepsake to wake it up.'}</p>
-      </section>
+        <section className={`private-scene ${sceneIndex === 3 ? 'is-current' : sceneIndex < 3 ? 'is-ahead' : 'is-away'}`} aria-label="CAT KNIGHT">
+          <p className="private-motif-kicker">THE BRAVEST LITTLE GUARD</p>
+          <div className="private-motif-art motif-cat-art" aria-hidden="true"><svg viewBox="0 0 180 180"><path d="m35 70 8-43 39 25q8-3 16 0l39-25 8 43q12 17 7 39-10 39-63 39T26 109q-5-22 9-39Z"/><path d="M62 94h2m52 0h2m-39 18q13 12 26 0m-53-8-23-5m27 24-22 8m89-27 23-5m-27 24 22 8"/><path d="m128 107 28 9v30l-28 14-28-14v-30Z"/><path d="m117 133 10 10 17-21"/><path d="m41 69 8-26 25 15m57 11-8-26-25 15"/></svg></div>
+          <h2 className="private-motif-title">YOUR TINY<br/><em>brave guard.</em></h2>
+          <p className="private-motif-copy">A knight on whiskers, assigned to protect every rose, daisy, and stolen hug.</p>
         </section>
-        <section className={`private-scene ${sceneIndex === 3 ? 'is-current' : sceneIndex < 3 ? 'is-ahead' : 'is-away'}`} aria-label="Our soundtrack scene">
+        <section className={`private-scene ${sceneIndex === 4 ? 'is-current' : sceneIndex < 4 ? 'is-ahead' : 'is-away'}`} aria-label="I LOVE YOU">
+          <p className="private-motif-kicker">SOME THINGS DESERVE THEIR OWN LITTLE UNIVERSE</p>
+          <div className="private-motif-art motif-heart-art" aria-hidden="true"><Heart fill="currentColor"/></div>
+          <h2 className="private-motif-title">I LOVE<br/><em>YOU.</em></h2>
+          <p className="private-motif-copy">Across every orbit, every quiet moment, and every version of tomorrow.</p>
+        </section>
+        <section className={`private-scene ${sceneIndex === 5 ? 'is-current' : sceneIndex < 5 ? 'is-ahead' : 'is-away'}`} aria-label="BUTTERFLY">
+          <p className="private-motif-kicker">A LITTLE WINGBEAT, FINDING ITS WAY HOME</p>
+          <div className="private-motif-art motif-butterfly-art" aria-hidden="true"><svg viewBox="0 0 180 180"><path d="M88 86C62 31 19 27 31 68c7 23 31 32 58 27-43 9-48 51-20 49 21-2 28-28 29-52m-2-6c26-55 69-59 57-18-7 23-31 32-58 27 43 9 48 51 20 49-21-2-28-28-29-52m3-4v50m-7-54-12-20m20 20 12-20"/></svg></div>
+          <h2 className="private-motif-title">FOLLOW<br/><em>the flutter.</em></h2>
+          <p className="private-motif-copy">Somehow, through all that space, the sweetest little things find their way to us.</p>
+        </section>
+        <section className={`private-scene ${sceneIndex === 6 ? 'is-current' : sceneIndex < 6 ? 'is-ahead' : 'is-away'}`} aria-label="Our soundtrack scene">
       <section className={`private-soundtrack ${musicOpen ? 'private-soundtrack-open' : ''} ${musicPlaying ? 'private-soundtrack-playing' : ''}`} aria-label="Our soundtrack">
         <audio ref={audioRef} src="/api/private-audio" loop preload="none" onPlay={() => setMusicPlaying(true)} onPause={() => setMusicPlaying(false)}/>
         <div className="private-soundtrack-copy"><span className="private-memory-date">A LITTLE SOUNDTRACK</span><strong>{musicBlocked ? 'One tap, then our song.' : 'A little music, all around us.'}</strong><small>{musicPlaying ? 'Playing softly in the background.' : 'The song you sent, tucked into our little space.'}</small><div className="private-viz" aria-hidden="true">{Array.from({ length: 7 }, (_, i) => <i key={i}/>)}</div></div>
@@ -226,7 +230,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         {musicBlocked && !musicPlaying && <p className="private-music-hint">Your browser paused autoplay. Tap “Play our song” and it will continue while you explore.</p>}
       </section>
         </section>
-        <section className={`private-scene ${sceneIndex === 4 ? 'is-current' : sceneIndex < 4 ? 'is-ahead' : 'is-away'}`} aria-label="Our story">
+        <section className={`private-scene ${sceneIndex === 7 ? 'is-current' : sceneIndex < 7 ? 'is-ahead' : 'is-away'}`} aria-label="Our story">
       <article className="private-note" data-scene-scroll>
         <div className="private-note-top"><span>A LITTLE KEEPSAKE OF US</span><Heart size={18} fill="currentColor"/></div>
         <p>Hey, my favorite person,</p>
@@ -242,7 +246,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         <p className="private-signoff">A hug, a kiss, and all my love <Heart size={15} fill="currentColor"/></p>
       </article>
         </section>
-        <section className={`private-scene private-finale ${sceneIndex === 5 ? 'is-current' : sceneIndex < 5 ? 'is-ahead' : 'is-away'}`} aria-label="The end of our little space">
+        <section className={`private-scene private-finale ${sceneIndex === 8 ? 'is-current' : sceneIndex < 8 ? 'is-ahead' : 'is-away'}`} aria-label="The end of our little space">
           <p className="private-eyebrow"><Heart size={14} fill="currentColor"/> ALWAYS, IN EVERY LITTLE UNIVERSE</p>
           <h2>One more<br/><em>hug?</em></h2>
           <div className="private-finale-heart" aria-hidden="true">♥</div>
