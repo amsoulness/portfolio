@@ -112,8 +112,23 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
         </div>
       </section>
 
+      <section className="private-section private-hobbies-section" aria-label="A little about Vaishu and Emmu">
+        <div className="private-section-heading"><span>02 / LITTLE THINGS THAT FEEL LIKE US</span><i/></div>
+        <h2>Two different worlds.<br/><em>A few things in common.</em></h2>
+        <div className="private-hobbies-grid">
+          <article className="private-hobby-card private-hobby-vaishu">
+            <span className="private-card-index">HER LITTLE WORLD</span><h3>Vaishu</h3><p>Her kind of lovely.</p>
+            <ul>{['Reading', 'Dancing', 'Listening to music', 'Painting', 'Sketching', 'Taking her own photos'].map(hobby => <li key={hobby}>{hobby}</li>)}</ul>
+          </article>
+          <article className="private-hobby-card private-hobby-emmu">
+            <span className="private-card-index">MY LITTLE WORLD</span><h3>Emmu</h3><p>A mind that’s always exploring.</p>
+            <ul>{['Reading', 'Coding', 'Gaming', 'Listening to music', 'Movies & web series', 'Anime & K-dramas'].map(hobby => <li key={hobby}>{hobby}</li>)}</ul>
+          </article>
+        </div>
+      </section>
+
       <section className="private-section private-keepsake-section" aria-label="Little keepsakes">
-        <div className="private-section-heading"><span>02 / LITTLE THINGS, BIG FEELINGS</span><i/></div>
+        <div className="private-section-heading"><span>03 / LITTLE THINGS, BIG FEELINGS</span><i/></div>
         <div className="private-keepsake-grid">
           <article className="private-keepsake-card private-ring-card"><span className="private-card-index">A PROMISE IN LIGHT</span><div className="private-motif-art motif-ring-art"><PrivateAsciiMotif motif="ring" label="An original animated ASCII diamond ring"/></div><h3>WILL YOU <em>stay close?</em></h3><p>For all the tiny tomorrows we still get to share.</p></article>
           <article className="private-keepsake-card private-bloom-card"><span className="private-card-index">TWO LITTLE BLOOMS</span><div className="private-garden-flowers"><figure className="private-garden-flower private-garden-rose"><img src="/keepsake/rose.svg" alt="A red rose"/><figcaption>A rose for me</figcaption></figure><figure className="private-garden-flower private-garden-daisy"><img src="/keepsake/daisy.svg" alt="A yellow daisy"/><figcaption>A daisy for you</figcaption></figure></div><h3>Growing <em>side by side.</em></h3></article>
@@ -124,7 +139,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       </section>
 
       <section className="private-section private-soundtrack-section" aria-label="Our soundtrack">
-        <div className="private-section-heading"><span>03 / PRESS PLAY, STAY A LITTLE</span><i/></div>
+        <div className="private-section-heading"><span>04 / PRESS PLAY, STAY A LITTLE</span><i/></div>
         <div className={`private-soundtrack ${musicPlaying ? 'private-soundtrack-playing' : ''}`}>
           <audio ref={audioRef} src="/api/private-audio" loop preload="none" onPlay={() => setMusicPlaying(true)} onPause={() => setMusicPlaying(false)}/>
           <div className="private-record" aria-hidden="true"><span>♥</span></div>
@@ -135,7 +150,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
       </section>
 
       <section className="private-section private-story-section" id="our-story" aria-label="Our story">
-        <div className="private-section-heading"><span>04 / HOW OUR LITTLE STORY BEGAN</span><i/></div>
+        <div className="private-section-heading"><span>05 / HOW OUR LITTLE STORY BEGAN</span><i/></div>
         <article className="private-note">
           <div className="private-note-top"><span>A LITTLE KEEPSAKE OF US</span><Heart size={17} fill="currentColor"/></div>
           <p className="private-note-greeting">Hey, my favorite person,</p><p>{content?.note}</p>

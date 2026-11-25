@@ -68,3 +68,23 @@
 @keyframes invite-hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}@keyframes invite-orbit{to{transform:rotate(360deg) rotateX(68deg)}}@keyframes invite-key{0%,100%{box-shadow:0 0 18px #c83c4d20}50%{box-shadow:0 0 30px #d7b87950}}@keyframes invite-key-turn{0%{transform:rotate(0) scale(1)}45%{transform:rotate(38deg) scale(1.13)}100%{transform:rotate(110deg) scale(.75);opacity:.4}}@keyframes seal-open{0%{transform:scale(1);filter:brightness(1)}55%{transform:scale(1.28);filter:brightness(1.8)}100%{transform:scale(1.65);filter:brightness(2.4);opacity:.15}}@keyframes gate-reject{0%,100%{translate:0}20%{translate:-7px 0}40%{translate:6px 0}60%{translate:-4px 0}80%{translate:3px 0}}@keyframes seal-reject{0%,100%{rotate:0}30%{rotate:-9deg}65%{rotate:8deg}}@keyframes error-spark{from{transform:rotate(-45deg) scale(.4);opacity:0}to{transform:rotate(0) scale(1);opacity:1}}
 @media(max-width:600px){.private-gate{margin:clamp(38px,7vh,70px) auto clamp(42px,8vh,82px);padding:35px 22px}.private-gate h1{font-size:clamp(42px,10vw,58px)}.private-seal{width:82px;height:82px;margin-bottom:22px}.private-gate .private-intro{font-size:14px}.private-gate .private-footnote{font-size:8px;letter-spacing:.9px}}
 @media(prefers-reduced-motion:reduce){.private-seal,.private-seal:before,.private-seal:after,.private-seal i,.private-seal b,.private-gate.gate-opening,.private-gate.gate-rejected,.private-gate.gate-rejected .private-seal,.private-gate .private-error span{animation:none!important}.private-gate.gate-opening{transform:none;filter:none}.private-gate .private-form button:before{transition:none!important}}
+
+.private-hobbies-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,2vw,24px);max-width:980px;margin:0 auto}
+.private-hobby-card{position:relative;min-height:290px;padding:clamp(26px,4vw,42px);border:1px solid #ffffff20;background:radial-gradient(ellipse at 100% 0%,#b9add611,transparent 48%),linear-gradient(145deg,#171318ee,#0d0c10f5);box-shadow:0 22px 60px #0005;overflow:hidden;transition:transform .4s,border-color .4s}
+.private-hobby-card:after{content:"";position:absolute;right:-42px;bottom:-74px;width:190px;height:190px;border:1px solid #d7b87922;border-radius:50%;box-shadow:0 0 0 20px #d7b87908,0 0 0 42px #b9add607;pointer-events:none}
+.private-hobby-vaishu{border-color:#d7b8793d;background:radial-gradient(ellipse at 95% 5%,#d7b87913,transparent 48%),linear-gradient(145deg,#1b1715ee,#0d0c10f5)}
+.private-hobby-emmu{border-color:#b9add63d;background:radial-gradient(ellipse at 95% 5%,#b9add617,transparent 48%),linear-gradient(145deg,#17151cee,#0d0c10f5)}
+.private-hobby-card:hover{transform:translateY(-4px);border-color:#d7b87966}
+.private-hobby-card .private-card-index{position:static;display:block;margin-bottom:19px;color:var(--gold);font:9px 'DM Mono',monospace;letter-spacing:1.5px}
+.private-hobby-emmu .private-card-index{color:#c5b4e7}
+.private-hobby-card h3{margin:0;font:500 clamp(32px,4vw,45px)/1.05 'Playfair Display',Georgia,serif}
+.private-hobby-card>p{margin:7px 0 23px;color:#bdb1ad;font:italic 15px 'Playfair Display',Georgia,serif}
+.private-hobby-card ul{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:9px;margin:0;padding:0;list-style:none}
+.private-hobby-card li{padding:9px 12px;border:1px solid #d7b8792b;border-radius:999px;background:#09080a8c;color:#eee4dd;font-size:12px;line-height:1.2;transition:transform .25s,border-color .25s,background .25s}
+.private-hobby-emmu li{border-color:#b9add632}
+.private-hobby-card li:hover{transform:translateY(-2px);border-color:#d7b87988;background:#d7b87912}
+.private-page-light .private-hobby-card{background:linear-gradient(145deg,#fffaf4f2,#f5eeeaf5);box-shadow:0 20px 60px #402a3012}
+.private-page-light .private-hobby-card>p{color:#625456}
+.private-page-light .private-hobby-card li{background:#ffffffa8;color:#35262b;border-color:#6b514122}
+@media(max-width:700px){.private-hobbies-grid{grid-template-columns:1fr}.private-hobby-card{min-height:0;padding:26px}.private-hobby-card>p{margin-bottom:18px}}
+@media(prefers-reduced-motion:reduce){.private-hobby-card,.private-hobby-card li{transition:none!important}}
