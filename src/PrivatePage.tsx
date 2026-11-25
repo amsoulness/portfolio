@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, Heart, LockKeyhole, Music2, Play, Sparkles } from 'lucide-react'
+import { ArrowLeft, Heart, KeyRound, LockKeyhole, Music2, Play, RotateCcw, Sparkles } from 'lucide-react'
 import type { SiteTheme } from './ThemeToggle'
 import PrivateAsciiMotif from './PrivateAsciiMotif'
 import './PrivatePage.css'
@@ -22,6 +22,7 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
   const [content, setContent] = useState<PrivateContent | null>(null)
   const [details, setDetails] = useState<PrivateDetails | null>(null)
   const contentRootRef = useRef<HTMLDivElement>(null)
+  const passwordInputRef = useRef<HTMLInputElement>(null)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [musicBlocked, setMusicBlocked] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -105,22 +106,29 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
   return <main className={`private-page ${unlocked ? 'private-page-unlocked' : ''} ${theme === 'light' ? 'private-page-light' : ''} ${smoothMode ? '' : 'private-page-still'}`}>
     <div className="private-sky" aria-hidden="true"><span/><span/><span/><span/><span/><span/><i/><i/><i/></div>
     <div className="private-lock-fx" aria-hidden="true"><span>♡</span><span>✦</span><span>✧</span><span>♥</span></div>
+    {unlocked && <div className="private-romance-particles" aria-hidden="true"><span>🌹</span><span>✦</span><span>🌼</span><span>♡</span><span>✧</span><span>🌹</span><span>🦋</span><span>♥</span><span>🌼</span><span>✦</span><span>🌹</span><span>♡</span><span>🌼</span><span>✧</span><span>♥</span><span>🌹</span><span>🦋</span><span>🌼</span></div>}
     <header className="private-nav">
       <a href="/" className="private-brand">AMSOUL<span>NESS.</span></a>
       <a className="private-back" href="/"><ArrowLeft size={16}/> BACK TO PORTFOLIO</a>
     </header>
 
     {!unlocked ? <section className={`private-gate gate-${gateMood}`} aria-labelledby="private-title" aria-busy={busy}>
+      <div className="private-gate-cinema" aria-hidden="true"><span className="private-cinema-halo"/><span className="private-cinema-sweep"/><i/><i/><b/></div>
       <div className="private-seal" aria-hidden="true"><i/><i/><b><LockKeyhole size={19}/></b><span>ONLY THE RIGHT KEY</span></div>
       <p className="private-eyebrow"><Sparkles size={14}/> A PRIVATE INVITATION</p>
       <h1 id="private-title">You’re invited<br/><em>to step inside.</em></h1>
       <p className="private-intro">A quiet little place is waiting to be discovered. Enter your key whenever you’re ready.</p>
       <form className="private-form" onSubmit={unlock}>
         <label htmlFor="private-password">YOUR KEY</label>
-        <input id="private-password" type="password" autoComplete="current-password" value={password} onChange={event => { setPassword(event.target.value); setError(''); setGateMood('idle') }} placeholder="Enter the secret key" required disabled={busy}/>
+        <input ref={passwordInputRef} id="private-password" type="password" autoComplete="current-password" value={password} onChange={event => { setPassword(event.target.value); setError(''); setGateMood('idle') }} placeholder="Enter the secret key" required disabled={busy}/>
         <button type="submit" disabled={busy || !password}><span className="private-open-spark" aria-hidden="true"/><LockKeyhole size={15}/>{busy ? 'OPENING YOUR INVITATION…' : 'ACCEPT INVITATION'}</button>
       </form>
-      <p className="private-error" role="alert" aria-live="polite">{error && <><span aria-hidden="true">✧</span>{error}</>}</p>
+      <div className="private-gate-status" role="status" aria-live="polite">{busy && <><span aria-hidden="true"/><span>THE SEAL IS TURNING · YOUR LITTLE WORLD IS OPENING</span></>}</div>
+      {error && <div className="private-error-popup" role="alert" aria-live="assertive">
+        <span className="private-error-icon" aria-hidden="true"><KeyRound size={17}/></span>
+        <div className="private-error-copy"><strong>THE SEAL STAYS CLOSED</strong><p>{error}</p></div>
+        <button className="private-error-retry" type="button" onClick={() => { setError(''); setGateMood('idle'); passwordInputRef.current?.focus() }} aria-label="Try entering the key again"><RotateCcw size={15}/></button>
+      </div>}
       <p className="private-footnote"><span/>NO CLUES. NO PREVIEW. JUST THE KEY.</p>
     </section> : <div className={`private-content ${entrySequence ? 'private-content-entering' : ''}`} ref={contentRootRef}>
       <section className="private-hero" aria-labelledby="letter-title">
