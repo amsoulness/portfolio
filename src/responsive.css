@@ -93,6 +93,55 @@ textarea {
   }
 }
 
+/* Keep the seasonal badge readable and inside safe areas on every viewport. */
+.doom-season-badge {
+  box-sizing: border-box;
+  max-width: calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right));
+  white-space: nowrap;
+}
+
+.doom-season-badge > span {
+  flex: 0 0 4px;
+}
+
+.doom-season-badge small {
+  display: inline;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .doom-season-badge {
+    right: max(12px, env(safe-area-inset-right));
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: auto;
+    gap: 6px;
+    padding: 8px 10px;
+    font-size: clamp(7px, 2.1vw, 8px);
+    letter-spacing: clamp(.25px, .2vw, .65px);
+  }
+
+  .doom-season-badge small {
+    display: inline;
+    margin-left: clamp(2px, .8vw, 5px);
+    font-size: clamp(7px, 1.9vw, 8px);
+    letter-spacing: .25px;
+  }
+}
+
+@media (max-width: 360px) {
+  .doom-season-badge {
+    gap: 5px;
+    padding-inline: 8px;
+    letter-spacing: .2px;
+  }
+
+  .doom-season-badge small {
+    margin-left: 2px;
+    letter-spacing: 0;
+  }
+}
+
 
 /* One readable type system across portfolio, tools and embedded controls. */
 :root {
