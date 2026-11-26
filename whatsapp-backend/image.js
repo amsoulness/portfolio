@@ -30,20 +30,4 @@ async function prepareImage(bytes) {
   };
 }
 
-async function prepareStatusImage(bytes) {
-  if (!Buffer.isBuffer(bytes) || !bytes.length || bytes.length > MAX_BYTES) {
-    throw new Error('Choose an image smaller than 20 MB.');
-  }
-  const metadata = await sharp(bytes, { limitInputPixels: MAX_PIXELS }).metadata();
-  if (!['jpeg', 'png', 'webp'].includes(metadata.format) || (metadata.pages || 1) > 1) {
-    throw new Error('Choose a still JPG, PNG, or WebP image.');
-  }
-  const image = sharp(bytes, { limitInputPixels: MAX_PIXELS }).rotate().flatten({ background: '#fff' });
-  const { data, info } = await image
-    .resize({ width: 1080, height: 1920, fit: 'inside', withoutEnlargement: true })
-    .jpeg({ quality: 92, mozjpeg: true, chromaSubsampling: '4:4:4' })
-    .toBuffer({ resolveWithObject: true });
-  return { buffer: data, width: info.width, height: info.height };
-}
-
-module.exports = { prepareImage, prepareStatusImage, MAX_BYTES };
+module.exports = { prepareImage, MAX_BYTES };

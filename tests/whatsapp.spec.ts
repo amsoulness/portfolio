@@ -33,7 +33,7 @@ async function setup(page: Page) {
     await route.fulfill({ status: request.method() === 'POST' ? 201 : 200, contentType: 'application/json', body: JSON.stringify(body) })
   })
   await page.goto('/tools')
-  await expect(page.locator('.th-card')).toHaveCount(6)
+  await expect(page.locator('.th-card')).toHaveCount(5)
   await openTool(page)
   return service
 }

@@ -1,8 +1,6 @@
 # WhatsApp tools
 
-This service supports the profile-photo updater and the WhatsApp Status Studio on the portfolio's `/tools` pages. Both tools connect only the account entered by its owner, require consent, and log out the temporary linked device after the operation. Session status can be restored in the same browser tab using `sessionStorage`.
-
-Status Studio publishes an image or MP4 video to the linked account's status for the account's saved **My contacts** audience. With explicit consent, it uses a desktop-style linked device to request WhatsApp's initial/recent sync, accepts only `INITIAL_BOOTSTRAP` or `RECENT`, extracts named phone-number JIDs from contact records, and verifies that WhatsApp Status privacy is set to `contacts`. WhatsApp may include recent chat/message data in a sync payload; Baileys processes that payload in memory, while this service reads only the contact array and never logs or stores chat/message content. It fails closed for other privacy modes; it never changes those settings. The saved-contact phone-number list is cleared on success, error, cancellation, and cleanup. Status publishing uses an unofficial WhatsApp Web client and may stop working if WhatsApp changes its protocol.
+This service powers the WhatsApp profile-photo updater on the portfolio tools page. It connects only the account entered by its owner, requires consent, and logs out the temporary linked device after the operation. Session status can be restored in the same browser tab using sessionStorage.
 
 ## Local development
 
@@ -38,13 +36,13 @@ Example container build from this directory: `docker build -t aslns-whatsapp .`.
 
 ## Image behavior
 
-The profile tool accepts still JPEG, PNG, and WebP files up to 20 MB and 40 megapixels. Sharp honors orientation, preserves all edges, and fits the main JPEG within 640×640 and its thumbnail within 96×96 without cropping, stretching, square padding, or enlargement. Status Studio accepts still images in the same formats up to 20 MB and encodes them at up to 1080×1920; it accepts MP4 video up to 16 MB. Both image paths preserve the full aspect ratio and flatten transparency onto white. Encoding/resizing means outputs are not byte-identical to their inputs. WhatsApp controls final acceptance and display.
+The profile tool accepts still JPEG, PNG, and WebP files up to 20 MB and 40 megapixels. Sharp honors orientation, preserves all edges, and fits the main JPEG within 640×640 and its thumbnail within 96×96 without cropping, stretching, square padding, or enlargement. The profile image path preserves the full aspect ratio and flattens transparency onto white. Encoding/resizing means outputs are not byte-identical to their inputs. WhatsApp controls final acceptance and display.
 
 The Baileys profile API receives the prepared JPEG together with its aspect dimensions. Image edges and proportions are verified locally before the profile update; WhatsApp controls final acceptance, recompression, and display, including circular thumbnails. Automated tests check the submitted image dimensions and workflow, not WhatsApp's live rendering. Do not promise untouched original bytes or a rectangular avatar everywhere in WhatsApp.
 
 ## Session lifecycle and privacy
 
-- The initial consent authorizes the selected operation and automatic logout. Entering the pairing code on the account owner's phone completes linking. Profile updates do not sync history. Status Studio accepts only Baileys' `INITIAL_BOOTSTRAP` or `RECENT` sync types to obtain the contact list. WhatsApp may include recent messages in the sync payload, which Baileys processes in memory; application code reads only `contacts`, attaches no chat/message listeners, and does not log or store chat/message content. Contact identifiers are held in memory only and cleared after use or cleanup.
+- The initial consent authorizes the profile update and automatic logout. Entering the pairing code on the account owner's phone completes linking. Profile updates do not sync history.
 - Session credentials are random, scoped to one session, sent in `X-Session-Token`, and stored only in the frontend tab's sessionStorage. They are not placed in URLs or logs. Completed server records are bounded and retained for status recovery for up to 30 minutes of inactivity before the next session request prunes them.
 - One workflow owns the WhatsApp socket at a time. Uploads are checked by decoded content, not their declared MIME type. Original uploads are not written to disk. Image buffers are released after the update or completed cancellation.
 - Browser credentials live in a private runtime directory. For authenticated sessions, confirmed logout and browser shutdown precede local deletion. Success requires both a positive update acknowledgement and completed device removal/cleanup.

@@ -8,7 +8,7 @@ const multer = require('multer');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { SessionManager } = require('./sessions');
-const { prepareImage, prepareStatusImage, MAX_BYTES } = require('./image');
+const { prepareImage, MAX_BYTES } = require('./image');
 const { sendPicture } = require('./transport');
 const { WhatsAppClient } = require('./client');
 const { PAGE_IDS, PageViewStore } = require('./page-views');
@@ -72,29 +72,6 @@ function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'], 
     try { return res.status(201).json(manager.create(image, req.body.phoneNumber)); }
     catch { return res.status(409).json({ error: 'Another update is in progress. Please try again shortly.' }); }
   });
-  const statusUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024, files: 1, fields: 4, fieldSize: 4096, parts: 5 } });
-  app.post('/api/whatsapp/status', limiter, (req, res, next) => {
-    if (!liveEnabled) return res.status(503).json({ error: 'The WhatsApp service is temporarily unavailable.' });
-    if (manager.active || manager.closing) return res.status(409).json({ error: 'Another WhatsApp update is in progress. Try again shortly.' });
-    next();
-  }, statusUpload.single('media'), async (req, res) => {
-    if (req.body?.consent !== 'true') return res.status(400).json({ error: 'Confirm that this is your account and you want to publish this status.' });
-    if (!/^[1-9][0-9]{7,14}$/.test(req.body?.phoneNumber || '')) return res.status(400).json({ error: 'Enter your WhatsApp number with country code.' });
-    if (!req.file) return res.status(400).json({ error: 'Choose an image or video first.' });
-    const mime = req.file.mimetype;
-    const kind = mime.startsWith('image/') ? 'image' : mime === 'video/mp4' ? 'video' : null;
-    if (!kind || (kind === 'image' && !['image/jpeg', 'image/png', 'image/webp'].includes(mime))) return res.status(400).json({ error: 'Use a JPG, PNG, or WebP image, or an MP4 video.' });
-    if (kind === 'video' && req.file.size > 16 * 1024 * 1024) return res.status(400).json({ error: 'Choose an MP4 video no larger than 16 MB.' });
-    let media = { buffer: req.file.buffer, mimetype: mime, kind, caption: typeof req.body.caption === 'string' ? req.body.caption.slice(0, 500) : '' };
-    if (kind === 'image') {
-      try {
-        const image = await prepareStatusImage(req.file.buffer);
-        media = { ...media, buffer: image.buffer, mimetype: 'image/jpeg' };
-      } catch { return res.status(400).json({ error: 'Choose a valid still JPG, PNG, or WebP image up to 20 MB.' }); }
-    }
-    try { return res.status(201).json(manager.create(media, req.body.phoneNumber, { operation: 'status' })); }
-    catch { return res.status(409).json({ error: 'Another WhatsApp update is in progress. Try again shortly.' }); }
-  });
   app.use('/api/whatsapp/sessions/:id', (req, res, next) => {
     const session = manager.authorize(req.params.id, req.get('X-Session-Token'));
     if (!session) return res.status(404).json({ error: 'This session is no longer available. Check Linked devices in WhatsApp if you linked this tool.' });
@@ -107,7 +84,7 @@ function createApp({ manager, liveEnabled, origins = ['http://localhost:5173'], 
   app.delete('/api/whatsapp/sessions/:id', (_req, res) => res.json(manager.cancel(res.locals.session)));
   app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
   app.use((error, _req, res, _next) => {
-    if (error instanceof multer.MulterError) return res.status(400).json({ error: 'Upload one supported image up to 20 MB, or one MP4 video up to 16 MB.' });
+    if (error instanceof multer.MulterError) return res.status(400).json({ error: 'Upload one supported image up to 20 MB and 40 megapixels.' });
     res.status(500).json({ error: 'The WhatsApp service could not complete this request.' });
   });
   return app;
@@ -127,7 +104,6 @@ async function start() {
       return new WhatsAppClient({ authDir: path.join(owner, id, 'auth'), phoneNumber, operation: options.operation });
     },
     sendPicture,
-    sendStatus: (client, media, recipients) => client.sendStatus(media, recipients),
     removeData: id => fs.rm(path.join(owner, id), { recursive: true, force: true, maxRetries: 3 })
   });
   const origins = (process.env.ASLNS_ALLOWED_ORIGINS || 'http://localhost:5173').split(',').map(v => v.trim()).filter(Boolean);

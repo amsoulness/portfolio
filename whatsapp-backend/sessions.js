@@ -5,14 +5,14 @@ const TERMINAL = new Set(['SUCCESS', 'CANCELLED', 'ERROR']);
 const TTL = 10 * 60 * 1000;
 
 class SessionManager {
-  constructor({ createClient, sendPicture, sendStatus, removeData, ttl = TTL, retention = 30 * 60 * 1000 }) {
-    Object.assign(this, { createClient, sendPicture, sendStatus, removeData, ttl, retention });
+  constructor({ createClient, sendPicture, removeData, ttl = TTL, retention = 30 * 60 * 1000 }) {
+    Object.assign(this, { createClient, sendPicture, removeData, ttl, retention });
     this.sessions = new Map();
     this.active = null;
     this.closing = false;
   }
 
-  create(image, phoneNumber, options = {}) {
+  create(image, phoneNumber) {
     if (this.closing || this.active) throw new Error('The tool is busy with another update. Please try again shortly.');
     const now = Date.now();
     for (const [id, session] of this.sessions) {
@@ -25,7 +25,6 @@ class SessionManager {
     }
     const s = {
       id: randomUUID(), token: randomBytes(32).toString('hex'), image,
-      operation: options.operation || 'profile',
       status: 'STARTING', code: null, expiresAt: now + this.ttl,
       authenticated: false, updated: false, deviceRemoved: false,
       cancelled: false, initializing: true, updating: false, cleaning: false,
@@ -61,7 +60,7 @@ class SessionManager {
   async start(s, phone) {
     try {
       if (s.cancelled) return;
-      const client = this.createClient(s.id, phone, { operation: s.operation });
+      const client = this.createClient(s.id, phone);
       s.client = client;
       client.on('code', code => {
         if (s.cancelled || s.authenticated || s.updateStarted || s.cleaning) return;
@@ -109,25 +108,15 @@ class SessionManager {
     try {
       if (await s.client.getState() !== 'CONNECTED') throw new Error('Disconnected');
       if (s.cancelled) return;
-      let result;
-      if (s.operation === 'status') {
-        s.status = 'SYNCING_CONTACTS';
-        const audience = await s.client.getStatusAudience();
-        if (s.cancelled) return;
-        s.status = 'UPDATING';
-        result = await this.sendStatus(s.client, s.image, audience);
-      } else {
-        s.status = 'UPDATING';
-        result = await this.sendPicture(s.client, s.image);
-      }
+      s.status = 'UPDATING';
+      const result = await this.sendPicture(s.client, s.image);
       if (result !== true) {
         s.outcome = 'failed';
-        s.error = s.operation === 'status' ? 'WhatsApp did not confirm the status upload.' : 'WhatsApp did not accept this photo. The profile update was not confirmed.';
+        s.error = 'WhatsApp did not accept this photo. The profile update was not confirmed.';
       } else {
         s.updated = true;
         s.outcome = 'confirmed';
         try {
-          if (s.operation === 'status') return;
           await s.client.sendSelfMessage('✨ PROFILE, REIMAGINED ✨\nYour new WhatsApp photo is live! 📸💜\nThanks for creating with AMSOULNESS. Keep making every detail yours. ✦\nhttps://aslns.online/tools');
           s.confirmationSent = true;
         } catch {
@@ -138,9 +127,7 @@ class SessionManager {
     } catch (error) {
       if (s.cancelled) return;
       s.outcome = 'unconfirmed';
-      s.error = error?.publicMessage || (s.operation === 'status'
-        ? 'WhatsApp did not confirm the status post. Check your status before trying again.'
-        : 'The update could not be confirmed. Check your profile in WhatsApp before trying again.');
+      s.error = error?.publicMessage || 'The update could not be confirmed. Check your profile in WhatsApp before trying again.';
     } finally {
       s.image = null;
       s.updating = false;
@@ -152,7 +139,6 @@ class SessionManager {
     if (TERMINAL.has(s.status)) return this.snapshot(s);
     s.cancelled = true;
     s.code = null;
-    if (s.operation === 'status' && s.status === 'SYNCING_CONTACTS') s.client?.cancelStatusAudienceWait?.();
     // Never race logout against an update or browser initialization.
     if (!s.cleaning) s.status = 'CANCELLING';
     void this.cleanup(s);
@@ -190,7 +176,7 @@ class SessionManager {
     } catch {
       s.status = 'CLEANUP_REQUIRED';
       s.error = s.updated
-        ? `${s.operation === 'status' ? 'Your status was posted' : 'Your photo was updated'}, but device removal is not confirmed. Retry cleanup or remove this device in WhatsApp → Linked devices.`
+        ? 'Your photo was updated, but device removal is not confirmed. Retry cleanup or remove this device in WhatsApp → Linked devices.'
         : 'Session cleanup is incomplete. Retry cleanup or remove this device in WhatsApp → Linked devices.';
     } finally {
       s.cleaning = false;

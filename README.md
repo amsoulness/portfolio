@@ -30,13 +30,12 @@ Hey, I’m **Emmanuel Cherian** — a BCA student, aspiring software developer, 
 | --- | --- |
 | **Portfolio** | Projects, skills, experience, creative work, and a few personal favorites. |
 | **WhatsApp Profile Updater** | Preview the whole photo, then update it through a temporary linked-device session. |
-| **WhatsApp Status Studio** | Post a photo or video status from your own WhatsApp account. |
 | **Image Studio** | Image compression and format conversion in one place. |
 | **QR Code Studio** | Create and export QR codes. |
 | **Color Lab** | Explore colors and palettes. |
 | **Password Studio** | Generate secure passwords. |
 
-Image, QR, color and password tools run in your browser. WhatsApp tools use a backend for their temporary linked-device sessions. Keep a pairing code private; it can link a device to your account.
+Image, QR, color and password tools run in your browser. The WhatsApp profile updater uses a backend for its temporary linked-device session. Keep a pairing code private; it can link a device to your account.
 
 <details>
 <summary><strong>🪄 Peek behind the curtain</strong> (the code is less magical than the animations)</summary>
