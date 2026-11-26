@@ -69,6 +69,22 @@ textarea {
     min-height: 100dvh;
   }
 
+  .doom-season-badge {
+    right: max(12px, env(safe-area-inset-right));
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    left: auto;
+  }
+
+}
+
+@media (max-width: 420px) {
+  :root { scroll-padding-block: 14px; }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  :where(.site, .th-v13, .private-page) :is(button, a, input, select, textarea) {
+    scroll-margin-block: 12px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

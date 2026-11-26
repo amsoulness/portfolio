@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { ArrowLeft, Heart, LockKeyhole, Music2, Play, Sparkles } from 'lucide-react'
+import { ArrowLeft, Heart, KeyRound, LockKeyhole, Music2, Play, RotateCcw, Sparkles } from 'lucide-react'
 import type { SiteTheme } from './ThemeToggle'
 import PrivateAsciiMotif from './PrivateAsciiMotif'
 import './PrivatePage.css'
@@ -17,10 +17,12 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [gateMood, setGateMood] = useState<'idle' | 'opening' | 'rejected'>('idle')
+  const [hugs, setHugs] = useState(0)
   const [entrySequence, setEntrySequence] = useState(false)
   const [content, setContent] = useState<PrivateContent | null>(null)
   const [details, setDetails] = useState<PrivateDetails | null>(null)
   const contentRootRef = useRef<HTMLDivElement>(null)
+  const passwordInputRef = useRef<HTMLInputElement>(null)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [musicBlocked, setMusicBlocked] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -104,22 +106,30 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
   return <main className={`private-page ${unlocked ? 'private-page-unlocked' : ''} ${theme === 'light' ? 'private-page-light' : ''} ${smoothMode ? '' : 'private-page-still'}`}>
     <div className="private-sky" aria-hidden="true"><span/><span/><span/><span/><span/><span/><i/><i/><i/></div>
     <div className="private-lock-fx" aria-hidden="true"><span>♡</span><span>✦</span><span>✧</span><span>♥</span></div>
+    {unlocked && <div className="private-romance-particles" aria-hidden="true"><span>🌹</span><span>✦</span><span>🌼</span><span>♡</span><span>✧</span><span>🌹</span><span>🦋</span><span>♥</span><span>🌼</span><span>✦</span><span>🌹</span><span>♡</span><span>🌼</span><span>✧</span><span>♥</span><span>🌹</span><span>🦋</span><span>🌼</span></div>}
+    {unlocked && <div className="private-privacy-mark" aria-hidden="true">{Array.from({length: 9}, (_, index) => <span key={index}>ONLY OUR LITTLE WORLD · VAISHU + EMMU</span>)}</div>}
     <header className="private-nav">
       <a href="/" className="private-brand">AMSOUL<span>NESS.</span></a>
       <a className="private-back" href="/"><ArrowLeft size={16}/> BACK TO PORTFOLIO</a>
     </header>
 
     {!unlocked ? <section className={`private-gate gate-${gateMood}`} aria-labelledby="private-title" aria-busy={busy}>
+      <div className="private-gate-cinema" aria-hidden="true"><span className="private-cinema-halo"/><span className="private-cinema-sweep"/><i/><i/><b/></div>
       <div className="private-seal" aria-hidden="true"><i/><i/><b><LockKeyhole size={19}/></b><span>ONLY THE RIGHT KEY</span></div>
       <p className="private-eyebrow"><Sparkles size={14}/> A PRIVATE INVITATION</p>
       <h1 id="private-title">You’re invited<br/><em>to step inside.</em></h1>
       <p className="private-intro">A quiet little place is waiting to be discovered. Enter your key whenever you’re ready.</p>
       <form className="private-form" onSubmit={unlock}>
         <label htmlFor="private-password">YOUR KEY</label>
-        <input id="private-password" type="password" autoComplete="current-password" value={password} onChange={event => { setPassword(event.target.value); setError(''); setGateMood('idle') }} placeholder="Enter the secret key" required disabled={busy}/>
+        <input ref={passwordInputRef} id="private-password" type="password" autoComplete="current-password" value={password} onChange={event => { setPassword(event.target.value); setError(''); setGateMood('idle') }} placeholder="Enter the secret key" required disabled={busy}/>
         <button type="submit" disabled={busy || !password}><span className="private-open-spark" aria-hidden="true"/><LockKeyhole size={15}/>{busy ? 'OPENING YOUR INVITATION…' : 'ACCEPT INVITATION'}</button>
       </form>
-      <p className="private-error" role="alert" aria-live="polite">{error && <><span aria-hidden="true">✧</span>{error}</>}</p>
+      <div className="private-gate-status" role="status" aria-live="polite">{busy && <><span aria-hidden="true"/><span>THE SEAL IS TURNING · YOUR LITTLE WORLD IS OPENING</span></>}</div>
+      {error && <div className="private-error-popup" role="alert" aria-live="assertive">
+        <span className="private-error-icon" aria-hidden="true"><KeyRound size={17}/></span>
+        <div className="private-error-copy"><strong>THE SEAL STAYS CLOSED</strong><p>{error}</p></div>
+        <button className="private-error-retry" type="button" onClick={() => { setError(''); setGateMood('idle'); passwordInputRef.current?.focus() }} aria-label="Try entering the key again"><RotateCcw size={15}/></button>
+      </div>}
       <p className="private-footnote"><span/>NO CLUES. NO PREVIEW. JUST THE KEY.</p>
     </section> : <div className={`private-content ${entrySequence ? 'private-content-entering' : ''}`} ref={contentRootRef}>
       <section className="private-hero" aria-labelledby="letter-title">
@@ -187,7 +197,6 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
           <article className="private-keepsake-card private-bloom-card"><span className="private-card-index">TWO LITTLE BLOOMS</span><div className="private-garden-flowers"><figure className="private-garden-flower private-garden-rose"><PrivateAsciiMotif motif="rose" label="ASLNS animated ASCII rose"/><figcaption>A rose for me</figcaption></figure><figure className="private-garden-flower private-garden-daisy"><PrivateAsciiMotif motif="daisy" label="ASLNS animated ASCII daisy"/><figcaption>A daisy for you</figcaption></figure></div><h3>Growing <em>side by side.</em></h3></article>
           <article className="private-keepsake-card private-cat-card"><span className="private-card-index">YOUR TINY GUARD</span><div className="private-motif-art motif-cat-art"><PrivateAsciiMotif motif="cat" label="An original animated ASCII cat knight"/></div><h3>Brave little <em>protector.</em></h3><p>On duty for every rose, daisy, and stolen hug.</p></article>
           <article className="private-keepsake-card private-heart-card"><span className="private-card-index">A HEART, MANY WAYS</span><div className="private-motif-art motif-heart-art"><PrivateAsciiMotif motif="heart" label="A rotating ASCII heart formed from I love you in 114 languages"/></div><h3>I love <em>you.</em></h3><p>The same little feeling, in 114 languages.</p></article>
-          <article className="private-keepsake-card private-butterfly-card"><span className="private-card-index">A LITTLE WINGBEAT</span><div className="private-motif-art motif-butterfly-art"><PrivateAsciiMotif motif="butterfly" label="An original animated ASCII butterfly"/></div><h3>Finding its <em>way home.</em></h3><p>Somehow, the sweetest things find their way to us.</p></article>
         </div>
       </section>
 
@@ -220,6 +229,14 @@ export default function PrivatePage({ theme, smoothMode }: { theme: SiteTheme; s
 
       <section className="private-finale" aria-label="The end of our little space">
         <div className="private-finale-glow" aria-hidden="true">♥</div><p className="private-eyebrow">ALWAYS, IN EVERY LITTLE UNIVERSE</p><h2>One more<br/><em>hug?</em></h2>
+        <button className="private-hug" type="button" onClick={() => setHugs(count => count + 1)}>
+          {hugs ? 'One more hug' : 'Open your hug'}
+        </button>
+        <p className="private-hug-note" role="status">{hugs > 0 && (hugs % 2 ? 'Until I can hug you in person, this one is yours.' : 'Stay a little longer. I like it here with you.')}</p>
+        {hugs > 0 && <div key={hugs} className="private-petal-arc" aria-hidden="true">
+          {['🌹','🌼','♡','🌼','🌹','♡','🌼','🌹'].map((flower, index) =>
+            <span key={index} style={{ left: (9 + index * 11) + '%', animationDelay: (index % 3) * 90 + 'ms' }}>{flower}</span>)}
+        </div>}
       </section>
     </div>}
     <footer className="private-footer">MADE WITH A LITTLE MAGIC <span>♥</span> AMSOULNESS</footer>

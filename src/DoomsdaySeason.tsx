@@ -15,5 +15,5 @@ export default function DoomsdaySeason({children}:{children:ReactNode}){
   sync();document.addEventListener('visibilitychange',sync)
   return()=>{clearTimeout(timer);document.removeEventListener('visibilitychange',sync);document.documentElement.removeAttribute('data-doomsday')}
  },[])
- return <SeasonContext.Provider value={active}>{active&&<div className="doom-season-atmosphere" aria-hidden="true"><span/><span/><i/><i/><i/></div>}{children}{active&&<div className="doom-season-badge"><span/>DOOMSDAY EDITION <small>UNTIL 21 DEC · IST</small></div>}</SeasonContext.Provider>
+ return <SeasonContext.Provider value={active}>{active&&<div className="doom-season-atmosphere" aria-hidden="true"><span/><span/><i/><i/><i/></div>}{children}{active&&<div className="doom-season-badge"><span/>DOOMSDAY EDITION <small>UNTIL 16 DEC · IST</small></div>}</SeasonContext.Provider>
 }

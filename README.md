@@ -20,6 +20,18 @@ Software projects, cinematic edits, and browser tools — because apparently one
 
 </div>
 
+## Find your way through the source
+
+| To change… | Start with… |
+| --- | --- |
+| A page or browser interaction | [Frontend source](src/) |
+| An HTTP endpoint | [API handlers](api/) |
+| A file served directly by the website | [Public assets](public/) |
+| Hosting headers or URL rewrites | [Vercel configuration](vercel.json) |
+| Local environment settings | [Example environment file](.env.example) |
+
+Use the [live tools page](https://aslns.online/tools) alongside the source to see how a change fits into the visitor experience.
+
 ## The short version
 
 Hey, I’m **Emmanuel Cherian** — a BCA student, aspiring software developer, and self-taught video editor. This is my corner of the internet for building things, learning loudly, and occasionally making a button glow because it looked lonely..
