@@ -33,3 +33,7 @@ html body .cinematic-inner :is(.th-card,.th-workspace,.as-pair-panel,.as-render-
 html body .cinematic-inner :is(input,textarea,select){border-radius:2px;background-color:#07111be8;color:#e4ece8}
 .cinematic-inner .journey-directory{z-index:110}
 @media(max-width:800px){html body .cinematic-inner :is(.th.th-v13,.as-session,.private-page){padding-top:85px!important}.cinematic-inner .journey-header nav{gap:12px}.cinematic-inner .journey-header nav>a{display:none}.cinematic-inner .journey-header{padding:18px 5vw}.cinematic-inner .journey-brand{font-size:13px;gap:8px}.cinematic-inner .journey-brand small{font-size:7px;letter-spacing:1px}html body .cinematic-inner :is(.th-hero,.as-session-hero,.as-render-heading,.private-hero){min-height:55svh}}
+/* Keep the scroll-driven world visible between and behind chapters. */
+html body main.site:has(.cinematic-world) .section{background:linear-gradient(90deg,#040a109e,#040a1059 60%,#040a107a)!important}
+html body main.site:has(.cinematic-world) .tools-featured-section{background:#040a108c!important}
+html body .cinematic-inner :is(.th-hero,.as-session-hero,.as-render-heading,.private-hero){background:linear-gradient(90deg,#040a109e,#040a1026)!important}

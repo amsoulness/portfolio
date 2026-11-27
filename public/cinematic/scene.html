@@ -4089,6 +4089,12 @@ function applyCamera() {
 /* ============================================== 9 · scroll ↔ chapters */
 const SECS = [].slice.call(document.querySelectorAll('[data-cam]'));
 let anchors = [], maxScroll = 1, activeSec = 0;
+let hostCameraProgress = null;
+addEventListener('message', event => {
+  if (event.origin !== location.origin || event.source !== parent || event.data?.type !== 'aslns-scene-scroll') return;
+  const value = Number(event.data.progress);
+  if (Number.isFinite(value)) hostCameraProgress = clamp(value, 0, 1) * (CAM.length - 1);
+});
 function measure() {
   maxScroll = Math.max(1, document.documentElement.scrollHeight - vpH());
   anchors = SECS.map((el, i) => {
@@ -4683,7 +4689,7 @@ function frame(now) {
       else if (avg < .0138 && PERF.scale < 1) { PERF.scale = Math.min(1, PERF.scale + .08); resize(); }
     }
   }
-  RIG.prog = progressFor(scrollY);
+  RIG.prog = hostCameraProgress === null ? progressFor(scrollY) : hostCameraProgress;
   RIG.smooth = REDUCE ? RIG.prog : damp(RIG.smooth, RIG.prog, 5.2, dt);
   RIG.mx = damp(RIG.mx, RIG.tmx, 2.6, dt);
   RIG.my = damp(RIG.my, RIG.tmy, 2.6, dt);
