@@ -1,0 +1,9 @@
+import { useEffect, useState, type ReactNode } from 'react'
+const chapters=[['home','00','Arrival'],['about','01','The person'],['skills','02','Capabilities'],['projects','03','Selected work'],['experience','04','The journey'],['inspiration','05','My picks'],['contact','06','Connect']]
+export default function ChapterNavigation({children}:{children?:ReactNode}){
+ const [active,setActive]=useState('home');const [open,setOpen]=useState(false)
+ useEffect(()=>{const observer=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting)setActive(e.target.id)},{rootMargin:'-15% 0px -55% 0px'});chapters.forEach(([id])=>{const el=document.getElementById(id);if(el)observer.observe(el)});return()=>observer.disconnect()},[])
+ useEffect(()=>{if(!open)return;const dismiss=(event:KeyboardEvent)=>{if(event.key==='Escape')setOpen(false)};window.addEventListener('keydown',dismiss);return()=>window.removeEventListener('keydown',dismiss)},[open])
+ return <><header className="journey-header"><a href="/" className="journey-brand"><span aria-hidden="true">✳</span><span>ASLNS<small>EMMANUEL CHERIAN</small></span></a><nav aria-label="Primary navigation"><a href="#projects">Selected work</a><a href="/tools">The toolkit</a><a href="/session">Session</a>{children}<button onClick={()=>setOpen(!open)} aria-expanded={open} aria-controls="journey-directory">{open?'Close −':'Explore +'}</button></nav></header>{open&&<nav id="journey-directory" className="journey-directory" aria-label="All pages">{chapters.map(([id,n,label])=><a key={id} href={'#'+id} onClick={()=>setOpen(false)}><small>{n}</small>{label}<span>↗</span></a>)}<a href="/our-space"><small>07</small>Our little space<span>↗</span></a></nav>}<nav className="journey-rail" aria-label="Page chapters">{chapters.map(([id,n,label])=><a key={id} href={'#'+id} aria-current={active===id?'location':undefined}><span>{label}</span><i/>{n}</a>)}</nav></>
+}
+

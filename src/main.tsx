@@ -6,6 +6,7 @@ import './responsive.css'
 import './theme-motion.css'
 import './RichTypography.css'
 import './KageFlow.css'
+import './Renovation.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

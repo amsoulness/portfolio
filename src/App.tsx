@@ -1,3 +1,4 @@
+import ChapterNavigation from './ChapterNavigation'
 import CinematicScene from './CinematicScene'
 const ToolsHub = lazy(() => import('./ToolsHub'))
 const SessionPage = lazy(() => import('./SessionPage'))
@@ -169,7 +170,6 @@ function ResourceTag({name}:{name:string}) {
   return url ? <a className="tag resource-tag" href={url} target="_blank" rel="noopener noreferrer" aria-label={`Learn about ${name} (opens in a new tab)`}>{name} <span aria-hidden="true">↗</span></a> : <span className="tag">{name}</span>
 }
 
-const particles = Array.from({length:170}, (_,i)=>({x:(i*73+11)%100,y:(i*47+19)%100,size:1+i%3,delay:i%9*.4,duration:3+i%5}))
 const comets = Array.from({length:16},(_,i)=>({left:(i*37+9)%100,delay:i*.73,duration:6+i%6}))
 const extraStars=Array.from({length:210},(_,i)=>({x:(i*67+17)%100,y:(i*41+29)%100,delay:(i%17)*.31,size:i%7===0?3:1.5}))
 const orbitSparks=Array.from({length:9},(_,i)=>({angle:i*40,delay:i*.32}))
@@ -192,16 +192,7 @@ function TechIcon({name}:{name:string}) {
   if(name==='DaVinci Resolve')return <span className="tech-icon resolve-icon" aria-hidden="true"><svg viewBox="0 0 64 64" width="44" height="44"><circle cx="32" cy="18" r="13" fill="#f5c85a"/><circle cx="19" cy="42" r="13" fill="#ed6472"/><circle cx="45" cy="42" r="13" fill="#5cc3e5"/><circle cx="32" cy="33" r="8" fill="#1c1828"/></svg></span>
   return <span className="tech-icon" aria-hidden="true">{image&&!failed?<img src={image} alt="" loading="lazy" onError={()=>setFailed(true)}/>:<span>{skillSymbols[name]||name.slice(0,2)}</span>}</span>
 }
-function ProjectArtwork({kind}:{kind:number}) {
-  return <div className={`project-art art-${kind}`} aria-hidden="true">
-    <div className="art-grid"/><div className="art-glow"/>
-    {kind===0?<><div className="art-chat chat-a">●●●</div><div className="art-chat chat-b">✓ ✓</div><div className="art-terminal">{'{ }'} <span>BOT ACTIVE</span></div></>:
-    kind===1?<><div className="art-frame frame-a"/><div className="art-frame frame-b"/><div className="art-play">▶</div><div className="art-caption">CINEMATIC / 24 FPS</div></>:
-    kind===2?<><div className="art-phone"><div className="art-phone-screen">▶</div></div><div className="art-caption">SHORT FORM / MOTION</div></>:
-    <><div className="art-diamond">✧</div><div className="art-caption">CREATIVE / CLIENT WORK</div></>}
-  </div>
-}
-const streaks=Array.from({length:12},(_,i)=>({left:(i*79+7)%100,delay:i*.7,duration:5+i%5}))
+
 function Reveal({children,delay=0}:{children:ReactNode,delay?:number}){
   const reduce=useReducedMotion()
   return <motion.div initial={reduce?false:{opacity:0,y:42,filter:'blur(5px)'}} whileInView={{opacity:1,y:0,filter:'blur(0px)'}} viewport={{once:true,amount:.12}} transition={{duration:.75,delay}}>{children}</motion.div>
@@ -593,13 +584,13 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
     <div className="v10-dust" aria-hidden="true">{dust.map((d,i)=><i key={i} style={{left:`${d.x}%`,top:`${d.y}%`,width:d.size,height:d.size,animationDelay:`-${d.delay}s`}}/>)}</div>
     <div className="v10-ribbons" aria-hidden="true">{ribbons.map((r,i)=><span key={i} style={{left:`${r.x}%`,animationDelay:`-${r.delay}s`,animationDuration:`${r.duration}s`}}/>)}</div>
     <div className="v10-vignette" aria-hidden="true"/>
-    <div className="particles" aria-hidden="true">{streaks.map((streak,i)=><span key={`streak-${i}`} className="streak" style={{left:`${streak.left}%`,'--streak-duration':`${streak.duration}s`,'--streak-delay':`-${streak.delay}s`} as React.CSSProperties}/>)}{particles.map((p,i)=><span key={i} className="particle" style={{left:`${p.x}%`,top:`${p.y}%`,width:p.size,height:p.size,'--particle-duration':`${p.duration}s`,'--particle-delay':`-${p.delay}s`} as React.CSSProperties}/>)}</div>
+
     <div className="v9-float-controls" aria-label="Portfolio quick actions">
       <a href="#projects" className="v9-float-btn" aria-label="Jump to projects" title="Explore projects">✦<span>Work</span></a>
       <a href="#inspiration" className="v9-float-btn" aria-label="Jump to my personal favorites" title="My favorite picks">✧<span>My Picks</span></a>
       {showTop&&<button type="button" className="v9-float-btn v9-top" onClick={()=>window.scrollTo({top:0,behavior:reduce?'auto':'smooth'})} aria-label="Back to top" title="Back to top">↑<span>Top</span></button>}
     </div>
-    <CinematicScene/><a className="site-skip-link" href="#home">Skip to main content</a>
+    <CinematicScene/><ChapterNavigation><ThemeToggle theme={theme} preference={themePreference} onToggle={onToggleTheme}/></ChapterNavigation><a className="site-skip-link" href="#home">Skip to main content</a>
     <nav className="nav" aria-label="Main navigation" ref={navigationRef}>
       <motion.a href="#home" className="logo" whileHover={reduce?{}:{scale:1.12,rotate:-6}}>AMSOUL<span style={{color:'#a78bfa'}}>NESS.</span></motion.a>
       <button id="portfolio-menu-toggle" className="menu-toggle" aria-label={menuOpen?'Close navigation':'Open navigation'} aria-controls="portfolio-navigation" aria-expanded={menuOpen} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}</button>
@@ -659,7 +650,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
     </section>
     <section id="about" className="section">
       <Heading index="01" kicker="THE PERSON" title="Two worlds. One mindset."/>
-      <div className="about-layout">
+      <div className="chapter-landscape"><img src="/cinematic/kage-approach.webp" alt="A moonlit temple approach" loading="lazy"/><span>01 / THE PERSON</span></div><div className="about-layout">
         <div className="about-copy">
           <Reveal><p>I'm <strong>Emmanuel Cherian</strong>, a BCA student at <strong>Al Azhar College of Arts and Science</strong>, affiliated with Mahatma Gandhi University, Kerala. I’m learning software development by building projects and figuring things out as I go.</p></Reveal>
           <Reveal delay={.08}><p>Outside college, I edit videos as <strong>AMSOULNESS / ASLNS</strong>. I’m usually drawn to films, anime, web series and short-form edits, and I like trying new ways to tell a story.</p></Reveal>
@@ -687,11 +678,11 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
     <section id="projects" className="section">
       <Heading index="03" kicker="PROJECTS" title="Things I’ve worked on."/>
       <Reveal><motion.article className={`project ${activeCard==='WhatsApp Automation Bot'?'touch-active':''}`} onTap={()=>setActiveCard(activeCard==='WhatsApp Automation Bot'?null:'WhatsApp Automation Bot')} whileTap={reduce?{}:{scale:.985}} whileHover={reduce?{}:{y:-10,rotateX:2,rotateY:-2,boxShadow:'0 35px 100px #7c3aed33'}} style={{transformPerspective:1000}}>
-        <ProjectArtwork kind={0}/><span className="eyebrow">001 / AUTOMATION ENGINEERING</span><h3><a className="bot-project-title" href="/session">WhatsApp Automation Bot <span aria-hidden="true">↗</span></a></h3>
+        <img className="project-landscape" src="/cinematic/kage-lantern-court.webp" alt="Lantern-lit temple courtyard" loading="lazy"/><span className="eyebrow">001 / AUTOMATION ENGINEERING</span><h3><a className="bot-project-title" href="/session">WhatsApp Automation Bot <span aria-hidden="true">↗</span></a></h3>
         <p>Amsoulness / ASLNS is my WhatsApp bot distribution with group moderation, media tools, scheduling, and community plugins. Link your account, get a private session, and choose where to deploy.</p>
         <div className="bot-project-actions"><a className="btn primary" href="/session">Connect WhatsApp ↗</a><a className="btn outline" href="/session/deploy">Deploy bot ↗</a><a className="btn outline" href="/session/plugins">Plugins ↗</a><a className="btn outline" href="https://github.com/amsoulness/amsoulness-md" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div><div className="tags"><ResourceTag name="JavaScript"/><ResourceTag name="Node.js"/><ResourceTag name="Automation"/></div>
       </motion.article></Reveal>
-      <div className="creative-grid">{creativeProjects.map((project,i)=><Reveal key={project.title} delay={i*.08}><motion.article className={`project creative-project ${activeCard===project.title?'touch-active':''}`} onTap={()=>setActiveCard(activeCard===project.title?null:project.title)} whileTap={reduce?{}:{scale:.985}} whileHover={reduce?{}:{y:-10,rotateX:2,rotateY:-2,boxShadow:'0 35px 100px #7c3aed33'}}><ProjectArtwork kind={i+1}/><span className="eyebrow">{project.category}</span><h3>{project.title}</h3><p>{project.description}</p><div className="tags">{project.tags.map(tag=><ResourceTag key={tag} name={tag}/>)}</div></motion.article></Reveal>)}</div>
+      <div className="creative-grid">{creativeProjects.map((project,i)=><Reveal key={project.title} delay={i*.08}><motion.article className={`project creative-project ${activeCard===project.title?'touch-active':''}`} onTap={()=>setActiveCard(activeCard===project.title?null:project.title)} whileTap={reduce?{}:{scale:.985}} whileHover={reduce?{}:{y:-10,rotateX:2,rotateY:-2,boxShadow:'0 35px 100px #7c3aed33'}}><img className="project-landscape" src={["/cinematic/kage-approach.webp","/cinematic/kage-moonwater.webp","/cinematic/kage-sanmon-preview.webp"][i]} alt="Japanese night landscape" loading="lazy"/><span className="eyebrow">{project.category}</span><h3>{project.title}</h3><p>{project.description}</p><div className="tags">{project.tags.map(tag=><ResourceTag key={tag} name={tag}/>)}</div></motion.article></Reveal>)}</div>
     </section>
     <section id="experience" className="section">
       <Heading index="04" kicker="EXPERIENCE & EDUCATION" title="Learning by doing."/>
