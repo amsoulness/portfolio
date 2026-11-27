@@ -1,3 +1,4 @@
+import CinematicScene from './CinematicScene'
 const ToolsHub = lazy(() => import('./ToolsHub'))
 const SessionPage = lazy(() => import('./SessionPage'))
 const DeployPage = lazy(() => import('./DeployPage'))
@@ -598,7 +599,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
       <a href="#inspiration" className="v9-float-btn" aria-label="Jump to my personal favorites" title="My favorite picks">✧<span>My Picks</span></a>
       {showTop&&<button type="button" className="v9-float-btn v9-top" onClick={()=>window.scrollTo({top:0,behavior:reduce?'auto':'smooth'})} aria-label="Back to top" title="Back to top">↑<span>Top</span></button>}
     </div>
-    <a className="site-skip-link" href="#home">Skip to main content</a>
+    <CinematicScene/><a className="site-skip-link" href="#home">Skip to main content</a>
     <nav className="nav" aria-label="Main navigation" ref={navigationRef}>
       <motion.a href="#home" className="logo" whileHover={reduce?{}:{scale:1.12,rotate:-6}}>AMSOUL<span style={{color:'#a78bfa'}}>NESS.</span></motion.a>
       <button id="portfolio-menu-toggle" className="menu-toggle" aria-label={menuOpen?'Close navigation':'Open navigation'} aria-controls="portfolio-navigation" aria-expanded={menuOpen} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}</button>

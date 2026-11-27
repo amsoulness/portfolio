@@ -1,0 +1,30 @@
+.cinematic-world{position:fixed;inset:0;z-index:0;pointer-events:none;background:#05090d;overflow:hidden}
+.cinematic-world iframe{width:100%;height:100%;border:0;filter:hue-rotate(215deg) saturate(.65)}
+main.site:has(.cinematic-world){background:transparent!important;isolation:isolate}
+main.site:has(.cinematic-world)::before,main.site:has(.cinematic-world)::after{display:none!important}
+main.site:has(.cinematic-world)>:is(.ambient,.particles,.v8-aurora,.v9-nebula,.v9-stars,.v9-scanlines,.v10-dust,.v10-ribbons,.v10-vignette){display:none!important}
+main.site:has(.cinematic-world) .hero{min-height:115svh!important;align-items:flex-start!important;padding:150px 6vw 25vh!important;background:linear-gradient(90deg,#03080d99,transparent 75%)!important}
+main.site:has(.cinematic-world) .hero-content{width:100%!important;max-width:500px!important}
+main.site:has(.cinematic-world) .hero h1{font:400 clamp(42px,5.3vw,78px)/.98 'Space Grotesk',sans-serif!important;letter-spacing:-.055em!important;text-transform:uppercase}
+main.site:has(.cinematic-world) .hero-description{font-size:15px!important;max-width:390px;line-height:1.7!important}
+main.site:has(.cinematic-world) .hero .visual-field,main.site:has(.cinematic-world) .hero::after{display:none!important}
+main.site:has(.cinematic-world) .hero-actions-v26{flex-wrap:wrap;gap:12px}
+main.site:has(.cinematic-world) .hero-actions-v26>*{font-size:9px!important;min-height:42px;padding:12px 16px!important;background:#06101899!important;color:#e5f4f4!important;border:1px solid #c4e4e944!important;box-shadow:none!important}
+main.site:has(.cinematic-world) .section{position:relative;z-index:1;min-height:100svh;padding:110px 6vw!important;background:linear-gradient(180deg,#040a10b0,#040a10e8 45%,#040a10aa)!important;border-top:1px solid #c1d9e52b}
+main.site:has(.cinematic-world) .section::before,main.site:has(.cinematic-world) .section::after{display:none!important}
+main.site:has(.cinematic-world) .section h2{font-family:'Space Grotesk',sans-serif!important;font-weight:400!important;text-transform:uppercase;font-size:clamp(40px,6.3vw,88px)!important;line-height:1.04!important;max-width:860px}
+main.site:has(.cinematic-world) .tools-featured-section{position:relative;z-index:1;background:#040a10d9!important;margin:0!important;width:100%!important;border-radius:0!important}
+main.site:has(.cinematic-world) .inspiration-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+main.site:has(.cinematic-world) .inspiration-card:first-child{grid-column:span 2;grid-row:span 2}
+main.site:has(.cinematic-world) .inspiration-card{border-radius:2px!important;background:#070d13cc!important}
+main.site:has(.cinematic-world) .inspiration-image{aspect-ratio:1.4;object-fit:cover}
+main.site:has(.cinematic-world) .project,main.site:has(.cinematic-world) .skill{border-radius:2px!important;background:#060d16b8!important;backdrop-filter:blur(8px)}
+main.site:has(.cinematic-world) .nav{background:#040b12b0!important}
+@media(max-width:700px){main.site:has(.cinematic-world) .hero{padding-top:120px!important;min-height:105svh!important}main.site:has(.cinematic-world) .hero-content{max-width:320px!important}main.site:has(.cinematic-world) .hero h1{font-size:44px!important}main.site:has(.cinematic-world) .inspiration-grid{grid-template-columns:repeat(2,minmax(0,1fr))}main.site:has(.cinematic-world) .inspiration-card:first-child{grid-column:span 2;grid-row:auto}main.site:has(.cinematic-world) .section{padding:78px 6vw!important}}
+main.site:has(.cinematic-world)>:is(.grid-bg,.v8-comets,.v8-ripples){display:none!important}
+.cinematic-world{background: url('/cinematic/kage-sanmon-preview.webp') center/cover no-repeat #05090d}
+.cinematic-world iframe{opacity:0;transition:opacity 1.2s}
+.cinematic-world.scene-ready iframe{opacity:1}
+main.site:has(.cinematic-world) .hero::before{display:none!important}
+main.site .cinematic-world{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;z-index:0!important}
+
