@@ -1,0 +1,12 @@
+html body main.site .scene-chapter:is(.section,.hero,.tools-featured-section){position:relative!important;display:block!important;height:var(--chapter-distance,220svh)!important;min-height:0!important;padding:0!important;margin:0!important;width:100%!important;max-width:none!important;border:0!important;background:transparent!important;overflow:visible!important;transform:none!important}
+.scene-chapter-stage{position:sticky;top:0;height:100svh;overflow:clip;padding:125px 7vw 45px;box-sizing:border-box;display:flex;align-items:flex-start;background:linear-gradient(90deg,#0309109c,transparent 85%)}
+.scene-chapter-content{width:100%;opacity:var(--chapter-opacity,1);transform:translate3d(0,var(--chapter-offset,0px),0);will-change:transform,opacity}
+html body main.site .scene-chapter .hero-content{transform:none!important}
+html body main.site .scene-chapter .chapter-landscape{display:none}
+html body main.site .scene-chapter .section-heading{margin-bottom:40px}
+html body main.site .scene-chapter .project-landscape{max-height:240px;object-fit:cover}
+html body main.site .scene-chapter .scroll-cue{position:static;margin-top:36px}
+html body main.site .scene-chapter .tools-featured-topline{margin-bottom:30px}
+@media(max-width:800px){.scene-chapter-stage{padding:105px 6vw 30px}.scene-chapter-content{max-width:100%}html body main.site .scene-chapter .section-heading h2{font-size:clamp(32px,8vw,52px)!important}}
+@media(prefers-reduced-motion:reduce){html body main.site .scene-chapter:is(.section,.hero,.tools-featured-section){height:auto!important;min-height:100svh!important}.scene-chapter-stage{position:relative;height:auto;overflow:visible}.scene-chapter-content{opacity:1;transform:none;will-change:auto}}
+html body main.site:has(.scene-chapter){overflow:clip!important}

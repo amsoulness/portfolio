@@ -1,3 +1,4 @@
+import SceneChapter from './SceneChapter'
 import ChapterNavigation from './ChapterNavigation'
 import CinematicScene from './CinematicScene'
 const ToolsHub = lazy(() => import('./ToolsHub'))
@@ -606,7 +607,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
       </div>
       <ThemeToggle theme={theme} preference={themePreference} onToggle={onToggleTheme} className="portfolio-theme-toggle"/>
     </nav>
-    <section id="home" className="hero" aria-label="Main content" tabIndex={-1}>
+    <SceneChapter id="home" className="hero" aria-label="Main content" tabIndex={-1}>
       <div className="visual-field" aria-hidden="true">
         <motion.div className="visual-ring ring-one" animate={reduce?{}:{rotate:360}} transition={{duration:32,repeat:Infinity,ease:'linear'}}><span className="ring-node"/></motion.div>
         <motion.div className="visual-ring ring-two" animate={reduce?{}:{rotate:-360}} transition={{duration:44,repeat:Infinity,ease:'linear'}}><span className="ring-node"/></motion.div>
@@ -623,8 +624,8 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
         <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE 5 CREATIVE TOOLS <span aria-hidden="true">↗</span></a></div>
       </motion.div>
       <motion.div className="scroll-cue" animate={reduce?{}:{y:[0,10,0]}} transition={{duration:2,repeat:Infinity}}>SCROLL TO EXPLORE ↓</motion.div>
-    </section>
-    <section className="tools-featured-section" id="featured-tools" aria-labelledby="tools-featured-title">
+    </SceneChapter>
+    <SceneChapter className="tools-featured-section" id="featured-tools" aria-labelledby="tools-featured-title">
       <div className="tools-featured-topline"><span><i/> AMSOULNESS / DIGITAL LAB</span><span>FEATURED EXPERIENCE — 001</span></div>
       <div className="tools-featured-layout">
         <div className="tools-featured-copy">
@@ -647,8 +648,8 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
         </a>
       </div>
       <div className="tools-featured-marquee" aria-hidden="true"><div>WHATSAPP DP STUDIO <b>✦</b> IMAGE STUDIO <b>✦</b> QR CODE STUDIO <b>✦</b> COLOR LAB <b>✦</b> PASSWORD STUDIO <b>✦</b> WHATSAPP DP STUDIO <b>✦</b> IMAGE STUDIO <b>✦</b> QR CODE STUDIO <b>✦</b> COLOR LAB <b>✦</b> PASSWORD STUDIO <b>✦</b></div></div>
-    </section>
-    <section id="about" className="section">
+    </SceneChapter>
+    <SceneChapter id="about" className="section">
       <Heading index="01" kicker="THE PERSON" title="Two worlds. One mindset."/>
       <div className="chapter-landscape"><img src="/cinematic/kage-approach.webp" alt="A moonlit temple approach" loading="lazy"/><span>01 / THE PERSON</span></div><div className="about-layout">
         <div className="about-copy">
@@ -665,8 +666,8 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
           <div className="fact"><small>INTERESTS</small><span>Technology · Programming · Music · Reading</span></div>
         </motion.aside></Reveal>
       </div>
-    </section>
-    <section id="skills" className="section">
+    </SceneChapter>
+    <SceneChapter id="skills" className="section">
       <Heading index="02" kicker="CAPABILITIES" title="Technical × creative."/>
       <div className="skill-grid">{skills.map((skill,i)=><motion.a key={skill} href={resourceLinks[skill]} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${skill} in a new tab`} className="skill skill-v7" style={{'--skill-accent':skillDetails[skill].accent} as CSSProperties} initial={reduce?false:{opacity:0,y:38,scale:.94}} whileInView={{opacity:1,y:0,scale:1}} viewport={{once:true,amount:.12}} transition={{duration:.55,delay:(i%5)*.055}} whileHover={reduce?{}:{y:-9,scale:1.025}} whileTap={{scale:.96}}>
   <span className="skill-aura" aria-hidden="true"/><span className="skill-top"><span className="skill-category">{skillDetails[skill].category}</span><span className="skill-number">{skillDetails[skill].mark}</span></span>
@@ -674,8 +675,8 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
   <span className="skill-bottom"><strong>{skill}</strong><span className="skill-description">{skillDetails[skill].description}</span></span><span className="skill-launch" aria-hidden="true">↗</span>
 </motion.a>)}</div>
       <div className="editing-tools"><div className="editing-tools-title"><h3>VIDEO EDITING TOOLS</h3><span>My creative toolkit</span></div><div className="editing-tools-grid">{editingTools.map(tool=><Reveal key={tool.name}><motion.div className="editing-tool" whileHover={reduce?{}:{y:-6}} whileTap={reduce?{}:{scale:.985}}><a className="editing-tool-heading resource-heading" href={resourceLinks[tool.name]} target="_blank" rel="noopener noreferrer" aria-label={`Open official ${tool.name} website`}><TechIcon name={tool.name}/><div className="editing-tool-copy"><strong>{tool.name}</strong><span>{tool.level}</span></div><span className="editing-external" aria-hidden="true">↗</span></a><div className="editing-progress-meta"><span>Experience level</span><strong>{tool.progress}%</strong></div><div className="editing-track"><motion.div className="editing-fill" initial={reduce?false:{width:0}} whileInView={{width:`${tool.progress}%`}} viewport={{once:true}} transition={{duration:1.2}}/></div></motion.div></Reveal>)}</div></div>
-    </section>
-    <section id="projects" className="section">
+    </SceneChapter>
+    <SceneChapter id="projects" className="section">
       <Heading index="03" kicker="PROJECTS" title="Things I’ve worked on."/>
       <Reveal><motion.article className={`project ${activeCard==='WhatsApp Automation Bot'?'touch-active':''}`} onTap={()=>setActiveCard(activeCard==='WhatsApp Automation Bot'?null:'WhatsApp Automation Bot')} whileTap={reduce?{}:{scale:.985}} whileHover={reduce?{}:{y:-10,rotateX:2,rotateY:-2,boxShadow:'0 35px 100px #7c3aed33'}} style={{transformPerspective:1000}}>
         <img className="project-landscape" src="/cinematic/kage-lantern-court.webp" alt="Lantern-lit temple courtyard" loading="lazy"/><span className="eyebrow">001 / AUTOMATION ENGINEERING</span><h3><a className="bot-project-title" href="/session">WhatsApp Automation Bot <span aria-hidden="true">↗</span></a></h3>
@@ -683,13 +684,13 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
         <div className="bot-project-actions"><a className="btn primary" href="/session">Connect WhatsApp ↗</a><a className="btn outline" href="/session/deploy">Deploy bot ↗</a><a className="btn outline" href="/session/plugins">Plugins ↗</a><a className="btn outline" href="https://github.com/amsoulness/amsoulness-md" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div><div className="tags"><ResourceTag name="JavaScript"/><ResourceTag name="Node.js"/><ResourceTag name="Automation"/></div>
       </motion.article></Reveal>
       <div className="creative-grid">{creativeProjects.map((project,i)=><Reveal key={project.title} delay={i*.08}><motion.article className={`project creative-project ${activeCard===project.title?'touch-active':''}`} onTap={()=>setActiveCard(activeCard===project.title?null:project.title)} whileTap={reduce?{}:{scale:.985}} whileHover={reduce?{}:{y:-10,rotateX:2,rotateY:-2,boxShadow:'0 35px 100px #7c3aed33'}}><img className="project-landscape" src={["/cinematic/kage-approach.webp","/cinematic/kage-moonwater.webp","/cinematic/kage-sanmon-preview.webp"][i]} alt="Japanese night landscape" loading="lazy"/><span className="eyebrow">{project.category}</span><h3>{project.title}</h3><p>{project.description}</p><div className="tags">{project.tags.map(tag=><ResourceTag key={tag} name={tag}/>)}</div></motion.article></Reveal>)}</div>
-    </section>
-    <section id="experience" className="section">
+    </SceneChapter>
+    <SceneChapter id="experience" className="section">
       <Heading index="04" kicker="EXPERIENCE & EDUCATION" title="Learning by doing."/>
       <div className="timeline">{experiences.map((item,i)=><Reveal key={item.title} delay={i*.12}><motion.div className="timeline-card" whileHover={reduce?{}:{x:12}}><span className="eyebrow">{item.date}</span><h3>{item.title}</h3><strong style={{color:'#a78bfa'}}>{item.company}</strong><p>{item.description}</p></motion.div></Reveal>)}</div>
-    </section>
-    <section className="section" id="inspiration"><Heading index="05" kicker="MY PICKS" title="A few things I’m into."/><p className="inspiration-intro">Films, shows, music, books and tools I keep coming back to. Pick a card if you want to find out more.</p><div className="inspiration-grid">{inspirations.map((item,i)=><InspirationCard key={item.title} item={item} index={i}/>)}</div></section>
-    <section id="contact" className="section contact">
+    </SceneChapter>
+    <SceneChapter className="section" id="inspiration"><Heading index="05" kicker="MY PICKS" title="A few things I’m into."/><p className="inspiration-intro">Films, shows, music, books and tools I keep coming back to. Pick a card if you want to find out more.</p><div className="inspiration-grid">{inspirations.map((item,i)=><InspirationCard key={item.title} item={item} index={i}/>)}</div></SceneChapter>
+    <SceneChapter id="contact" className="section contact">
       <Reveal><span className="eyebrow"><span className="rich-section-number">06</span><span className="rich-section-divider"> / </span>LET’S CONNECT</span><h2>Let's create<br/><span className="gradient">something bold.</span></h2>
       <p style={{color:'#b4b1c4',fontSize:19,lineHeight:1.8,marginBottom:40}}>Open to conversations about software development, creative editing, collaboration and new opportunities. The fastest way to reach me is WhatsApp.</p>
       <div className="actions contact-actions-v27">
@@ -699,7 +700,7 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
         <MagneticLink href={LINKEDIN} external><img className="contact-brand-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg" alt="" loading="lazy" onError={e=>{e.currentTarget.style.display="none"}}/> LINKEDIN <span aria-hidden="true">↗</span></MagneticLink>
         <MagneticLink href={INSTAGRAM} external><img className="contact-brand-icon" src="https://cdn.simpleicons.org/instagram/FFFFFF" alt="" loading="lazy" onError={e=>{e.currentTarget.style.display="none"}}/> INSTAGRAM @FT.ASLNS <span aria-hidden="true">↗</span></MagneticLink>
       </div></Reveal>
-    </section>
+    </SceneChapter>
     <footer className="footer">© 2026 AMSOULNESS / ASLNS — EMMANUEL CHERIAN · BUILT WITH CURIOSITY & CREATIVITY ✳</footer>
   </main>
 }
