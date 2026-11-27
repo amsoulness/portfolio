@@ -5,7 +5,6 @@ import App from './App.tsx'
 import './responsive.css'
 import './theme-motion.css'
 import './RichTypography.css'
-import './CinematicExperience.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
