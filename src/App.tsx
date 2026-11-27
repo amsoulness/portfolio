@@ -738,7 +738,7 @@ export default function App(){
   useEffect(() => {
     document.documentElement.dataset.theme = theme
     document.documentElement.style.colorScheme = theme
-    document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f7f5fc' : '#090711')
+    document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#edf5f7' : '#07121b')
     window.localStorage.setItem('aslns-theme-preference', themePreference)
   }, [theme, themePreference])
 

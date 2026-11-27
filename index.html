@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#090711" />
+    <meta name="theme-color" content="#07121b" />
     <script>
       try {
         const preference = localStorage.getItem('aslns-theme-preference') || 'system';
@@ -12,7 +12,7 @@
         const theme = preference === 'light' || preference === 'dark' ? preference : systemTheme;
         document.documentElement.dataset.theme = theme;
         document.documentElement.style.colorScheme = theme;
-        document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#f7f5fc' : '#090711';
+        document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#edf5f7' : '#07121b';
       } catch {}
     </script>
     <meta name="description" content="Emmanuel Cherian is a BCA student in Kerala, India, learning software development and creating video edits. Explore his projects, skills and creative work at AMSOULNESS / ASLNS." />
