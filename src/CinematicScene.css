@@ -28,3 +28,6 @@ main.site:has(.cinematic-world)>:is(.grid-bg,.v8-comets,.v8-ripples){display:non
 main.site:has(.cinematic-world) .hero::before{display:none!important}
 main.site .cinematic-world{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;z-index:0!important}
 
+.th.th-v13::before{position:fixed!important;background:linear-gradient(#040b13b8,#040b13ed),url('/cinematic/kage-approach.webp') center/cover!important}
+html .as-session{background:linear-gradient(#040b13b8,#040b13ed),url('/cinematic/kage-lantern-court.webp') center/cover fixed!important}
+html .private-page::before{background:linear-gradient(#07111ab8,#07111ae8),url('/cinematic/kage-moonwater.webp') center/cover!important}
