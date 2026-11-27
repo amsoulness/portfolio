@@ -6,6 +6,7 @@ import DoomsdaySeason from './DoomsdaySeason'
 import './responsive.css'
 import './theme-motion.css'
 import './RichTypography.css'
+import './CinematicExperience.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
