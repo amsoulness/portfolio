@@ -767,6 +767,7 @@ export default function App(){
     if (destination.origin !== window.location.origin) return
     const nextPath = normalizeSitePath(destination.pathname)
 
+    if (destination.hash && nextPath !== path) return
     if (destination.hash && nextPath === path) {
       const section = document.getElementById(decodeURIComponent(destination.hash.slice(1)))
       if (!section) return
@@ -787,7 +788,8 @@ export default function App(){
 
   const isNavigating = initialLoading || isPending || navigationPulse
 
-  return <div className="site-navigation-shell" onClick={handleNavigation}>
+  return <div className={`site-navigation-shell ${path!=='/'?'cinematic-inner':' '}`} onClick={handleNavigation}>
+    {path!=='/'&&<><CinematicScene/><ChapterNavigation inner><ThemeToggle theme={theme} preference={themePreference} onToggle={toggleTheme}/></ChapterNavigation></>}
     <style>{`.mobile-smooth-toggle{display:none}@media(max-width:650px){.mobile-smooth-toggle{position:fixed;z-index:999;display:inline-flex;align-items:center;justify-content:center;left:calc(16px + env(safe-area-inset-left));bottom:calc(78px + env(safe-area-inset-bottom));width:44px;height:44px;padding:0;border:1px solid #b99affaa;border-radius:50%;background:#171126ed;color:#f7efff;box-shadow:0 7px 24px #0009,0 0 20px #8b5cf633;backdrop-filter:blur(14px);font:700 20px/1 Inter,system-ui,sans-serif;cursor:pointer;transition:transform .2s ease,border-color .2s ease,background .2s ease}.mobile-smooth-toggle:active{transform:scale(.94)}.mobile-smooth-toggle[aria-pressed=true]{border-color:#c9b0ff;background:linear-gradient(145deg,#52306a,#171126ed)}.mobile-smooth-toggle:focus-visible{outline:2px solid #e6d5ff;outline-offset:3px}}@media(prefers-reduced-motion:reduce){.mobile-smooth-toggle{transition:none}}`}</style>
     {isNavigating
       ? <ToolsLoading message={navigationLabel}/>
