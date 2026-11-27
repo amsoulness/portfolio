@@ -293,3 +293,136 @@ html[data-theme="light"] .as-session.as-session :is(.as-pair-panel, .as-deploy-p
   .site.site .nav-links > a::after { transition: none; }
   .site.site :is(.skill-v7, .project, .inspiration-card, .th-card, .as-session-primary, .as-deploy-secondary) { transition: none !important; }
 }
+
+/* The references' strongest idea is a page that unfolds like a short film.
+   Carry that rhythm through the portfolio using its own art and content. */
+.site.site .hero {
+  min-height: min(1040px, max(760px, 100svh));
+  padding-top: clamp(100px, 14vh, 170px);
+  padding-bottom: clamp(100px, 15vh, 170px);
+}
+.site.site .hero::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: auto 0 0;
+  height: min(30vh, 260px);
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, #09070f 90%);
+}
+.site.site .hero-content { max-width: 1430px; }
+.site.site .hero h1 { max-width: 1050px; font-size: clamp(72px, 12.4vw, 178px); }
+.site.site .hero-description { max-width: 550px; }
+.site.site .visual-field { filter: saturate(.78) contrast(1.08); }
+.site.site .visual-ring { border-color: #d3c2ff20; box-shadow: inset 0 0 45px #ab91ff08, 0 0 55px #a98cff0a; }
+.site.site .ring-node { box-shadow: 0 0 24px 6px #c2a9ff50; }
+.site.site .scroll-cue { z-index: 3; display: flex; align-items: center; gap: 13px; }
+.site.site .scroll-cue::before { content: ""; width: 38px; height: 1px; background: linear-gradient(90deg, #bca4f7, transparent); }
+
+/* Editorial bento: one expansive feature, two supporting frames. */
+.site.site .creative-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
+  align-items: stretch;
+  gap: clamp(16px, 2.4vw, 32px);
+}
+.site.site .creative-project { min-height: 100%; }
+.site.site .creative-project:first-child { grid-row: span 2; }
+.site.site .creative-project:first-child .project-art { height: clamp(280px, 37vw, 510px); }
+.site.site .creative-project:nth-child(2) .project-art,
+.site.site .creative-project:nth-child(3) .project-art { height: clamp(170px, 20vw, 250px); }
+
+/* Scene lighting follows the pointer; this is decorative and stays inert on touch. */
+.site.site .project,
+.site.site .inspiration-card,
+.th.th-v13 .th-card,
+.as-session.as-session .as-plugin-card {
+  --spot-x: 50%;
+  --spot-y: 30%;
+  background-image: radial-gradient(ellipse at var(--spot-x) var(--spot-y), #b59aff14, transparent 48%),
+    radial-gradient(ellipse at 82% 0%, #a78bfa12, transparent 44%),
+    linear-gradient(145deg, #171221f5, #0b0912 78%);
+}
+.site.site .project-art {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transform: translateZ(0);
+  box-shadow: inset 0 1px #fff2, 0 24px 60px #0005;
+}
+.site.site .project-art::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  inset: -45% auto -45% -45%;
+  width: 32%;
+  pointer-events: none;
+  opacity: 0;
+  transform: rotate(22deg);
+  background: linear-gradient(90deg, transparent, #e4d7ff1c, #ffffff2c, transparent);
+}
+.site.site .project:hover .project-art::after { opacity: 1; animation: film-frame-sweep 1.15s cubic-bezier(.2,.65,.25,1) both; }
+.site.site .project-art .art-grid { transform: perspective(800px) rotateX(58deg) scale(1.6); transform-origin: center bottom; opacity: .62; }
+.site.site .project-art .art-glow { filter: blur(36px); animation: film-core-breathe 7s ease-in-out infinite alternate; }
+.site.site .project-art :is(.art-frame, .art-phone, .art-terminal, .art-chat, .art-diamond) { transition: transform .6s cubic-bezier(.2,.75,.25,1), filter .6s ease; }
+.site.site .project:hover .art-frame.frame-a { transform: translate3d(-6px,-5px,0) rotate(-4deg) scale(1.04); }
+.site.site .project:hover .art-frame.frame-b { transform: translate3d(8px,5px,0) rotate(5deg) scale(1.05); }
+.site.site .project:hover .art-phone { transform: translateY(-8px) rotate(-3deg) scale(1.04); }
+.site.site .project:hover .art-diamond { transform: translateY(-7px) rotate(12deg) scale(1.08); filter: drop-shadow(0 0 25px #cdbaff66); }
+.site.site .project:hover .art-terminal { transform: translateY(-5px); filter: drop-shadow(0 0 20px #91dff155); }
+.site.site .inspiration-art-main,
+.site.site .inspiration-art-backdrop { transition: transform .9s cubic-bezier(.2,.75,.25,1), filter .9s ease; }
+.site.site .inspiration-card:hover .inspiration-art-main { transform: scale(1.07); filter: saturate(1.08) contrast(1.03); }
+.site.site .inspiration-card:hover .inspiration-art-backdrop { transform: scale(1.12); }
+
+@keyframes film-frame-sweep { 0% { left: -45%; } 100% { left: 130%; } }
+@keyframes film-core-breathe { from { opacity: .66; transform: scale(.92); } to { opacity: 1; transform: scale(1.13); } }
+
+/* Keep the immersive look in supporting routes, with restrained motion for reading. */
+.th.th-v13 .th-card { background-image: radial-gradient(ellipse at var(--spot-x) var(--spot-y), #b59aff14, transparent 48%), linear-gradient(150deg, #191422, #0d0b13 75%); }
+.th.th-v13 .th-card,
+.as-session.as-session .as-plugin-card { --spot-x: 50%; --spot-y: 30%; }
+.as-session.as-session .as-plugin-card { background-image: radial-gradient(ellipse at var(--spot-x) var(--spot-y), #b59aff14, transparent 48%), linear-gradient(150deg, #171422, #100d17 75%); }
+.as-session.as-session :is(.as-pair-panel, .as-deploy-panel, .as-render-card, .as-plugin-link-panel) { position: relative; overflow: hidden; }
+.as-session.as-session :is(.as-pair-panel, .as-deploy-panel, .as-render-card, .as-plugin-link-panel)::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #d2baff80, #9fe6f070, transparent);
+  opacity: .72;
+}
+.site.site .progress { height: 2px; box-shadow: 0 0 16px #b9a1ff78; }
+
+html[data-theme="light"] .site.site .hero::after { background: linear-gradient(180deg, transparent, #fbf9ff 90%); }
+html[data-theme="light"] .site.site .project,
+html[data-theme="light"] .site.site .inspiration-card,
+html[data-theme="light"] .th.th-v13 .th-card,
+html[data-theme="light"] .as-session.as-session .as-plugin-card { background-image: radial-gradient(ellipse at var(--spot-x) var(--spot-y), #8e6fc216, transparent 48%), linear-gradient(145deg, #fff, #f6f2fb 78%); }
+
+@media (max-width: 760px) {
+  .site.site .hero { min-height: max(740px, 96svh); }
+  .site.site .hero h1 { font-size: clamp(58px, 13.5vw, 94px); }
+  .site.site .creative-grid { grid-template-columns: minmax(0, 1fr); }
+  .site.site .creative-project:first-child { grid-row: auto; }
+  .site.site .creative-project:first-child .project-art,
+  .site.site .creative-project:nth-child(2) .project-art,
+  .site.site .creative-project:nth-child(3) .project-art { height: clamp(190px, 58vw, 300px); }
+}
+@media (hover: none), (pointer: coarse) {
+  .site.site .project-art::after { display: none; }
+  .site.site .project:hover .art-frame,
+  .site.site .project:hover .art-phone,
+  .site.site .project:hover .art-diamond,
+  .site.site .project:hover .art-terminal { transform: none; filter: none; }
+  .site.site .inspiration-card:hover .inspiration-art-main,
+  .site.site .inspiration-card:hover .inspiration-art-backdrop { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site.site .project-art::after { display: none; }
+  .site.site .project-art .art-glow { animation: none; }
+  .site.site .project-art :is(.art-frame, .art-phone, .art-terminal, .art-chat, .art-diamond),
+  .site.site .inspiration-art-main,
+  .site.site .inspiration-art-backdrop { transition: none; }
+}

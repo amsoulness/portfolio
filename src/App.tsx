@@ -264,6 +264,8 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
     if(!fullEffects||e.pointerType!=='mouse')return
     ambientRef.current?.style.setProperty('--pointer-x',`${e.clientX/window.innerWidth*100}%`)
     ambientRef.current?.style.setProperty('--pointer-y',`${e.clientY/window.innerHeight*100}%`)
+    const surface=(e.target as HTMLElement).closest<HTMLElement>('.project, .creative-project, .inspiration-card, .th-card, .as-plugin-card')
+    if(surface){const box=surface.getBoundingClientRect();surface.style.setProperty('--spot-x',`${((e.clientX-box.left)/box.width)*100}%`);surface.style.setProperty('--spot-y',`${((e.clientY-box.top)/box.height)*100}%`)}
   }}>
     <style>{`
       :root{font-family:Inter,system-ui,Arial,sans-serif;color-scheme:dark}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#050509}a{color:inherit}::selection{background:#8b5cf6;color:white}
