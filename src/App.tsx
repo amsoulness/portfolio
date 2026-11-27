@@ -4,6 +4,7 @@ const ToolsHub = lazy(() => import('./ToolsHub'))
 const SessionPage = lazy(() => import('./SessionPage'))
 const DeployPage = lazy(() => import('./DeployPage'))
 const PluginsPage = lazy(() => import('./PluginsPage'))
+const CloudDeploy = lazy(() => import('./CloudDeploy'))
 const RenderDeploy = lazy(() => import('./RenderDeploy'))
 const PrivatePage = lazy(() => import('./PrivatePage'))
 import ToolsLoading from './ToolsLoading'
@@ -20,6 +21,8 @@ const navigationLabelFor = (path: string) => {
     '/tools': 'Opening the Tool Lab',
     '/session': 'Opening WhatsApp Session',
     '/session/deploy/render': 'Opening Render Deployer',
+    '/session/deploy/koyeb': 'Opening Koyeb Deployer',
+    '/session/deploy/heroku': 'Opening Heroku Deployer',
     '/session/plugins': 'Opening Plugins',
     '/session/deploy': 'Opening Deployment Hub',
     '/tools/whatsapp': 'Opening WhatsApp Profile Updater',
@@ -783,7 +786,7 @@ export default function App(){
       return
     }
 
-    if (!['/', '/tools', '/our-space', '/session', '/session/deploy', '/session/plugins', '/session/deploy/render'].includes(nextPath) && !/^\/tools\/(whatsapp|image|qr|color|password)$/.test(nextPath)) return
+    if (!['/', '/tools', '/our-space', '/session', '/session/deploy', '/session/plugins', '/session/deploy/render', '/session/deploy/koyeb', '/session/deploy/heroku'].includes(nextPath) && !/^\/tools\/(whatsapp|image|qr|color|password)$/.test(nextPath)) return
     if (nextPath === path) return
     event.preventDefault()
     window.history.pushState({}, '', `${destination.pathname}${destination.search}`)
@@ -802,6 +805,8 @@ export default function App(){
         ? <Suspense fallback={<ToolsLoading message={navigationLabel}/>}><DeployPage theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme}/></Suspense>
       : path === '/session/plugins'
         ? <Suspense fallback={<ToolsLoading message={navigationLabel}/>}><PluginsPage theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme}/></Suspense>
+      : path === '/session/deploy/koyeb' || path === '/session/deploy/heroku'
+        ? <Suspense fallback={<ToolsLoading message={navigationLabel}/>}><CloudDeploy key={path} host={path.endsWith('heroku') ? 'heroku' : 'koyeb'} theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme}/></Suspense>
       : path === '/session/deploy/render'
         ? <Suspense fallback={<ToolsLoading message={navigationLabel}/>}><RenderDeploy theme={theme} themePreference={themePreference} onToggleTheme={toggleTheme}/></Suspense>
       : path === '/session'
