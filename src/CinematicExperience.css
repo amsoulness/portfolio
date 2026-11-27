@@ -603,45 +603,6 @@ html[data-theme="light"] .as-session.as-session .as-plugin-card { background-ima
 .as-session.as-session .as-session-primary { background: var(--panel-red) !important; color: #fff5e8 !important; }
 .as-session.as-session .as-session-glow { opacity: .2 !important; filter: grayscale(1) sepia(.45) !important; }
 
-html[data-doomsday] .site.site,
-html[data-doomsday] .th.th-v13,
-html[data-doomsday] .as-session.as-session {
-  --s-bg: #170c10;
-  --s-panel: #1d1214;
-  --s-line: #f1e8d82b;
-  --s-text: #f1e8d8;
-  --s-muted: #c9bdb0;
-  --s-accent: #f3bd80;
-  --s-soft: #d8393219;
-  color: var(--panel-paper) !important;
-}
-html[data-doomsday] :is(.site.site, .th.th, .as-session.as-session) :is(h1,h2,h3,h4,h5,h6) {
-  color: var(--panel-paper) !important;
-  text-shadow: 4px 5px 0 #090708 !important;
-}
-html[data-doomsday] :is(.site.site, .th.th, .as-session.as-session) :is(p,li,dd) { color: #c9bdb0 !important; }
-html[data-doomsday] :is(.site.site, .th.th, .as-session.as-session) :is(.eyebrow,.as-session-eyebrow,.th-eyebrow,.th-kicker,.as-plugin-category,.tag,.th-card-tag,small) { color: #f3bd80 !important; }
-html[data-doomsday] :is(.site.site, .th.th, .as-session.as-session) :is(.project,.about-panel,.timeline-card,.skill,.editing-tool,.inspiration-card,.th-card,.th-panel,.th-workspace,.as-pair-panel,.as-deploy-panel,.as-render-card,.as-plugin-card,.as-plugin-link-panel) {
-  background: #1d1214 !important;
-  border-color: #f1e8d82b !important;
-  box-shadow: 7px 8px 0 #090809, 0 18px 55px #0005 !important;
-  border-radius: 4px 20px 4px 20px !important;
-}
-html[data-doomsday] :is(.site.site, .th.th, .as-session.as-session) :is(.btn.primary,.th-btn,.as-session-primary) {
-  background: var(--panel-red) !important; color: #fff5e8 !important; border-color: #ff8779 !important; border-radius: 3px 14px 3px 14px !important;
-}
-html[data-doomsday] :is(.site.site, .th.th, .as-session.as-session) :is(.btn.outline,.as-deploy-secondary,.tag,.th-filter,.th-tab,.as-plugin-filters button) {
-  background: #211316 !important; border-color: #f1e8d849 !important; color: var(--panel-paper) !important; border-radius: 3px 14px 3px 14px !important;
-}
-html[data-doomsday] :is(.site.site nav,.th.th .th-nav,.as-session.as-session .as-session-nav) { background: #180c10ed !important; border-color: #f1e8d81f !important; }
-html[data-doomsday] :is(.site.site,.th.th,.as-session.as-session) :is(nav a,.logo,.th-logo,.as-session-brand) { color: var(--panel-paper) !important; }
-html[data-doomsday] :is(.site.site,.th.th,.as-session.as-session) :is(.rule,.progress) { background: linear-gradient(90deg, var(--panel-red), #f3bd80, transparent) !important; }
-html[data-doomsday] :is(.site.site,.th.th,.as-session.as-session) :is(input,select,textarea) { background: #110b0d !important; color: var(--panel-paper) !important; border-color: #f1e8d849 !important; accent-color: var(--panel-red); }
-html[data-doomsday] :is(.site.site,.th.th,.as-session.as-session) :is(code,pre,kbd) { background-color: #100a0c !important; color: #f3bd80 !important; }
-html[data-doomsday] .site.site .hero { background: linear-gradient(115deg, #160d0fee, #54181d75), #1a0c10 !important; }
-html[data-doomsday] .site.site .hero h1 > span,
-html[data-doomsday] .th.th .th-v20-gradient { background: linear-gradient(115deg,#ff685f,#f1b26e 72%,#f2d2a0) !important; background-clip: text !important; color: transparent !important; }
-html[data-doomsday] .site.site .logo::after { color: #f3bd80 !important; }
 html[data-theme="light"] .site.site { background: linear-gradient(180deg,#f1e8d8,#e4d7c6 55%,#f1e8d8) !important; color: #1c1515 !important; }
 html[data-theme="light"] .site.site .nav { background: #f1e8d8ed !important; border-color: #1c151526 !important; }
 html[data-theme="light"] .site.site :is(.logo, nav a) { color: #1c1515 !important; }

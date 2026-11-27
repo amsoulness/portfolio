@@ -1,5 +1,3 @@
-import { DoomsdayOnly, NormalOnly } from './DoomsdaySeason'
-import DoomsdayCountdown from './DoomsdayCountdown'
 const ToolsHub = lazy(() => import('./ToolsHub'))
 const SessionPage = lazy(() => import('./SessionPage'))
 const DeployPage = lazy(() => import('./DeployPage'))
@@ -95,7 +93,6 @@ const resourceLinks: Record<string,string> = {
 }
 type Inspiration = { category:string; title:string; subtitle:string; url:string; wiki?:string; image?:string; credit?:string; creditUrl?:string; monogram:string }
 const inspirations: Inspiration[] = [
- {category:'MOVIES',title:'Avengers: Doomsday',subtitle:'Marvel Studios · Film',url:'https://en.wikipedia.org/wiki/Avengers:_Doomsday',wiki:'Avengers: Doomsday',monogram:'A'},
  {category:'WEB SERIES',title:'Game of Thrones',subtitle:'HBO · Fantasy series',url:'https://en.wikipedia.org/wiki/Game_of_Thrones',wiki:'Game of Thrones',image:'/game-of-thrones-art.jpg',monogram:'G'},
  {category:'ANIME',title:'Attack on Titan',subtitle:'Anime · Dark fantasy',url:'https://en.wikipedia.org/wiki/Attack_on_Titan_(TV_series)',wiki:'Attack on Titan (TV series)',image:'/attack-on-titan-art.jpg',monogram:'進'},
  {category:'ANIME',title:'Solo Leveling',subtitle:'Anime · Action fantasy',url:'https://en.wikipedia.org/wiki/Solo_Leveling',wiki:'Solo Leveling',image:'/solo-leveling-art.jpg',monogram:'S'},
@@ -628,14 +625,13 @@ function PortfolioApp({theme,themePreference,onToggleTheme,effectsOn}:{theme:Sit
         <div className="v9-hero-halo" aria-hidden="true"><div className="v9-hero-halo-inner"/>{orbitSparks.map((spark,i)=><span key={i} style={{transform:`rotate(${spark.angle}deg) translateY(-190px)`,animationDelay:`-${spark.delay}s`}}/>)}</div>
       </div>
       <motion.div className="hero-content" style={{y:heroY}}>
-        <div className="hero-topline"><motion.p className="eyebrow" initial={reduce?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8}}><DoomsdayOnly>THE DOOMSDAY EDITION / AMSOULNESS</DoomsdayOnly><NormalOnly>✦ DEVELOPER × CREATIVE EDITOR</NormalOnly></motion.p><PageViewCounter page="portfolio" className="aslns-view-counter--hero"/></div>
-        <DoomsdayOnly><h1 className="doom-season-hero-title"><span>DOOMSDAY</span><em>is coming.</em></h1><p className="doom-season-hero-sub">THE WORLD CHANGES. THE COUNTDOWN BEGINS.</p><a className="doom-season-enter" href="#doomsday">ENTER THE COUNTDOWN <span aria-hidden="true">↓</span></a></DoomsdayOnly><NormalOnly><h1>{['Emmanuel','Cherian.'].map((word,i)=><div key={word} style={{overflow:'hidden',paddingBottom:9}}><motion.span className={i===1?'gradient':''} style={{display:'inline-block'}} initial={reduce?false:{y:'110%',opacity:0}} animate={{y:'0%',opacity:1}} transition={{duration:1.1,delay:.25+i*.25,ease:[.22,1,.36,1]}}>{word}</motion.span></div>)}</h1></NormalOnly>
+        <div className="hero-topline"><motion.p className="eyebrow" initial={reduce?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8}}>✦ DEVELOPER × CREATIVE EDITOR</motion.p><PageViewCounter page="portfolio" className="aslns-view-counter--hero"/></div>
+        <h1>{['Emmanuel','Cherian.'].map((word,i)=><div key={word} style={{overflow:'hidden',paddingBottom:9}}><motion.span className={i===1?'gradient':''} style={{display:'inline-block'}} initial={reduce?false:{y:'110%',opacity:0}} animate={{y:'0%',opacity:1}} transition={{duration:1.1,delay:.25+i*.25,ease:[.22,1,.36,1]}}>{word}</motion.span></div>)}</h1>
         <Reveal delay={.4}><p className="hero-description">I’m Emmanuel, a BCA student who builds web projects and edits videos. This is where I share what I’m learning, the things I make, and a few tools I wanted for myself.</p></Reveal>
         <div className="actions hero-actions-v26"><MagneticLink href="#projects" primary>EXPLORE MY WORK ↗</MagneticLink><a href="/tools" className="tools-hero-cta"><span className="tools-cta-pulse">✦</span> EXPLORE 5 CREATIVE TOOLS <span aria-hidden="true">↗</span></a></div>
       </motion.div>
       <motion.div className="scroll-cue" animate={reduce?{}:{y:[0,10,0]}} transition={{duration:2,repeat:Infinity}}>SCROLL TO EXPLORE ↓</motion.div>
     </section>
-    <DoomsdayOnly><DoomsdayCountdown/></DoomsdayOnly>
     <section className="tools-featured-section" id="featured-tools" aria-labelledby="tools-featured-title">
       <div className="tools-featured-topline"><span><i/> AMSOULNESS / DIGITAL LAB</span><span>FEATURED EXPERIENCE — 001</span></div>
       <div className="tools-featured-layout">

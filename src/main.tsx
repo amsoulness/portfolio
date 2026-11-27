@@ -2,7 +2,6 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import DoomsdaySeason from './DoomsdaySeason'
 import './responsive.css'
 import './theme-motion.css'
 import './RichTypography.css'
@@ -10,6 +9,6 @@ import './CinematicExperience.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <DoomsdaySeason><App /></DoomsdaySeason>
+    <App />
   </StrictMode>,
 )
